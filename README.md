@@ -1,0 +1,1 @@
+# Tietokantasovelluksen harjoitustyö Paikalla
