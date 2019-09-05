@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<ul class="nav nav-tabs">
+  {% if "tiedot" in request.path %}
+  <li class="nav-item active">
+  {% else %}
+  <li class="nav-item">
+  {% endif %}
+    Tiedot
+  </li>
+
+  {% if "ohjaajat" in request.path %}
+  <li class="nav-item active">
+  {% else %}
+  <li class="nav-item">
+  {% endif %}
+    Ohjaajat
+  </li>
+
+  {% if "jasenet" in request.path %}
+  <li class="nav-item active">
+  {% else %}
+  <li class="nav-item">
+  {% endif %}
+    Jäsenet
+  </li>
+
+  {% if "kokoukset" in request.path %}
+  <li class="nav-item active">
+  {% else %}
+  <li class="nav-item">
+  {% endif %}
+    Kokoukset
+  </li>
+
+</ul>
+
+{% block intab}
+
+{% endblock %}
+
+{% endblock %}

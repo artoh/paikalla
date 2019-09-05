@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<ul>
+{% for ryhma in ryhmat %}
+<li>{{ ryhma.nimi }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
