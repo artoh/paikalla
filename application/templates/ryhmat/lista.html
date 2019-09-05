@@ -3,9 +3,16 @@
 {% block body %}
 
 
+<a href="{{ url_for('ryhmat_uusi') }}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i> Lisää ryhmä</a>
+<h2>Ryhmät</h2>
+
 <ul>
 {% for ryhma in ryhmat %}
-<li>{{ ryhma.nimi }}</li>
+<li>
+    <a href="{{ url_for('ryhmat_tiedot', ryhma_id=ryhma.id)}}">
+      {{ ryhma.nimi }}
+  </a>
+</li>
 {% endfor %}
 </ul>
 
