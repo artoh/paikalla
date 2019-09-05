@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<!-- Ryhmän poistamiseen liittyvä varmistus toteutettuna Bootstrapilla -->
+<button type="button" class="btn btn-outline-danger float-right" data-toggle="modal" data-target="#poistoModal">
+  <i class="fas fa-trash-alt"></i> Poista ryhmä
+</button>
+
+
+<div class="modal fade" id="poistoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="poistoModalLabel">Ryhmän poistaminen</h5>
+      </div>
+      <div class="modal-body">
+        Haluatko varmasti poistaa ryhmän? Tämän jälkeen ryhmän toiminta ei näy tilastoissa.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Älä poista</button>
+        <form method="POST" action="{{ url_for('ryhmat_poista', ryhma_id=ryhma.id) }}">
+          <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>  Poista</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h2>{{ ryhma.nimi}}</h2>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    {% if "tiedot" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="tiedot">
+    {% endif %}
+      Tiedot
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "ohjaajat" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="ohjaajat">
+    {% endif %}
+      Ohjaajat
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "jasenet" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="jasenet">
+    {% endif %}
+      Jäsenet
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "kokoukset" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="kokoukset">
+    {% endif %}
+      Kokoukset
+    </a>
+  </li>
+
+</ul>
+
+{% block intab %}
+
+{% endblock %}
+
+{% endblock %}

@@ -2,9 +2,9 @@
 
 {% block body %}
 
-<form method="POST" action="{{ url_for('ryhmat_luo') }}">
-    <input type="text" name="nimi" />
-    <input type="submit" value="Lisää ryhmä" />
-</form>
+<h2>Lisää uusi ryhmä</h2>
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('ryhmat_luo'), button_map={"submit":"success"}) }}
 
 {% endblock %}
