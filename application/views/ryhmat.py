@@ -1,6 +1,7 @@
 from application import app, db
 from flask import render_template, request, url_for, redirect
 from application.models import Ryhma
+from application.forms.ryhmaforms import RyhmaTiedotForm
 
 
 @app.route("/ryhmat")
@@ -25,5 +26,13 @@ def ryhmat_luo():
 
 @app.route("/ryhmat/<ryhma_id>/tiedot/")
 def ryhmat_tiedot(ryhma_id) :
-    return render_template("ryhmat/tiedot.html", ryhma =  Ryhma.query.get(ryhma_id) )
+    ryhma = Ryhma.query.get(ryhma_id)
+    form = RyhmaTiedotForm()
+    form.tayta(ryhma)
 
+    return render_template("ryhmat/tiedot.html", ryhma=ryhma, form=form )
+
+
+@app.route("/ryhmat/<ryhma_id>/paivita/")
+def ryhmat_paivita(ryhma_id) :
+    return redirect( url_for("ryhmat_tiedot", ryhma_id=ryhma_id ) )
