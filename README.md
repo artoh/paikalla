@@ -4,8 +4,6 @@ Paikalla-palvelun avulla yhdistyksen jäsenet (tai heidän huoltajansa) voivat i
 
 Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimintatilastot.
 
-Järjestelmä muodostaa jokaiselle siihen liittyneelle yhdistykselle erillisen palvelun, mutta julkaisee kaikkien yhdistysten yhteenvetotilastoa (jonka avulla yhdistykset voivat kilpailla aktiivisimman yhdistyksen tittelistä)
 
-## Tietokantakaavio
-
-![Tietokantakaavio](documentation/tietokantakaavio.svg)
+- [Tietokantakaavio](documentation/tietokantakaavio.svg)
+- [Käyttötapaukset](dokumentation/kayttotapaukset.md)
