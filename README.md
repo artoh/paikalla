@@ -6,4 +6,4 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 
 
 - [Tietokantakaavio](documentation/tietokantakaavio.svg)
-- [Käyttötapaukset](dokumentation/kayttotapaukset.md)
+- [Käyttötapaukset](documentation/kayttotapaukset.md)
