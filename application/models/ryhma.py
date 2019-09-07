@@ -8,3 +8,4 @@ class Ryhma(db.Model):
     ilmoittautuminenAlkaa = db.Column( db.DateTime, nullable=True)
     ilmoittautuminenPaattyy = db.Column( db.DateTime, nullable=True)
     kuvaus = db.Column(db.Text, nullable = True)
+    paattynyt = db.Column( db.Boolean, default=False)

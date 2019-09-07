@@ -1,12 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, validators
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, validators
 from wtforms.fields.html5 import DateField, IntegerField
 
 import datetime
 
 class NullableDateField(DateField):
-    """Native WTForms DateField throws error for empty dates.
-    Let's fix this so that we could have DateField nullable.
+    """ WtFormsin DateField ei hyväksy tyhjää päivämäärää, jota tarvitaan
+    osoittamaan puuttuva päivämäärä.
+
     https://stackoverflow.com/questions/27766417/how-to-implement-not-required-datefield-using-flask-wtf """
     def process_formdata(self, valuelist):
         if valuelist:
@@ -26,6 +27,7 @@ class RyhmaTiedotForm(FlaskForm) :
     ilmoittautuminenAlkaa = NullableDateField("Ilmoittautuminen alkaa")
     ilmoittautuminenPaattyy = NullableDateField("Ilmoittautuminen päättyy")
     kuvaus = TextAreaField("Ryhmän kuvaus")
+    paattynyt = BooleanField("Ryhmä on päättynyt")
     submit = SubmitField("Tallenna")
 
 
@@ -35,6 +37,7 @@ class RyhmaTiedotForm(FlaskForm) :
         self.ilmoittautuminenAlkaa.data = ryhma.ilmoittautuminenAlkaa
         self.ilmoittautuminenPaattyy.data = ryhma.ilmoittautuminenPaattyy
         self.kuvaus.data = ryhma.kuvaus
+        self.paattynyt.data = ryhma.paattynyt
 
     def tallenna(self, ryhma):
         ryhma.nimi = self.nimi.data
@@ -42,6 +45,7 @@ class RyhmaTiedotForm(FlaskForm) :
         ryhma.ilmoittautuminenAlkaa = self.ilmoittautuminenAlkaa.data
         ryhma.ilmoittautuminenPaattyy = self.ilmoittautuminenPaattyy.data
         ryhma.kuvaus = self.kuvaus.data
+        ryhma.paattynyt = self.paattynyt.data
 
     class Meta:
         csrf = False

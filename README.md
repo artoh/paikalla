@@ -4,6 +4,6 @@ Paikalla-palvelun avulla yhdistyksen jäsenet (tai heidän huoltajansa) voivat i
 
 Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimintatilastot.
 
-
+- [Sovellus Herokussa](https://olenpaikalla.herokuapp.com)
 - [Tietokantakaavio](documentation/tietokantakaavio.svg)
 - [Käyttötapaukset](documentation/kayttotapaukset.md)
