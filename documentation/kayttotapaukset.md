@@ -53,7 +53,7 @@
   - [ ] Toimihenkilö yhdistää lapselle huoltajan
   - [ ] Toimihenkilö poistaa lapselta huoltajan
 - [ ] Toimihenkilö merkitsee jäsenen eronneeksi
-- [ ] Toimihenkilö luo vaihtaa jäsenen salasanan
+- [ ] Toimihenkilö vaihtaa jäsenen salasanan
 - [ ] Toimihenkilö vaihtaa jäsenen statusta
   - ei jäsen
   - jäsen

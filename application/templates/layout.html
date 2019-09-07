@@ -19,13 +19,13 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="/ilmoittautumiset">Ilmoittautumiset</a>
+              <a class="nav-link disabled" href="/ilmoittautumiset">Ilmoittautumiset</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/tiedot">Henkilötiedot</a>
+              <a class="nav-link disabled" href="/tiedot">Henkilötiedot</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/kalenteri">Kalenteri</a>
+              <a class="nav-link disabled" href="/kalenteri">Kalenteri</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/jasenet">Jäsenet</a>
@@ -38,12 +38,13 @@
               <a class="nav-link" href="/ryhmat">Ryhmät</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/yhdistys">Yhdistys</a>
+              <a class="nav-link disabled" href="/tilasto">Tilasto</a>
             </li>
           </ul>
           <a href="/logout" class="btn btn-light" role="button"><i class="fas fa-sign-out-alt"></i> Kirjaudu ulos</a>
         </div>
       </nav>
+
       <div class="container" style="margin-top: 1em;">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

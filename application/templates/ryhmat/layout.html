@@ -45,7 +45,7 @@
     {% if "ohjaajat" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link" href="ohjaajat">
+    <a class="nav-link disabled" href="ohjaajat">
     {% endif %}
       Ohjaajat
     </a>
@@ -55,7 +55,7 @@
     {% if "jasenet" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link" href="jasenet">
+    <a class="nav-link disabled" href="jasenet">
     {% endif %}
       Jäsenet
     </a>
@@ -65,9 +65,19 @@
     {% if "kokoukset" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link" href="kokoukset">
+    <a class="nav-link disabled" href="kokoukset">
     {% endif %}
       Kokoukset
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "tilasto" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link disabled" href="tilasto">
+    {% endif %}
+      Tilasto
     </a>
   </li>
 
