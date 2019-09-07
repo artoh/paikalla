@@ -62,10 +62,10 @@
   - vastaava jäsenrekisterin hoitaja
 
 ## Ryhmien hallinta
-- [ ] Toimihenkilö luo uuden ryhmän
-- [ ] Toimihenkilö poistaa ryhmän
+- [x] Toimihenkilö luo uuden ryhmän
+- [x] Toimihenkilö poistaa ryhmän
 - [ ] Toimihenkilö muokkaa ryhmän tietoja
-  - [ ] Ryhmän perustiedot
+  - [x] Ryhmän perustiedot
   - [ ] Ryhmän ohjaajat
   - [ ] Ryhmän jäsenet
   - [ ] Ryhmän kokoukset
