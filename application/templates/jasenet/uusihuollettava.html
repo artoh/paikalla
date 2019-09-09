@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h2>Lisää uusi huollettava</h2>
+<p>Huoltaja: {{henkilo.sukunimi}} {{henkilo.etunimi}}</p>
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('jasenet_luo_huollettava',huoltaja_id=henkilo.id), button_map={"submit":"success"}) }}
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+$(function(){
+  $("#aikuinen").prop("disabled",true)
+  $("#toimihenkilo").prop("disabled",true)
+})
+
+</script>
+{% endblock %}

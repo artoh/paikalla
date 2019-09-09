@@ -1,0 +1,44 @@
+{% extends "jasenet/layout.html" %}
+
+{% block intab %}
+
+
+<h2>Huoltajat</h2>
+<form action="{{url_for('jasenet_linkita_huoltaja',henkilo_id=jasen.id)}}" method="post">
+<div class="form-group row">
+  <select class="form-control col-sm-6" name="linkita">
+    {% for aikuinen in aikuiset %}
+      <option value="{{aikuinen.id}}">
+        {{aikuinen.sukunimi}} {{aikuinen.etunimi}}
+      </option>
+    {% endfor %}
+  </select>
+  <button type="submit"  class="btn btn-outline-primary col-sm-3"><i class="fas fa-link"></i> Linkitä huoltajaksi</button>
+  </form>
+  <a href="{{url_for('jasenet_uusi_huoltaja', huollettava_id=jasen.id)}}" class="btn btn-outline-primary col-sm-3"><i class="fas fa-user-plus"></i> Lisää uusi henkilö</a>
+</div>
+<ul>
+
+{% for huoltaja in jasen.huoltajat %}
+
+  <li>
+    <form action="{{url_for('jasenet_poista_huoltajuus')}}" method="POST">
+    <a href="{{url_for('jasenet_tiedot',henkilo_id=huoltaja.id)}}">
+      {{huoltaja.sukunimi}} {{huoltaja.etunimi}}
+    </a>
+      <input type="hidden" name="huoltaja" value="{{huoltaja.id}}"/>
+      <input type="hidden" name="huollettava" value="{{jasen.id}}"/>
+      <input type="hidden" name="jatka" value="huollettava"/>
+      <button type="submit" class="btn btn-outline-danger btn-sm">
+        <i class="fas fa-unlink"></i> Poista huoltajuus
+      </button>
+    <form>
+
+  </li>
+
+{% endfor %}
+
+
+</ul>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "jasenet/layout.html" %}
+
+{% block intab %}
+
+
+<h2>Huollettavat</h2>
+<form action="{{url_for('jasenet_linkita_huollettava',huoltaja_id=jasen.id)}}" method="post">
+<div class="form-group row">
+  <select class="form-control col-sm-6" name="linkita">
+    {% for lapsi in lapset %}
+      <option value="{{lapsi.id}}">
+        {{lapsi.sukunimi}} {{lapsi.etunimi}}
+      </option>
+    {% endfor %}
+  </select>
+  <input type="submit"  class="btn btn-outline-primary col-sm-3" value="Linkitä huollettavaksi"/>
+  </form>
+  <a href="{{url_for('jasenet_uusi_huollettava', huoltaja_id=jasen.id)}}" class="btn btn-outline-primary col-sm-3"><i class="fas fa-user-plus"></i> Lisää uusi henkilö</a>
+</div>
+<ul>
+
+{% for lapsi in jasen.huollettavat %}
+
+  <li>
+    <form action="{{url_for('jasenet_poista_huoltajuus')}}" method="POST">
+    <a href="{{url_for('jasenet_tiedot',henkilo_id=lapsi.id)}}">
+      {{lapsi.sukunimi}} {{lapsi.etunimi}}
+    </a>
+    <input type="hidden" name="huoltaja" value="{{jasen.id}}"/>
+    <input type="hidden" name="huollettava" value="{{lapsi.id}}"/>
+    <button type="submit" class="btn btn-outline-danger btn-sm">
+      <i class="fas fa-unlink"></i> Poista huoltajuus
+    </button>
+
+  </li>
+
+{% endfor %}
+
+
+</ul>
+
+{% endblock %}

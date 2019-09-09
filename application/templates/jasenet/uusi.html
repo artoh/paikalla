@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h2>Lisää uusi jäsen</h2>
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('jasenet_luo'), button_map={"submit":"success"}) }}
+
+{% endblock %}

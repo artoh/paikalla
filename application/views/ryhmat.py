@@ -5,12 +5,18 @@ from application.forms.ryhmat import RyhmaTiedotForm
 
 @app.route("/")
 def tilapainenjuuri():
-    flash("Aluksi käytössä vain CRUD ryhmille","primary")
-    return redirect( url_for("ryhmat_index") )
+    flash("Tervetuloa!","primary")
+    return redirect( url_for("ryhmat_index"))
 
 @app.route("/ryhmat/")
 def ryhmat_index():
-    return render_template("ryhmat/lista.html", ryhmat = Ryhma.query.all() )
+    if( "aktiiviset" in request.args.keys()) :
+        ryhmat = Ryhma.query.filter_by(paattynyt=False).order_by(Ryhma.nimi).all()
+    elif( "paattyneet" in request.args.keys()) :
+        ryhmat = Ryhma.query.filter_by(paattynyt=True).order_by(Ryhma.nimi).all()
+    else:
+        ryhmat = Ryhma.query.order_by(Ryhma.nimi).all()
+    return render_template("ryhmat/lista.html", ryhmat = ryhmat )
 
 
 @app.route("/ryhmat/uusi/")

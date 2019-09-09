@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h2>Lisää uusi huoltaja</h2>
+<p>Huollettava: {{henkilo.sukunimi}} {{henkilo.etunimi}}</p>
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('jasenet_luo_huoltaja',huollettava_id=henkilo.id), button_map={"submit":"success"}) }}
+
+
+{% endblock %}

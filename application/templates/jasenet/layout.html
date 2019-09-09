@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<!-- Jäsenen poistamiseen liittyvä varmistus toteutettuna Bootstrapilla -->
+<button type="button" class="btn btn-outline-danger float-right" data-toggle="modal" data-target="#poistoModal">
+  <i class="fas fa-user-minus"></i> Poista jäsen
+</button>
+
+
+<div class="modal fade" id="poistoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="poistoModalLabel">Jäsenen poistaminen</h5>
+      </div>
+      <div class="modal-body">
+        Haluatko varmasti poistaa jäsenen?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Älä poista</button>
+        <form method="POST" action="{{ url_for('jasenet_poista', henkilo_id=jasen.id) }}">
+          <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>  Poista</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h2>{{ jasen.etunimi}} {{jasen.sukunimi}}</h2>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    {% if "tiedot" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="tiedot">
+    {% endif %}
+      Henkilötiedot
+    </a>
+  </li>
+
+  {%if jasen.aikuinen == True %}
+    <li class="nav-item">
+      {% if "huollettavat" in request.path %}
+      <a class="nav-link active" href="#">
+      {% else %}
+      <a class="nav-link" href="{{url_for('jasenet_huollettavat', henkilo_id=jasen.id)}}">
+      {% endif %}
+        Huollettavat
+      </a>
+    </li>
+  {% else %}
+  <li class="nav-item">
+    {% if "huoltajat" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="{{url_for('jasenet_huoltajat', henkilo_id=jasen.id)}}">
+    {% endif %}
+      Huoltajat
+    </a>
+  </li>
+  {% endif %}
+
+  <li class="nav-item">
+    {% if "ryhmat" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link disabled" href="ryhmat">
+    {% endif %}
+      Ryhmät
+    </a>
+  </li>
+
+</ul>
+
+{% block intab %}
+
+{% endblock %}
+<a href="{{url_for('jasenet_index')}}" class="btn btn-outline-primary" style="margin-top: 1ex;">
+  Takaisin luetteloon
+</a>
+
+
+{% endblock %}

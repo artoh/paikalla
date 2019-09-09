@@ -1,0 +1,8 @@
+{% extends "jasenet/layout.html" %}
+
+{% block intab %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('jasenet_paivita',henkilo_id=jasen.id), button_map={"submit":"success"}) }}
+
+{% endblock %}

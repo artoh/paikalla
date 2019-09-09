@@ -6,6 +6,38 @@
 <a href="{{ url_for('ryhmat_uusi') }}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i> Lisää ryhmä</a>
 <h2>Ryhmät</h2>
 
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    {% if  request.args.to_dict()|length == 0 %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="{{ url_for('ryhmat_index')}}">
+    {% endif %}
+      Kaikki
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "aktiiviset" in request.args.keys() %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="?aktiiviset">
+    {% endif %}
+      Aktiiviset
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "paattyneet" in request.args.keys() %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="?paattyneet">
+    {% endif %}
+      Päättyneet
+    </a>
+  </li>
+</ul>
+
 <ul>
 {% for ryhma in ryhmat %}
 <li>
