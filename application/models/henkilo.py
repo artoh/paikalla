@@ -23,3 +23,4 @@ class Henkilo(db.Model):
                             primaryjoin=id == Huoltajuus.c.huollettava,
                             secondaryjoin=id == Huoltajuus.c.huoltaja,
                             backref=db.backref('huollettavat'))
+    ryhmat = db.relationship('Ryhmassa', backref='ryhmat', lazy=True)

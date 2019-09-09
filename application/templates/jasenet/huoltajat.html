@@ -2,21 +2,29 @@
 
 {% block intab %}
 
+<div>
+<form action="{{url_for('jasenet_linkita_huoltaja',henkilo_id=jasen.id)}}" method="post">
+  <div class="form-group row" style="margin-top:1ex;">
+	<div class="col-sm-6">
+		<select class="chosen-select" data-placeholder="Valitse huoltaja" name="linkita">
+			<option></option>
+			{% for aikuinen in aikuiset %}
+				<option value="{{aikuinen.id}}">
+					{{aikuinen.sukunimi}} {{aikuinen.etunimi}}
+				</option>
+			{% endfor %}
+		</select>
+	</div>
+    <div class="col-sm-6">
+      <button type="submit"  class="btn btn-outline-primary btn-sm"><i class="fas fa-link"></i> Linkitä huoltajaksi</button>
+      <a href="{{url_for('jasenet_uusi_huoltaja', huollettava_id=jasen.id)}}" class="btn btn-outline-primary btn-sm"><i class="fas fa-user-plus"></i> Lisää uusi henkilö</a>
+    </div>
+  </div>
+</form>
+</div>
 
 <h2>Huoltajat</h2>
-<form action="{{url_for('jasenet_linkita_huoltaja',henkilo_id=jasen.id)}}" method="post">
-<div class="form-group row">
-  <select class="form-control col-sm-6" name="linkita">
-    {% for aikuinen in aikuiset %}
-      <option value="{{aikuinen.id}}">
-        {{aikuinen.sukunimi}} {{aikuinen.etunimi}}
-      </option>
-    {% endfor %}
-  </select>
-  <button type="submit"  class="btn btn-outline-primary col-sm-3"><i class="fas fa-link"></i> Linkitä huoltajaksi</button>
-  </form>
-  <a href="{{url_for('jasenet_uusi_huoltaja', huollettava_id=jasen.id)}}" class="btn btn-outline-primary col-sm-3"><i class="fas fa-user-plus"></i> Lisää uusi henkilö</a>
-</div>
+
 <ul>
 
 {% for huoltaja in jasen.huoltajat %}
@@ -37,8 +45,5 @@
   </li>
 
 {% endfor %}
-
-
 </ul>
-
 {% endblock %}

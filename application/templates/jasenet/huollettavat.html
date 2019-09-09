@@ -2,21 +2,27 @@
 
 {% block intab %}
 
-
-<h2>Huollettavat</h2>
 <form action="{{url_for('jasenet_linkita_huollettava',huoltaja_id=jasen.id)}}" method="post">
-<div class="form-group row">
-  <select class="form-control col-sm-6" name="linkita">
+<div class="form-group row" style="margin-top: 1ex;">
+ <div class="col-sm-6">
+  <select class="chosen-select" data-placeholder="Valitse huollettava" name="linkita">
+    <option></option>
     {% for lapsi in lapset %}
       <option value="{{lapsi.id}}">
         {{lapsi.sukunimi}} {{lapsi.etunimi}}
       </option>
     {% endfor %}
   </select>
-  <input type="submit"  class="btn btn-outline-primary col-sm-3" value="Linkitä huollettavaksi"/>
+  </div>
+  <div class="col-sm-6">
+  <input type="submit"  class="btn btn-outline-primary btn-sm" value="Linkitä huollettavaksi"/>
   </form>
-  <a href="{{url_for('jasenet_uusi_huollettava', huoltaja_id=jasen.id)}}" class="btn btn-outline-primary col-sm-3"><i class="fas fa-user-plus"></i> Lisää uusi henkilö</a>
+  <a href="{{url_for('jasenet_uusi_huollettava', huoltaja_id=jasen.id)}}" class="btn btn-outline-primary btn-sm"><i class="fas fa-user-plus"></i> Lisää uusi henkilö</a>
+  </div>
 </div>
+
+<h2>Huollettavat</h2>
+
 <ul>
 
 {% for lapsi in jasen.huollettavat %}
@@ -28,6 +34,7 @@
     </a>
     <input type="hidden" name="huoltaja" value="{{jasen.id}}"/>
     <input type="hidden" name="huollettava" value="{{lapsi.id}}"/>
+    <input type="hidden" name="jatka" value="huoltaja"/>
     <button type="submit" class="btn btn-outline-danger btn-sm">
       <i class="fas fa-unlink"></i> Poista huoltajuus
     </button>
