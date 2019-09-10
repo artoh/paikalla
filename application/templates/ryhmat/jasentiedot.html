@@ -1,0 +1,39 @@
+<table>
+  <tr>
+    <td>Liittyi ryhmään</td>
+    <td>{{jasenyys.alkaen}}</td>
+  </tr>
+  <tr>
+    <td>Puhelinnumero</td>
+    <td>{{jasen.puhelin}}</td>
+  </tr>
+  <tr>
+    <td>Sähköposti</td>
+    <td>{{jasen.email}}</td>
+  </tr>
+  <tr>
+    <td>Huomioon otettavaa</td>
+    <td>{{jasen.varotieto}}</td>
+  </tr>
+</table>
+
+{% if not jasen.aikuinen %}
+  <h2>Huoltajat</h2>
+
+  {% for huoltaja in jasen.huoltajat %}
+    <table>
+      <tr>
+        <td>Nimi</td>
+        <td>{{huoltaja.sukunimi}} {{huoltaja.etunimi}}</td>
+      </tr>
+      <tr>
+        <td>Puhelinnumero</td>
+        <td>{{huoltaja.puhelin}}</td>
+      </tr>
+      <tr>
+        <td>Sähköposti</td>
+        <td>{{huoltaja.email}}</td>
+      </tr>
+    </table>
+  {% endfor %}
+{% endif %} 

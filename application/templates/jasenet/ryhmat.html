@@ -1,0 +1,12 @@
+{% extends "jasenet/layout.html" %}
+
+{% block intab %}
+<h2>Ryhmät</h2>
+
+{% for ryhma in henkilo.ryhmat %}
+
+  {{ ryhma.alkaen }}
+
+{% endfor %}
+
+{% endblock %}
