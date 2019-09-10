@@ -1,29 +1,44 @@
-<table>
+{% extends "ryhmat/layout.html" %}
+
+{% block intab %}
+
+<h2>{{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}} </h2>
+
+<table class="table table-borderless table-sm">
   <tr>
-    <td>Liittyi ryhmään</td>
-    <td>{{jasenyys.alkaen}}</td>
+    <td width="30%">Liittyi ryhmään</td>
+    <td>{{jasenyys.alkaen|pvm}}</td>
   </tr>
   <tr>
     <td>Puhelinnumero</td>
-    <td>{{jasen.puhelin}}</td>
+    <td>{{jasenyys.jasen.puhelin}}</td>
   </tr>
   <tr>
     <td>Sähköposti</td>
-    <td>{{jasen.email}}</td>
+    <td>{{jasenyys.jasen.email}}</td>
   </tr>
   <tr>
     <td>Huomioon otettavaa</td>
-    <td>{{jasen.varotieto}}</td>
+    <td>{{jasenyys.jasen.varotieto}}</td>
   </tr>
+  <tr>
+    <td>Yhdistyksen jäsenyys</td>
+    <td>
+      {% if jasenyys.jasen.jasenyysAlkoi and not jasenyys.jasen.jasenyysPaattyi %}
+        Jäsen
+      {% else %}
+        Ei ole jäsen
+      {% endif %}
+    </td>
 </table>
 
-{% if not jasen.aikuinen %}
-  <h2>Huoltajat</h2>
+{% if not jasenyys.jasen.aikuinen %}
+  <h4>Huoltajat</h4>
 
-  {% for huoltaja in jasen.huoltajat %}
-    <table>
+  {% for huoltaja in jasenyys.jasen.huoltajat %}
+    <table class="table table-borderless table-sm">
       <tr>
-        <td>Nimi</td>
+        <td width=30%>Nimi</td>
         <td>{{huoltaja.sukunimi}} {{huoltaja.etunimi}}</td>
       </tr>
       <tr>
@@ -34,6 +49,18 @@
         <td>Sähköposti</td>
         <td>{{huoltaja.email}}</td>
       </tr>
+      <tr>
+        <td>Yhdistyksen jäsenyys</td>
+        <td>
+          {% if huoltaja.jasenyysAlkoi and not huoltaja.jasenyysPaattyi %}
+            Jäsen
+          {% else %}
+            Ei ole jäsen
+          {% endif %}
+        </td>
     </table>
   {% endfor %}
-{% endif %} 
+{% endif %}
+
+
+{% endblock %}

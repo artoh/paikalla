@@ -29,8 +29,8 @@
 <ol>
   {% for jasenyys in jasenyydet %}
     {% if jasenyys.ohjaaja %}
-    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.ryhmassaId)}}" method="POST">
-      <li>{{jasenyys.sukunimi}} {{jasenyys.etunimi}}
+    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.id)}}" method="POST">
+      <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasenyys.id)}}"> {{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}}</a>
         <button type="submit" class="btn btn-outline-danger btn-sm">
           <i class="fas fa-unlink"></i> Erota ryhmästä
         </button>
@@ -45,8 +45,8 @@
 <ol>
   {% for jasenyys in jasenyydet %}
     {% if not jasenyys.ohjaaja %}
-    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.ryhmassaId)}}" method="POST">
-        <li>{{jasenyys.sukunimi}} {{jasenyys.etunimi}}
+    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.id)}}" method="POST">
+        <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasenyys.id)}}"> {{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}}</a>
           <button type="submit" class="btn btn-outline-danger btn-sm">
             <i class="fas fa-unlink"></i> Erota ryhmästä
           </button>

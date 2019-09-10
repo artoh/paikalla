@@ -47,27 +47,22 @@
 
 ### Jäsenten hallinta
 
-- [ ] Toimihenkilö lisää jäsenen
-- [ ] Toimihenkilö lisää huoltajan, joka ei ole jäsen
-- [ ] Toimihenkilö muokkaa jäsenen tietoja
-  - [ ] Toimihenkilö yhdistää lapselle huoltajan
-  - [ ] Toimihenkilö poistaa lapselta huoltajan
-- [ ] Toimihenkilö merkitsee jäsenen eronneeksi
+- [x] Toimihenkilö lisää jäsenen
+- [x] Toimihenkilö lisää huoltajan, joka ei ole jäsen
+- [x] Toimihenkilö muokkaa jäsenen tietoja
+  - [x] Toimihenkilö yhdistää lapselle huoltajan
+  - [x] Toimihenkilö poistaa lapselta huoltajan
+- [x] Toimihenkilö merkitsee jäsenen eronneeksi
 - [ ] Toimihenkilö vaihtaa jäsenen salasanan
-- [ ] Toimihenkilö vaihtaa jäsenen statusta
-  - ei jäsen
-  - jäsen
-  - ryhmänohjaaja
-  - toimihenkilö
-  - vastaava jäsenrekisterin hoitaja
+- [x] Toimihenkilö merkitsee jäsenen toimihenkilöksi
 
 ## Ryhmien hallinta
 - [x] Toimihenkilö luo uuden ryhmän
 - [x] Toimihenkilö poistaa ryhmän
 - [ ] Toimihenkilö muokkaa ryhmän tietoja
   - [x] Ryhmän perustiedot
-  - [ ] Ryhmän ohjaajat
-  - [ ] Ryhmän jäsenet
+  - [x] Ryhmän ohjaajat
+  - [x] Ryhmän jäsenet
   - [ ] Ryhmän kokoukset
 
 ## Tilastot

@@ -3,22 +3,23 @@ from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma, Ryhmassa, Henkilo
 from datetime import datetime
 
-@app.route("/ryhmat/<ryhma_id>/jasenet")
+@app.route("/ryhmat/<ryhma_id>/ryhmassa")
 def ryhmat_jasenet(ryhma_id):
     ryhma = Ryhma.query.get(ryhma_id)
-    jasenyydet = ryhma.jasenyydet()
+    jasenyydet = ryhma.jasenyydet
 
     ryhmassaidt = []
     for jasenyys in jasenyydet :
-        ryhmassaidt.append(jasenyys["henkiloId"])
+        ryhmassaidt.append(jasenyys.henkiloId)
 
-    kaikkijasenet = Henkilo.query.order_by(Henkilo.sukunimi)
+    kaikkijasenet = Henkilo.query.filter(Henkilo.jasenyysAlkoi.isnot(None),
+                                         Henkilo.jasenyysPaattyi == None).order_by(Henkilo.sukunimi)
     eiryhmassa = []
     for henkilo in kaikkijasenet:
         if henkilo.id not in ryhmassaidt:
             eiryhmassa.append(henkilo)
 
-    return render_template("ryhmat/jasenet.html", ryhma=ryhma, eiryhmassa=eiryhmassa, jasenyydet=ryhma.jasenyydet())
+    return render_template("ryhmat/jasenet.html", ryhma=ryhma, eiryhmassa=eiryhmassa, jasenyydet=jasenyydet)
 
 
 @app.route("/ryhmat/<ryhma_id>/linkitaohjaaja", methods=["POST"])
@@ -43,4 +44,10 @@ def ryhmat_erota_jasen(ryhmassa_id):
     ryhmassa=Ryhmassa.query.get(ryhmassa_id)
     ryhmassa.paattyen=datetime.today()
     db.session.commit()
-    return redirect(url_for("ryhmat_jasenet", ryhma_id=ryhmassa.ryhma))
+    return redirect(url_for("ryhmat_jasenet", ryhma_id=ryhmassa.ryhmaId))
+
+@app.route("/ryhmat/jasentiedot/<ryhmassa_id>")
+def ryhmat_jasen_tiedot(ryhmassa_id):
+    ryhmassa = Ryhmassa.query.get(ryhmassa_id)
+
+    return render_template("ryhmat/jasentiedot.html",jasenyys=ryhmassa, ryhma=ryhmassa.ryhma)

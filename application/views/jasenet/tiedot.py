@@ -37,7 +37,6 @@ def jasenet_tiedot(henkilo_id) :
     form = HenkiloTiedotAdminilleForm()
     form.lataa(henkilo)
 
-
     return render_template("jasenet/tiedot.html", jasen=henkilo, form=form )
 
 
@@ -54,9 +53,6 @@ def jasenet_paivita(henkilo_id):
 
     flash("Henkilön " + henkilo.etunimi + " " + henkilo.sukunimi + " tiedot tallennettu", "success")
     return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )
-
-
-
 
 
 @app.route("/jasenet/<henkilo_id>/poista", methods=["POST"])

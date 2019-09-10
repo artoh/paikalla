@@ -1,12 +1,23 @@
 {% extends "jasenet/layout.html" %}
 
 {% block intab %}
-<h2>Ryhmät</h2>
-
-{% for ryhma in henkilo.ryhmat %}
-
-  {{ ryhma.alkaen }}
-
+<h3>Nykyiset ryhmät</h3>
+<ul>
+{% for ryhmassa in jasen.ryhmat %}
+  {% if (not ryhmassa.paattyen) and (not ryhmassa.ryhma.paattynyt) %}
+    <li><a href="{{url_for('ryhmat_tiedot',ryhma_id=ryhmassa.ryhma.id)}}"> {{ ryhmassa.ryhma.nimi }} </a>  {{ryhmassa.alkaen|pvm}} -</li>
+  {% endif %}
 {% endfor %}
+</ul>
+
+<h3>Entiset ryhmät</h3>
+<ul>
+{% for ryhmassa in jasen.ryhmat %}
+  {% if ryhmassa.paattyen or ryhmassa.ryhma.paattynyt %}
+    <li><a href="{{url_for('ryhmat_tiedot',ryhma_id=ryhmassa.ryhma.id)}}"> {{ ryhmassa.ryhma.nimi }} </a> {{ryhmassa.alkaen|pvm}} - {{ryhmassa.paattyen|pvm}}</li>
+  {% endif %}
+{% endfor %}
+</ul>
+
 
 {% endblock %}
