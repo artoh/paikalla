@@ -1,0 +1,17 @@
+ {% extends "ryhmat/layout.html" %}
+ {% block intab %}
+
+<a href="{{ url_for('ryhmat_kokoukset_uusi', ryhma_id=ryhma.id) }}">
+  Lisää kokous
+</a>
+<a href="{{ url_for('ryhmat_kokoukset_uusisarja', ryhma_id=ryhma.id) }}">
+  Lisää kokoussarja
+</a>
+
+
+<ul>
+ {% for kokous in ryhma.kokoukset|sort(attribute="alkaa") %}
+    <li>{{kokous.alkaa}} - {{kokous.paattyy}}</li>
+ {% endfor %}
+</ul>
+{% endblock %}
