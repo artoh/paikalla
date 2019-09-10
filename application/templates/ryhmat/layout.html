@@ -35,7 +35,7 @@
     {% if "tiedot" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link" href="tiedot">
+    <a class="nav-link" href="{{url_for('ryhmat_tiedot', ryhma_id=ryhma.id)}}">
     {% endif %}
       Tiedot
     </a>
@@ -45,7 +45,7 @@
     {% if "ohjaajat" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link disabled" href="ohjaajat">
+    <a class="nav-link" href="{{ url_for('ryhmat_ohjaajat', ryhma_id=ryhma.id) }}">
     {% endif %}
       Ohjaajat
     </a>
@@ -55,7 +55,7 @@
     {% if "jasenet" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link disabled" href="jasenet">
+    <a class="nav-link" href="{{url_for('ryhmat_jasenet', ryhma_id=ryhma.id)}}">
     {% endif %}
       Jäsenet
     </a>

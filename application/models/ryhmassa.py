@@ -9,3 +9,8 @@ class Ryhmassa(db.Model):
     ohjaaja = db.Column(db.Boolean, default=False)
     alkaen = db.Column(db.Date, nullable=False)
     paattyen = db.Column( db.Date, nullable=True)
+
+    def __init__(self, ryhmaId, jasenId, ohjaaja = False):
+        self.ryhma = ryhmaId
+        self.jasen = jasenId
+        self.ohjaaja = ohjaaja

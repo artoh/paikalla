@@ -1,0 +1,33 @@
+{% extends "ryhmat/layout.html" %} {% block intab %}
+
+<div>
+  <form action="{{url_for('ryhmat_linkita_jasen',ryhma_id=ryhma.id)}}" method="post">
+    <div class="form-group row" style="margin-top:1ex;">
+      <div class="col-sm-6">
+        <select class="chosen-select" data-placeholder="Valitse lisättävä jäsen" name="linkita">
+          <option></option>
+          {% for jasen in jasenet %}
+          <option value="{{ jasen.id }}">
+            {{ jasen.sukunimi }} {{ jasen.etunimi }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-sm-6">
+        <button type="submit" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-link"></i> Lisää ryhmään
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<h2>Jäsenet</h2>
+
+<ul>
+  {% for jasen in ryhma.jasenet() %}
+  <li> {{jasen.sukunimi}} {{jasen.etunimi}} </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
