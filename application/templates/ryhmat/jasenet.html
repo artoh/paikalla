@@ -6,9 +6,9 @@
       <div class="col-sm-6">
         <select class="chosen-select" data-placeholder="Valitse lisättävä jäsen" name="linkita">
           <option></option>
-          {% for jasen in jasenet %}
-          <option value="{{ jasen.id }}">
-            {{ jasen.sukunimi }} {{ jasen.etunimi }}
+          {% for henkilo in eiryhmassa %}
+          <option value="{{ henkilo.id }}">
+            {{ henkilo.sukunimi }} {{ henkilo.etunimi }}
           </option>
           {% endfor %}
         </select>
@@ -17,17 +17,44 @@
         <button type="submit" class="btn btn-outline-primary btn-sm">
           <i class="fas fa-link"></i> Lisää ryhmään
         </button>
+        <button type="submit" formaction="{{ url_for('ryhmat_linkita_ohjaaja', ryhma_id=ryhma.id) }}" class="btn btn-outline-primary btn-sm">
+          Lisää ohjaajaksi
+        </button>
       </div>
     </div>
   </form>
 </div>
 
-<h2>Jäsenet</h2>
-
-<ul>
-  {% for jasen in ryhma.jasenet() %}
-  <li> {{jasen.sukunimi}} {{jasen.etunimi}} </li>
+<h2>Ohjaajat</h2>
+<ol>
+  {% for jasenyys in jasenyydet %}
+    {% if jasenyys.ohjaaja %}
+    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.ryhmassaId)}}" method="POST">
+      <li>{{jasenyys.sukunimi}} {{jasenyys.etunimi}}
+        <button type="submit" class="btn btn-outline-danger btn-sm">
+          <i class="fas fa-unlink"></i> Erota ryhmästä
+        </button>
+      </li>
+    </form>
+    {% endif %}
   {% endfor %}
-</ul>
+</ol>
+
+
+<h2>Jäsenet</h2>
+<ol>
+  {% for jasenyys in jasenyydet %}
+    {% if not jasenyys.ohjaaja %}
+    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.ryhmassaId)}}" method="POST">
+        <li>{{jasenyys.sukunimi}} {{jasenyys.etunimi}}
+          <button type="submit" class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-unlink"></i> Erota ryhmästä
+          </button>
+        </li>
+      </form>
+    {% endif %}
+  {% endfor %}
+</ol>
+
 
 {% endblock %}

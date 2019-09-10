@@ -42,22 +42,12 @@
   </li>
 
   <li class="nav-item">
-    {% if "ohjaajat" in request.path %}
-    <a class="nav-link active" href="#">
-    {% else %}
-    <a class="nav-link" href="{{ url_for('ryhmat_ohjaajat', ryhma_id=ryhma.id) }}">
-    {% endif %}
-      Ohjaajat
-    </a>
-  </li>
-
-  <li class="nav-item">
     {% if "jasenet" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
     <a class="nav-link" href="{{url_for('ryhmat_jasenet', ryhma_id=ryhma.id)}}">
     {% endif %}
-      Jäsenet
+      Ohjaajat ja jäsenet
     </a>
   </li>
 

@@ -1,6 +1,7 @@
 from application import db
 from .ryhmassa import Ryhmassa
 from .henkilo import Henkilo
+from sqlalchemy.sql import text
 
 class Ryhma(db.Model):
     __tablename__ = "Ryhma"
@@ -29,3 +30,18 @@ class Ryhma(db.Model):
             taulu.append( Henkilo.query.get(r.jasen))
         taulu.sort(key=lambda x: x.sukunimi + " " + x.etunimi)
         return taulu
+
+    def jasenyydet(self):
+        stmt = text("SELECT ryhmassa.id, sukunimi, etunimi, ohjaaja, Henkilo.id FROM "
+                    "Ryhmassa JOIN Henkilo ON Ryhmassa.jasen=Henkilo.id "
+                    "WHERE Ryhmassa.ryhma=:ryhmaid AND paattyen IS NULL ORDER BY sukunimi,etunimi").params(ryhmaid=self.id)
+
+        res = db.engine.execute(stmt)
+        vastaus = []
+        for rivi in res:
+            vastaus.append({"ryhmassaId" : rivi[0],
+                            "sukunimi" : rivi[1],
+                            "etunimi" : rivi[2],
+                            "ohjaaja" : rivi[3],
+                            "henkiloId" : rivi[4]})
+        return vastaus
