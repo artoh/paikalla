@@ -59,11 +59,11 @@
 ## Ryhmien hallinta
 - [x] Toimihenkilö luo uuden ryhmän
 - [x] Toimihenkilö poistaa ryhmän
-- [ ] Toimihenkilö muokkaa ryhmän tietoja
+- [x] Toimihenkilö muokkaa ryhmän tietoja
   - [x] Ryhmän perustiedot
   - [x] Ryhmän ohjaajat
   - [x] Ryhmän jäsenet
-  - [ ] Ryhmän kokoukset
+  - [x] Ryhmän kokoukset
 
 ## Tilastot
 - [ ] Toimihenkilö näkee yksittäisen ryhmän tilaston

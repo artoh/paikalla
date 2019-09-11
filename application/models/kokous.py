@@ -19,3 +19,5 @@ class Kokous(db.Model) :
     lasna = db.relationship('Ryhmassa', secondary=Lasnaolo, lazy=True,
                             backref=db.backref('kokoukset', lazy=True))
 
+    def __init__(self, ryhmaId):
+        self.ryhmaId = ryhmaId

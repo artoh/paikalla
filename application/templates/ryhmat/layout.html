@@ -57,9 +57,20 @@
     {% else %}
     <a class="nav-link" href="{{url_for('ryhmat_kokoukset', ryhma_id=ryhma.id)}}">
     {% endif %}
-      Kokoukset
+      Tulevat kokoukset
     </a>
   </li>
+
+  <li class="nav-item">
+    {% if "menneet" in request.path %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="{{url_for('ryhmat_menneet', ryhma_id=ryhma.id)}}">
+    {% endif %}
+      Menneet kokoukset
+    </a>
+  </li>
+
 
   <li class="nav-item">
     {% if "tilasto" in request.path %}

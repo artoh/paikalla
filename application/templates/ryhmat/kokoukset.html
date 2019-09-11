@@ -1,17 +1,39 @@
  {% extends "ryhmat/layout.html" %}
  {% block intab %}
 
-<a href="{{ url_for('ryhmat_kokoukset_uusi', ryhma_id=ryhma.id) }}">
-  Lisää kokous
+<a href="{{ url_for('ryhmat_kokoukset_uusisarja', ryhma_id=ryhma.id) }}" class="btn btn-outline-primary float-right">
+  <i class="far fa-calendar-plus"></i> Lisää kokoussarja
 </a>
-<a href="{{ url_for('ryhmat_kokoukset_uusisarja', ryhma_id=ryhma.id) }}">
-  Lisää kokoussarja
+<a href="{{ url_for('ryhmat_kokoukset_uusi', ryhma_id=ryhma.id) }}" class="btn btn-outline-primary float-right">
+  <i class="fas fa-plus"></i> Lisää kokous
 </a>
 
 
-<ul>
- {% for kokous in ryhma.kokoukset|sort(attribute="alkaa") %}
-    <li>{{kokous.alkaa}} - {{kokous.paattyy}}</li>
- {% endfor %}
-</ul>
+<h2>Tulevat kokoukset</h2>
+<table class="table table-sm table-borderless table-striped">
+  <thead>
+    <tr>
+      <td>Ajankohta</td>
+      <td>Paikka</td>
+      <td>Kuvaus</td>
+      <td></td>
+    <tr>
+  </thead>
+  <tbody>
+    {% for kokous in ryhma.kokoukset|tulevat_kokoukset|sort(attribute="alkaa") %}
+      <tr>
+        <td>{{kokous.alkaa|pvmaika}}</td>
+        <td>{{kokous.sijainti}}</td>
+        <td>{{kokous.kuvaus}}</td>
+        <td>
+          <form>
+          <a href="{{url_for('ryhmat_kokoukset_muokkaa', kokous_id=kokous.id)}}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+          <button type="submit" formmethod="post" formaction="{{url_for('ryhmat_poista_kokous', kokous_id=kokous.id)}}"  class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button></form>
+        </td>
+      </tr>
+    {% endfor %}
+ </tbody>
+</table>
+
+
 {% endblock %}

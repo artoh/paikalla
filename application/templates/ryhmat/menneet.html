@@ -1,0 +1,28 @@
+{% extends "ryhmat/layout.html" %}
+{% block intab %}
+
+
+<h2>Menneet kokoukset</h2>
+<table class="table table-sm table-borderless table-striped">
+ <thead>
+   <tr>
+     <td>Ajankohta</td>
+    <td>Läsnä</td>
+     <td>Paikka</td>
+     <td>Kuvaus</td>
+   <tr>
+ </thead>
+ <tbody>
+   {% for kokous in ryhma.kokoukset|menneet_kokoukset|sort(attribute="alkaa", reverse=True) %}
+     <tr>
+       <td>{{kokous.alkaa|pvmaika}} </td>
+       <td></td>       
+       <td>{{kokous.sijainti}}</td>
+       <td>{{kokous.kuvaus}}</td>
+     </tr>
+   {% endfor %}
+</tbody>
+</table>
+
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "ryhmat/layout.html" %}
+
+{% block body %}
+
+<h2>Lisää toistuvia kokouksia</h2>
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('ryhmat_luo_kokoussarja', ryhma_id=ryhma.id), button_map={"submit":"success"}) }}
+
+{% endblock %}
