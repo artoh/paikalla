@@ -26,17 +26,27 @@
   </form>
 </div>
 
+{% macro jasenyys_tiedot(jasenyys) -%}
+<form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.id)}}" method="POST">
+  <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasenyys.id)}}"> {{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}}</a>
+    {% if jasenyys.jasen.varotieto %}
+      <a tabindex="0" class="btn btn-lg btn-warning btn-sm" role="button" data-toggle="popover" data-trigger="focus" title="{{jasenyys.jasen.etunimi}} {{jasenyys.jasen.sukunimi}}" data-content="{{jasenyys.jasen.varotieto}}">
+        <i class="fas fa-exclamation-triangle"></i>
+      </a>
+    {% endif %}
+    <button type="submit" class="btn btn-outline-danger btn-sm">
+      <i class="fas fa-unlink"></i> Erota ryhmästä
+    </button>
+  </li>
+</form>
+{% endmacro %}
+
+
 <h2>Ohjaajat</h2>
 <ol>
   {% for jasenyys in jasenyydet %}
     {% if jasenyys.ohjaaja %}
-    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.id)}}" method="POST">
-      <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasenyys.id)}}"> {{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}}</a>
-        <button type="submit" class="btn btn-outline-danger btn-sm">
-          <i class="fas fa-unlink"></i> Erota ryhmästä
-        </button>
-      </li>
-    </form>
+      {{ jasenyys_tiedot(jasenyys) }}
     {% endif %}
   {% endfor %}
 </ol>
@@ -46,16 +56,20 @@
 <ol>
   {% for jasenyys in jasenyydet %}
     {% if not jasenyys.ohjaaja %}
-    <form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.id)}}" method="POST">
-        <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasenyys.id)}}"> {{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}}</a>
-          <button type="submit" class="btn btn-outline-danger btn-sm">
-            <i class="fas fa-unlink"></i> Erota ryhmästä
-          </button>
-        </li>
-      </form>
+      {{ jasenyys_tiedot(jasenyys) }}
     {% endif %}
   {% endfor %}
 </ol>
 
 
+{% endblock %}
+{% block script %}
+<script>
+  $(function () {
+    $('[data-toggle="popover"]').popover({
+        placement : 'top',
+        trigger : 'hover'
+      })
+  })
+</script>
 {% endblock %}
