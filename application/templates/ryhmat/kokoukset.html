@@ -20,7 +20,7 @@
     <tr>
   </thead>
   <tbody>
-    {% for kokous in ryhma.kokoukset|tulevat_kokoukset|sort(attribute="alkaa") %}
+    {% for kokous in kokoukset %}
       <tr>
         <td>{{kokous.alkaa|pvmaika}}</td>
         <td>{{kokous.sijainti}}</td>

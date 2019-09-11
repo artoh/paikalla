@@ -5,14 +5,6 @@ from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
 
-@app.template_filter("menneet_kokoukset")
-def filter_menneet_kokoukset(lista):
-    uusilista = []
-    for kokous in lista:
-        if kokous.paattyy <= datetime.now() :
-            uusilista.append(kokous)
-    return uusilista
-
 @app.route("/ryhmat/<ryhma_id>/menneet")
 def ryhmat_menneet(ryhma_id):
     ryhma = Ryhma.query.get(ryhma_id)

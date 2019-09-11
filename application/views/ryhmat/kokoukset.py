@@ -5,19 +5,11 @@ from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
 
-
-@app.template_filter("tulevat_kokoukset")
-def filter_tulevat_kokoukset(lista):
-    uusilista = []
-    for kokous in lista:
-        if kokous.paattyy > datetime.now() :
-            uusilista.append(kokous)
-    return uusilista
-
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
 def ryhmat_kokoukset(ryhma_id):
     ryhma = Ryhma.query.get(ryhma_id)
-    return render_template("ryhmat/kokoukset.html", ryhma=ryhma)
+    kokoukset = Kokous.query.filter(Kokous.ryhmaId == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa")
+    return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset)
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusi")
 def ryhmat_kokoukset_uusi(ryhma_id):
