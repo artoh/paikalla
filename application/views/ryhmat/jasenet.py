@@ -6,11 +6,11 @@ from datetime import datetime
 @app.route("/ryhmat/<ryhma_id>/ryhmassa")
 def ryhmat_jasenet(ryhma_id):
     ryhma = Ryhma.query.get(ryhma_id)
-    jasenyydet = ryhma.jasenyydet
+    jasenet = ryhma.jasenet()
 
     ryhmassaidt = []
-    for jasenyys in jasenyydet :
-        ryhmassaidt.append(jasenyys.henkiloId)
+    for jasen in jasenet :
+        ryhmassaidt.append( jasen["henkiloId"] )
 
     kaikkijasenet = Henkilo.query.filter(Henkilo.jasenyysAlkoi.isnot(None),
                                          Henkilo.jasenyysPaattyi == None).order_by(Henkilo.sukunimi)
@@ -19,7 +19,7 @@ def ryhmat_jasenet(ryhma_id):
         if henkilo.id not in ryhmassaidt:
             eiryhmassa.append(henkilo)
 
-    return render_template("ryhmat/jasenet.html", ryhma=ryhma, eiryhmassa=eiryhmassa, jasenyydet=jasenyydet)
+    return render_template("ryhmat/jasenet.html", ryhma=ryhma, eiryhmassa=eiryhmassa, jasenet=jasenet)
 
 
 @app.route("/ryhmat/<ryhma_id>/linkitaohjaaja", methods=["POST"])

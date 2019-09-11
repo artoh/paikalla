@@ -13,10 +13,10 @@
    <tr>
  </thead>
  <tbody>
-   {% for kokous in ryhma.kokoukset|menneet_kokoukset|sort(attribute="alkaa", reverse=True) %}
+   {% for kokous in ryhma.menneetKokoukset() %}
      <tr>
        <td>{{kokous.alkaa|pvmaika}} </td>
-       <td></td>       
+       <td>{{kokous.lasna|int}}</td>
        <td>{{kokous.sijainti}}</td>
        <td>{{kokous.kuvaus}}</td>
      </tr>

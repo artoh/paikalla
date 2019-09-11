@@ -2,7 +2,7 @@
 {% block intab %}
 
 <div>
-  <form action="{{url_for('ryhmat_linkita_jasen',ryhma_id=ryhma.id)}}" method="post">
+  <form method="post">
     <div class="form-group row" style="margin-top:1ex;">
       <div class="col-sm-6">
         <select class="chosen-select" data-placeholder="Valitse lisättävä jäsen" name="linkita">
@@ -15,7 +15,7 @@
         </select>
       </div>
       <div class="col-sm-6">
-        <button type="submit" class="btn btn-outline-primary btn-sm">
+        <button type="submit" formaction="{{url_for('ryhmat_linkita_jasen',ryhma_id=ryhma.id)}}"  class="btn btn-outline-primary btn-sm">
           <i class="fas fa-link"></i> Lisää ryhmään
         </button>
         <button type="submit" formaction="{{ url_for('ryhmat_linkita_ohjaaja', ryhma_id=ryhma.id) }}" class="btn btn-outline-primary btn-sm">
@@ -26,40 +26,23 @@
   </form>
 </div>
 
-{% macro jasenyys_tiedot(jasenyys) -%}
-<form action="{{url_for('ryhmat_erota_jasen',ryhmassa_id=jasenyys.id)}}" method="POST">
-  <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasenyys.id)}}"> {{jasenyys.jasen.sukunimi}} {{jasenyys.jasen.etunimi}}</a>
-    {% if jasenyys.jasen.varotieto %}
-      <a tabindex="0" class="btn btn-lg btn-warning btn-sm" role="button" data-toggle="popover" data-trigger="focus" title="{{jasenyys.jasen.etunimi}} {{jasenyys.jasen.sukunimi}}" data-content="{{jasenyys.jasen.varotieto}}">
-        <i class="fas fa-exclamation-triangle"></i>
-      </a>
-    {% endif %}
-    <button type="submit" class="btn btn-outline-danger btn-sm">
-      <i class="fas fa-unlink"></i> Erota ryhmästä
-    </button>
-  </li>
-</form>
+{% macro jasen_tiedot(otsikko,jasenet) -%}
+  <h2>{{otsikko}}</h2>
+  <ol>
+    {% for jasen in jasenet %}
+      <li><a href="{{url_for('ryhmat_jasen_tiedot', ryhmassa_id=jasen.ryhmassaId)}}"> {{jasen.sukunimi}} {{jasen.etunimi}} </a>
+        {% if jasen.varotieto %}
+          <a tabindex="0" class="btn btn-lg btn-warning btn-sm" role="button" data-toggle="popover" data-trigger="focus" title="{{jasen.etunimi}} {{jasen.sukunimi}}" data-content="{{jasen.varotieto}}">
+            <i class="fas fa-exclamation-triangle"></i>
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
 {% endmacro %}
 
-
-<h2>Ohjaajat</h2>
-<ol>
-  {% for jasenyys in jasenyydet %}
-    {% if jasenyys.ohjaaja %}
-      {{ jasenyys_tiedot(jasenyys) }}
-    {% endif %}
-  {% endfor %}
-</ol>
-
-
-<h2>Jäsenet</h2>
-<ol>
-  {% for jasenyys in jasenyydet %}
-    {% if not jasenyys.ohjaaja %}
-      {{ jasenyys_tiedot(jasenyys) }}
-    {% endif %}
-  {% endfor %}
-</ol>
+{{ jasen_tiedot("Ohjaajat", jasenet|selectattr("ohjaaja","eq",True)) }}
+{{ jasen_tiedot("Jäsenet", jasenet|selectattr("ohjaaja","eq",False)) }}
 
 
 {% endblock %}
