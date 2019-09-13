@@ -3,6 +3,7 @@
 {% block body %}
 
 <!-- Ryhmän poistamiseen liittyvä varmistus toteutettuna Bootstrapilla -->
+{% if current_user.toimihenkilo %}
 <button type="button" class="btn btn-outline-danger float-right" data-toggle="modal" data-target="#poistoModal">
   <i class="fas fa-trash-alt"></i> Poista ryhmä
 </button>
@@ -26,7 +27,7 @@
     </div>
   </div>
 </div>
-
+{% endif %}
 
 <h2>{{ ryhma.nimi}}</h2>
 
