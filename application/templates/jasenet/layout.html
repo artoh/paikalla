@@ -7,7 +7,6 @@
   <i class="fas fa-user-minus"></i> Poista jäsen
 </button>
 
-
 <div class="modal fade" id="poistoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -26,6 +25,35 @@
     </div>
   </div>
 </div>
+
+{% if jasen.aikuinen and jasen.email %}
+<button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#salasanaModal">
+  <i class="fas fa-key"></i> Vaihda salasana
+</button>
+
+<form method="POST" action="{{ url_for('jasenet_salasana', henkilo_id=jasen.id) }}">
+  <div class="modal fade" id="salasanaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="poistoModalLabel">Salasanan vaihtaminen</h5>
+        </div>
+        <div class="modal-body">
+          <p>Anna käyttäjälle {{jasen.etunimi}} {{jasen.sukunimi}} uusi salasana<br/>
+            <input type=text name=salasana class="form-control"></input>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i>  Vaihda salasana</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endif %}
+
 
 
 <h2>{{ jasen.etunimi}} {{jasen.sukunimi}}</h2>

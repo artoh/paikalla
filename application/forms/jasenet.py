@@ -8,7 +8,8 @@ class HenkiloTiedotFormBase(FlaskForm) :
     etunimi = StringField("Etunimi", validators=[ validators.DataRequired()])
     sukunimi = StringField("Sukunimi", validators=[validators.DataRequired()])
     puhelin = StringField("Puhelinnumero")
-    email = EmailField("Sähköposti")
+    # email tarkastetaan regexpillä, jotta voi jäädä tyhjäksi
+    email = EmailField("Sähköposti", validators=[validators.Regexp("(\S+@\S+\.\w+)?", message="Sähköpostiosoite ei ole kelvollinen")])
     varotieto = TextAreaField("Huomioon otettavaa (esim. allergiat)")
 
     class Meta:

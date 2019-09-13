@@ -1,0 +1,55 @@
+{% extends "auth/layout.html" %}
+
+{% block body %}
+
+<div>
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Tervetuloa!</div>
+                    <div class="card-body">
+                        <form action="/login" method="POST">
+                          <p class="text-danger">
+                            {{ virhe }}
+                          </p>
+                            <div class="form-group row">
+                                <label for="email_address" class="col-md-4 col-form-label text-md-right">Sähköpostiosoite</label>
+                                <div class="col-md-6">
+                                    <input type="email" id="email" class="form-control" name="email" value="{{email}}" required autofocus>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="password" class="col-md-4 col-form-label text-md-right">Salasana</label>
+                                <div class="col-md-6">
+                                    <input type="password" id="salasana" class="form-control" name="salasana" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Kirjaudu
+                                </button>
+                            </div>
+                            <hr>
+                            <p>Ellei sinulla vielä ole Paikalla-palvelun tunnusta, ole hyvä ja rekisteröidy ensin.</p>
+                            <p>Lasten ilmoittautumiset tekee lapset huoltaja, jonka on ensin rekisteröidyttävä palveluun.</p>
+                            <p>Ota kaikissa ongelmatapauksissa yhteyttä jäsenrekisterin hoitajaan.</p>
+                            <div class="col-md-6 offset-md-4">
+                                <a href="{{url_for("auth_uusikayttaja")}}" class="btn btn-success">
+                                    Rekisteröidy
+                                </a>
+                            </div>
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+
+{% endblock %}

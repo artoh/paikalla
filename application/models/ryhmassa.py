@@ -4,8 +4,8 @@ from application import db
 class Ryhmassa(db.Model):
     __tablename__ = "Ryhmassa"
     id = db.Column(db.Integer, primary_key=True)
-    ryhmaId = db.Column(db.Integer, db.ForeignKey('Ryhma.id'), nullable=False)
-    henkiloId = db.Column(db.Integer, db.ForeignKey('Henkilo.id'), nullable=False)
+    ryhmaId = db.Column(db.Integer, db.ForeignKey('Ryhma.id', ondelete="CASCADE"), nullable=False)
+    henkiloId = db.Column(db.Integer, db.ForeignKey('Henkilo.id', ondelete="CASCADE"), nullable=False)
     ohjaaja = db.Column(db.Boolean, default=False)
     alkaen = db.Column(db.Date, nullable=False)
     paattyen = db.Column( db.Date, nullable=True)

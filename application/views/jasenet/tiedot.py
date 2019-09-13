@@ -1,4 +1,4 @@
-from application import app, db
+from application import app, db, bcrypt
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm, HenkiloTiedotForm
@@ -62,3 +62,11 @@ def jasenet_poista(henkilo_id):
     db.session.delete(henkilo)
     db.session.commit()
     return redirect( url_for("jasenet_index") )
+
+@app.route("/jasenet/<henkilo_id>/salasana", methods=["POST"])
+def jasenet_salasana(henkilo_id):
+    henkilo = Henkilo.query.get( henkilo_id )
+    henkilo.salasana = bcrypt.generate_password_hash( request.form.get("salasana"))
+    flash( henkilo.etunimi + " " + henkilo.sukunimi + " salasana vaihdettu", "info")
+    db.session.commit()
+    return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo.id))
