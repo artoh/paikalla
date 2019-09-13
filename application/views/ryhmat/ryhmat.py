@@ -2,11 +2,6 @@ from application import app, db
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma
 
-@app.route("/")
-def tilapainenjuuri():
-    flash("Tervetuloa!","primary")
-    return redirect( url_for("ryhmat_index"))
-
 @app.route("/ryhmat/")
 def ryhmat_index():
     if( "aktiiviset" in request.args.keys()) :

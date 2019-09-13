@@ -5,7 +5,7 @@ from application.models import Henkilo
 
 from flask_login import login_user, logout_user
 
-@app.route("/login", methods = ["GET", "POST"])
+@app.route("/", methods = ["GET", "POST"])
 def auth_login():
     if request.method == "GET":
         return render_template("auth/login.html", email="")
@@ -21,7 +21,7 @@ def auth_login():
 
     if( bcrypt.check_password_hash( kayttaja.salasana, salasanaTiiviste )) :
         login_user(kayttaja)
-        return redirect(url_for("ryhmat_index"))
+        return redirect(url_for("ilmoittautumiset_index"))
     else:
         return render_template("auth/login.html",
                                virhe = "Virheellinen salasana",

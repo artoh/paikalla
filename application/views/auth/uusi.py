@@ -21,4 +21,4 @@ def auth_luo_uusikayttaja():
     db.session.commit()
     login_user(henkilo)
     flash("Tervetuloa {} !".format(henkilo.etunimi), "info")
-    return redirect( url_for("ryhmat_index") )
+    return redirect( url_for("henkilotiedot_index") )

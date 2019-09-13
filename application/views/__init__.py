@@ -1,6 +1,7 @@
 from .ryhmat import *
 from .jasenet import *
 from .auth import *
+from .mina import *
 
 
 @app.template_filter('pvm')

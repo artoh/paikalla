@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+{%macro henkilotiedot(henkilo) -%}
+<table class="table table-borderless table-sm">
+  <tr>
+    <td>Puhelinnumero</td>
+    <td>{{current_user.puhelin}}</td>
+  </tr>
+  <tr>
+    <td>Sähköposti</td>
+    <td>{{current_user.email}}</td>
+  </tr>
+  <tr>
+    <td>Huomioon otettavaa</td>
+    <td>{{current_user.varotieto}}</td>
+  </tr>
+  <tr>
+    <td>Yhdistyksen jäsenyys</td>
+    <td>
+      {% if current_user.jasenyysAlkoi and not current_user.jasenyysPaattyi %}
+        Jäsen
+      {% else %}
+        Ei ole jäsen
+      {% endif %}
+    </td>
+</table>
+{% endmacro %}
+
+<a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
+<a class="btn btn-outline-primary float-right">Vaihda salasana</a>
+<a class="btn btn-outline-primary float-right">Lisää huollettava</a>
+<h2>Henkilötietoni</h2>
+{{ henkilotiedot(current_user)}}
+
+{% for lapsi in current_user.huollettavat %}
+ <hr/>
+ <a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
+ <a class="btn btn-outline-primary float-right">Lisää huoltaja</a>
+
+  <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>
+
+  {{ henkilotiedot(lapsi)}}
+  Huoltajat
+  <ul>
+   {% for huoltaja in lapsi.huoltajat %}
+    <li>{{huoltaja.etunimi}} {{huoltaja.sukunimi}}</li>
+   {% endfor %}
+  </ul>
+{% endfor %}
+
+
+
+{% endblock %}

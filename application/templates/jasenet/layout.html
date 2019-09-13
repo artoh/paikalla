@@ -92,7 +92,7 @@
   {% endif %}
 
   <li class="nav-item">
-    {% if "ryhmat" in request.path %}
+    {% if "ryhmissa" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
     <a class="nav-link" href="{{url_for('jasenet_ryhmat',henkilo_id=jasen.id)}}">

@@ -15,13 +15,21 @@
             {% else %}
               <li class="nav-item">
             {% endif %}
-              <a class="nav-link" href="/ilmoittautumiset">Ilmoittautumiset</a>
+              <a class="nav-link" href="{{url_for('ilmoittautumiset_index')}}">Ilmoittautumiset</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="/tiedot">Henkilötiedot</a>
+            {% if "henkilotiedot" in request.path %}
+              <li class="nav-item active">
+            {% else %}
+              <li class="nav-item">
+            {% endif %}
+              <a class="nav-link" href="{{url_for('henkilotiedot_index')}}">Henkilötiedot</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="/kalenteri">Kalenteri</a>
+            {% if "kalenteri" in request.path %}
+              <li class="nav-item active">
+            {% else %}
+              <li class="nav-item">
+            {% endif %}
+              <a class="nav-link" href="/kalenteri">Kalenteri</a>
             </li>
             {% if current_user.toimihenkilo %}
               {% if "jasenet" in request.path %}

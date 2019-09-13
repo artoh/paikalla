@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+{% if not current_user.jasenyysPaattyi %}
+
+<a class="btn btn-outline-primary float-right">Uusi ilmoittautuminen</a>
+  <h2>Omat ryhmäni</h2>
+
+  {% for ryhmassa in current_user.ryhmat %}
+    <h5>{{ryhmassa.ryhma.nimi}}</h5>
+
+    {%if ryhmassa.ohjaaja %}
+
+      <a href="{{url_for('ryhmat_tiedot', ryhma_id=ryhmassa.ryhmaId)}}" class="btn btn-outline-primary">Ohjaajan näkymä</a>
+
+    {% endif %}
+
+    Tähän vielä ohjaajien ja kokouksien tiedot, taitaa olla yhteenvetokyselyn paikka
+
+    {% else  %}
+      Et ole vielä ilmoittautunut yhteenkään ryhmään. Uusi ryhmä-napista pääset selaamaan ryhmiä ja tekemään ilmoittautumisen.
+
+
+  {% endfor %}
+
+{% endif %}
+
+{% for lapsi in current_user.huollettavat %}
+ <hr/>
+ <a class="btn btn-outline-primary float-right">Uusi ilmoittautuminen</a>
+  <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>
+
+    {% for ryhmassa in lapsi.ryhmat %}
+
+    <h5>{{ryhmassa.ryhma.nimi}}</h5>
+
+  {% endfor %}
+
+{% endfor %}
+
+{% endblock %}
