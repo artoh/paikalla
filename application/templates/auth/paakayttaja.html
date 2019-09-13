@@ -1,0 +1,13 @@
+{% extends "auth/layout.html" %}
+
+{% block body %}
+
+<h2>Tervetuloa!</h2>
+
+<p>Paikalla-sovelluksen avulla voi hallita yhdistyksesi ilmoittautumisia sekä ryhmien osallistumistilastoja.</p>
+<p>Aloita luomalla jäsenrekisterin hoitajan käyttäjätunnus.</p>
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('auth_luo_paakayttaja',), button_map={"submit":"success"}) }}
+
+{% endblock %}

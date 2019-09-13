@@ -1,6 +1,6 @@
 from application import db
 from .ryhmassa import Ryhmassa
-from .henkilo import Henkilo
+from .henkilo import Henkilo, ika
 from sqlalchemy.sql import text
 from dateutil.parser import parse
 
@@ -11,12 +11,14 @@ class Ryhma(db.Model):
     paikkoja = db.Column( db.Integer, default=0)
     ilmoittautuminenAlkaa = db.Column( db.DateTime, nullable=True)
     ilmoittautuminenPaattyy = db.Column( db.DateTime, nullable=True)
+    ikavahintaan = db.Column( db.Integer, default=0);
+    ikaenintaan = db.Column( db.Integer, default=999);
     kuvaus = db.Column(db.Text, nullable = True)
     paattynyt = db.Column( db.Boolean, default=False)
     jasenyydet = db.relationship('Ryhmassa',lazy=True)
 
     def jasenet(self):
-        stmt = text("SELECT ryhmassa.id, ohjaaja, sukunimi, etunimi, varotieto, Henkilo.id  "
+        stmt = text("SELECT ryhmassa.id, ohjaaja, sukunimi, etunimi, varotieto, Henkilo.id, syntymaaika  "
                     "FROM Ryhmassa JOIN Henkilo ON Ryhmassa.henkiloId=Henkilo.Id "
                     "WHERE Ryhmassa.ryhmaId=:ryhmaId AND Ryhmassa.paattyen IS NULL "
                     "ORDER BY sukunimi, etunimi").params(ryhmaId=self.id)
@@ -28,7 +30,8 @@ class Ryhma(db.Model):
                             "sukunimi" : rivi[2],
                             "etunimi" : rivi[3],
                             "varotieto" : rivi[4],
-                            "henkiloId" : rivi[5]} )
+                            "henkiloId" : rivi[5],
+                            "ika": ika( parse(rivi[6]) )} )
         return lista
 
     def menneetKokoukset(self):

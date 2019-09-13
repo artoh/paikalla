@@ -8,6 +8,10 @@ from flask_login import login_user, logout_user
 @app.route("/", methods = ["GET", "POST"])
 def auth_login():
     if request.method == "GET":
+        if not Henkilo.query.first() :
+            # Tyhjä tietokanta
+            return redirect( url_for("auth_paakayttaja"))
+
         return render_template("auth/login.html", email="")
 
     email = request.form.get("email")

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, PasswordField, validators, SubmitField
-from .jasenet import HenkiloTiedotFormBase
+from .jasenet import HenkiloTiedotFormBase, IkaValidator
 from application.models.henkilo import Henkilo
 from application import bcrypt
 from datetime import datetime
@@ -14,11 +14,11 @@ class LuoKayttajaForm(HenkiloTiedotFormBase) :
     def __init__(self, form = None):
         super().__init__(form)
         self.email.validators.append(validators.Email())
+        self.syntymaaika.validators.append( IkaValidator(min=18, message="Vain täysi-ikäinen voi luoda itse tunnuksen") )
 
     def henkilo(self):
         henkilo = Henkilo()
         super().tallenna(henkilo)
-        henkilo.aikuinen = True
         if self.jasen.data :
             henkilo.jasenyysAlkoi = datetime.today()
             henkilo.salasana = bcrypt.generate_password_hash( self.salasana.data)

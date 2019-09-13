@@ -2,12 +2,14 @@ from application import app, db
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 @app.route("/jasenet/<henkilo_id>/huoltajat")
 def jasenet_huoltajat(henkilo_id):
     henkilo = Henkilo.query.get(henkilo_id)
-    kaikkiaikuiset = Henkilo.query.filter_by(aikuinen=True).order_by(Henkilo.sukunimi)
+    aikuisetsyntyneet = datetime.today() - relativedelta(years=18)
+    kaikkiaikuiset = Henkilo.query.filter(Henkilo.syntymaaika < aikuisetsyntyneet ).order_by(Henkilo.sukunimi)
     aikuiset = []
     for aikuinen in kaikkiaikuiset:
         if aikuinen not in henkilo.huoltajat:

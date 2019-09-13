@@ -16,7 +16,11 @@
 
 <table class="table table-borderless table-sm">
   <tr>
-    <td width="30%">Liittyi ryhmään</td>
+    <td width="30%">Syntynyt</td>
+    <td>{{jasenyys.jasen.syntymaaika|pvm}} (ikä {{jasenyys.jasen.ika()}} v.)</td>
+  </tr>
+  <tr>
+    <td>Liittyi ryhmään</td>
     <td>{{jasenyys.alkaen|pvm}}</td>
   </tr>
   <tr>
@@ -25,7 +29,7 @@
   </tr>
   <tr>
     <td>Sähköposti</td>
-    <td>{{jasenyys.jasen.email}}</td>
+    <td>{{jasenyys.jasen.email or ""}}</td>
   </tr>
   <tr>
     <td>Huomioon otettavaa</td>
@@ -42,7 +46,7 @@
     </td>
 </table>
 
-{% if not jasenyys.jasen.aikuinen %}
+{% if not jasenyys.jasen.aikuinen() %}
   <h4>Huoltajat</h4>
 
   {% for huoltaja in jasenyys.jasen.huoltajat %}
@@ -57,7 +61,7 @@
       </tr>
       <tr>
         <td>Sähköposti</td>
-        <td>{{huoltaja.email}}</td>
+        <td>{{huoltaja.email or ""}}</td>
       </tr>
       <tr>
         <td>Yhdistyksen jäsenyys</td>

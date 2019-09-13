@@ -46,7 +46,7 @@ def jasenet_paivita(henkilo_id):
     henkilo = Henkilo.query.get(henkilo_id)
 
     if not form.validate():
-        return render_template("jasenet/tiedot", jasen=henkilo, form=form)
+        return render_template("jasenet/tiedot.html", jasen=henkilo, form=form)
 
     form.tallenna(henkilo)
     db.session.commit()

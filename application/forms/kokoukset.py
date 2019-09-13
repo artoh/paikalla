@@ -1,10 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, validators, SelectField
+from wtforms import StringField, TextAreaField, SubmitField, validators, SelectField, ValidationError
 from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 
 class KokousTiedotForm(FlaskForm):
-    alkaa= DateTimeLocalField("Kokous alkaa", format='%Y-%m-%dT%H:%M')
-    paattyy= DateTimeLocalField("Kokous päättyy", format='%Y-%m-%dT%H:%M')
+    def alkaa_ennen_paattymista(self, field):
+        if (self.alkaa.data < self.paattyy.data):
+            raise ValidationError("Jäsenyys ei voi päättyä ennen kuin se alkoi")
+    alkaa= DateTimeLocalField("Kokous alkaa", validators=[validators.InputRequired], format='%Y-%m-%dT%H:%M')
+    paattyy= DateTimeLocalField("Kokous päättyy", validators=[validators.InputRequired], format='%Y-%m-%dT%H:%M')
     sijainti= StringField("Sijainti")
     kuvaus= TextAreaField("Ennakkotiedot")
     submit = SubmitField("Tallenna")
@@ -23,8 +26,14 @@ class KokousTiedotForm(FlaskForm):
 
 
 class KokousSarjaForm(FlaskForm) :
-    alkaa= DateField("Alkaa päivästä")
-    paattyy= DateField("Päättyy päivään")
+    def alkaa_ennen_paattymista(self, field):
+        if (self.alkaa.data > self.paattyy.data):
+            raise ValidationError("Kokoussarja ei voi päättyä ennen kuin se alkoi")
+    def klo_ennen_paattymista(self, field):
+        if (self.alkaaklo.data > self.paattyyklo.data):
+            raise ValidationError("Kokous ei voi päättyä ennen kuin se alkoi")
+    alkaa= DateField("Alkaa päivästä", [validators.InputRequired()])
+    paattyy= DateField("Päättyy päivään", [alkaa_ennen_paattymista, validators.InputRequired() ])
     viikonpaiva= SelectField("Viikonpäivä",
                              choices=[("1","Maanantai"),
                                       ("2", "Tiistai"),
@@ -33,8 +42,8 @@ class KokousSarjaForm(FlaskForm) :
                                       ("5", "Perjantai"),
                                       ("6", "Lauantai"),
                                       ("0", "Sunnuntai")])
-    alkaaklo= TimeField("Alkaa klo")
-    paattyyklo= TimeField("Päättyy klo")
+    alkaaklo= TimeField("Alkaa klo", [validators.InputRequired() ])
+    paattyyklo= TimeField("Päättyy klo", [klo_ennen_paattymista, validators.InputRequired() ])
     sijainti= StringField("Sijanti")
     kuvaus= TextAreaField("Ennakkotiedot")
     submit= SubmitField("Tallenna")

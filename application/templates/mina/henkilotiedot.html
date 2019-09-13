@@ -6,6 +6,10 @@
 {%macro henkilotiedot(henkilo) -%}
 <table class="table table-borderless table-sm">
   <tr>
+    <td>Syntynyt</td>
+    <td>{{current_user.syntymaaika|pvm}}</td>
+  </tr>
+  <tr>
     <td>Puhelinnumero</td>
     <td>{{current_user.puhelin}}</td>
   </tr>
@@ -29,14 +33,21 @@
 </table>
 {% endmacro %}
 
-<a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
+
 <a class="btn btn-outline-primary float-right">Vaihda salasana</a>
-<a class="btn btn-outline-primary float-right">Lisää huollettava</a>
+{% if current_user.aikuinen() %}
+  <a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
+  <a class="btn btn-outline-primary float-right">Lisää huollettava</a>
+{% endif %}
 <h2>Henkilötietoni</h2>
 {{ henkilotiedot(current_user)}}
 
 {% for lapsi in current_user.huollettavat %}
+ {% if not lapsi.aikuinen() %}
  <hr/>
+ {% if lapsi.email %}
+ <a class="btn btn-outline-primary float-right">Vaihda salasana</a>
+ {% endif %}
  <a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
  <a class="btn btn-outline-primary float-right">Lisää huoltaja</a>
 
@@ -49,6 +60,7 @@
     <li>{{huoltaja.etunimi}} {{huoltaja.sukunimi}}</li>
    {% endfor %}
   </ul>
+  {% endif %}
 {% endfor %}
 
 

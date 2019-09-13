@@ -4,8 +4,9 @@
 
 
 {% if not current_user.jasenyysPaattyi %}
-
+{% if current_user.aikuinen() %}
 <a class="btn btn-outline-primary float-right">Uusi ilmoittautuminen</a>
+{% endif %}
   <h2>Omat ryhmäni</h2>
 
   {% for ryhmassa in current_user.ryhmat %}
@@ -20,14 +21,18 @@
     Tähän vielä ohjaajien ja kokouksien tiedot, taitaa olla yhteenvetokyselyn paikka
 
     {% else  %}
-      Et ole vielä ilmoittautunut yhteenkään ryhmään. Uusi ryhmä-napista pääset selaamaan ryhmiä ja tekemään ilmoittautumisen.
-
+      {% if current_user.aikuinen() %}
+        Et ole vielä ilmoittautunut yhteenkään ryhmään. Uusi ryhmä-napista pääset selaamaan ryhmiä ja tekemään ilmoittautumisen.
+      {% else %}
+        Huoltajasi tekee ilmoittautumiset puolestasi omalla tunnuksellaan.
+      {% endif %}
 
   {% endfor %}
 
 {% endif %}
 
 {% for lapsi in current_user.huollettavat %}
+ {% if not lapsi.aikuinen() %}
  <hr/>
  <a class="btn btn-outline-primary float-right">Uusi ilmoittautuminen</a>
   <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>
@@ -37,7 +42,7 @@
     <h5>{{ryhmassa.ryhma.nimi}}</h5>
 
   {% endfor %}
-
+ {% endif %}
 {% endfor %}
 
 {% endblock %}
