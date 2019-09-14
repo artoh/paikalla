@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{%if henkilo.id is eq(current_user.id) %}
+  <h2>Muokkaa omia henkilötietojasi</h2>
+{% else %}
+  <h2>Muokkaa huollettavan henkilötietoja</h2>
+{% endif %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form( form=form,action=url_for('henkilotiedot_muokkaa',henkilo_id=henkilo.id), button_map={"submit":"success"}) }}
+
+{% endblock %}

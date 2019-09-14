@@ -18,15 +18,15 @@ app.config["SECRET_KEY"] = os.urandom(32).hex()
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
-from application import models
-from application import views
-
-db.create_all()
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view="auth_login"
 login_manager.login_message = "Ole hyvä ja kirjaudu uudelleen"
+
+from application import models
+from application import views
+
+db.create_all()
 
 from application.models.henkilo import Henkilo
 

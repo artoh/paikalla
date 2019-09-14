@@ -2,57 +2,93 @@
 
 {% block body %}
 
+<!-- Salasananvaihto toteutetaan Bootstrapin modal-dialogilla
+    (jota on pikkasen tuunattu javascriptillä, jotta voidaan vaihtaa myös huollettavien salasanat) -->
+
+<form method="POST" id="salaform" action="{{url_for('henkilotiedot_vaihda_salasana')}}">
+<input type="hidden" name="henkiloid" id="salaid" />
+<input type="hidden" name="username" autocomplete="username" id="salauser"/>
+  <div class="modal fade" id="salamodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="poistoModalLabel">Salasanan vaihtaminen</h5>
+        </div>
+        <div class="modal-body">
+            <label for="salasana">Anna salasana käyttäjälle <span id="salanimi"></span></label>
+            <input type=password name=salasana class="form-control"  id="eka" autocomplete="new-password"></input>
+
+            <label for="salasana2">Anna sama salasana uudelleen</label>
+            <input type=password name=salasana2 class="form-control" id="toka" autocomplete="new-password"></input>
+            <div id="viesti" class="text-danger"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="$('#salamodal').modal('hide')">Peruuta</button>
+            <button type="submit" class="btn btn-primary" disabled id="nappi"><i class="fas fa-key"></i>  Vaihda salasana</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 
 {%macro henkilotiedot(henkilo) -%}
-<table class="table table-borderless table-sm">
-  <tr>
-    <td>Syntynyt</td>
-    <td>{{current_user.syntymaaika|pvm}}</td>
-  </tr>
-  <tr>
-    <td>Puhelinnumero</td>
-    <td>{{current_user.puhelin}}</td>
-  </tr>
-  <tr>
-    <td>Sähköposti</td>
-    <td>{{current_user.email}}</td>
-  </tr>
-  <tr>
-    <td>Huomioon otettavaa</td>
-    <td>{{current_user.varotieto}}</td>
-  </tr>
-  <tr>
-    <td>Yhdistyksen jäsenyys</td>
-    <td>
-      {% if current_user.jasenyysAlkoi and not current_user.jasenyysPaattyi %}
-        Jäsen
-      {% else %}
-        Ei ole jäsen
-      {% endif %}
-    </td>
-</table>
+
+  {% if current_user.aikuinen() %}
+    <a href="{{url_for('henkilotiedot_muokkaus', henkilo_id=henkilo.id)}}" class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
+    {% if henkilo is eq(current_user) %}
+      <a href="{{url_for('henkilotiedot_uusi_huollettava')}}" class="btn btn-outline-primary float-right">Lisää huollettava</a>
+    {% else %}
+      <a class="btn btn-outline-primary float-right">Lisää huoltaja</a>
+    {% endif %}
+  {% endif %}
+  {% if henkilo.email %}
+    <button type="button" class="btn btn-outline-primary float-right" onclick="salasananvaihto('{{henkilo.id}}','{{henkilo.etunimi}} {{henkilo.sukunimi}}','{{henkilo.email}}')">
+      <i class="fas fa-key"></i> Vaihda salasana
+    </button>
+  {% endif %}
+
+
+  {% if henkilo is eq(current_user) %}
+  <h2>Henkilötietoni</h2>
+  {% else %}
+  <h2>{{henkilo.etunimi}} {{henkilo.sukunimi}}</h2>
+  {% endif %}
+
+  <table class="table table-borderless table-sm">
+    <tr>
+      <td width=30%>Syntynyt</td>
+      <td>{{henkilo.syntymaaika|pvm}}</td>
+    </tr>
+    <tr>
+      <td>Puhelinnumero</td>
+      <td>{{henkilo.puhelin}}</td>
+    </tr>
+    <tr>
+      <td>Sähköposti</td>
+      <td>{{henkilo.email}}</td>
+    </tr>
+    <tr>
+      <td>Huomioon otettavaa</td>
+      <td>{{henkilo.varotieto}}</td>
+    </tr>
+    <tr>
+      <td>Yhdistyksen jäsenyys</td>
+      <td>
+        {% if henkilo.jasenyysAlkoi and not henkilo.jasenyysPaattyi %}
+          Jäsen
+        {% else %}
+          Ei ole jäsen
+        {% endif %}
+      </td>
+    </table>
 {% endmacro %}
 
 
-<a class="btn btn-outline-primary float-right">Vaihda salasana</a>
-{% if current_user.aikuinen() %}
-  <a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
-  <a class="btn btn-outline-primary float-right">Lisää huollettava</a>
-{% endif %}
-<h2>Henkilötietoni</h2>
 {{ henkilotiedot(current_user)}}
 
 {% for lapsi in current_user.huollettavat %}
  {% if not lapsi.aikuinen() %}
  <hr/>
- {% if lapsi.email %}
- <a class="btn btn-outline-primary float-right">Vaihda salasana</a>
- {% endif %}
- <a class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
- <a class="btn btn-outline-primary float-right">Lisää huoltaja</a>
-
-  <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>
-
   {{ henkilotiedot(lapsi)}}
   Huoltajat
   <ul>
@@ -63,6 +99,42 @@
   {% endif %}
 {% endfor %}
 
+{% endblock %}
 
+{% block script %}
+
+<!-- Salasanadialogin näyttäminen, salasanojen validoiminen sekä
+     sen määritteleminen, kenen salasanaa milloinkin ollaan vaihtamassa -->
+
+<script type="text/javascript">
+  $( function() {
+    function validoi() {
+      $("#nappi").prop("disabled", true)
+      if($("#eka").val().length < 6)
+        $("#viesti").text("Salasanan pitää olla vähintään 6 merkkiä pitkä.")
+      else if( $("#eka").val() !== $("#toka").val() )
+        $("#viesti").text("Salasanat eivät täsmää")
+      else {
+        $("#nappi").prop("disabled", false)
+        $("#viesti").text("")
+      }
+    }
+
+    $("#eka").keyup( validoi )
+    $("#toka").keyup( validoi )
+  })
+
+  function salasananvaihto(id,nimi,email) {
+    $("#eka").val("")
+    $("#toka").val("")
+
+    $("#salaid").prop("value",id)
+    $("#salanimi").text(nimi)
+    $("#salauser").prop("value",email)
+
+    $("#viesti").val("")
+    $("#salamodal").modal("show")
+  }
+</script>
 
 {% endblock %}
