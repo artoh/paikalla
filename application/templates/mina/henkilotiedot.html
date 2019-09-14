@@ -12,10 +12,10 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="poistoModalLabel">Salasanan vaihtaminen</h5>
+          <h5 class="modal-title">Salasanan vaihtaminen</h5>
         </div>
         <div class="modal-body">
-            <label for="salasana">Anna salasana käyttäjälle <span id="salanimi"></span></label>
+            <label for="salasana">Anna uusi salasana käyttäjälle <span id="salanimi" class="font-weight-bold></span></label>
             <input type=password name=salasana class="form-control"  id="eka" autocomplete="new-password"></input>
 
             <label for="salasana2">Anna sama salasana uudelleen</label>
@@ -31,6 +31,34 @@
   </div>
 </form>
 
+<!-- Modal toisen huoltajan lisäämiseen -->
+
+{% if current_user.aikuinen() %}
+  <form method="POST" id="huoltajaform" action="{{url_for('henkilotiedot_linkita_huoltaja')}}">
+  <input type="hidden" name="lapsiid" id="lapsiid" />
+    <div class="modal fade" id="huoltajamodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Lisää huoltaja</h5>
+          </div>
+          <div class="modal-body">
+            <p>Lisää huollettavallesi <span id="lapsinimi" class="font-weight-bold"></span> lisäksesi toinen huoltaja. Lisättävän huoltajan pitää
+              olla rekisteröitynyt palveluun.</p>
+              <label for="huoltaja">Lisättävän huoltajan sähköpostiosoite</label>
+              <input type=email name=huoltaja class="form-control"  id="huoltaja" required></input>
+              <div id="huoltajavirhe" class="text-danger"></div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="$('#huoltajamodal').modal('hide')">Peruuta</button>
+              <button type="submit" class="btn btn-primary" id="huoltajanappi">Lisää huoltaja</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endif %}
+
 {%macro henkilotiedot(henkilo) -%}
 
   {% if current_user.aikuinen() %}
@@ -38,7 +66,7 @@
     {% if henkilo is eq(current_user) %}
       <a href="{{url_for('henkilotiedot_uusi_huollettava')}}" class="btn btn-outline-primary float-right">Lisää huollettava</a>
     {% else %}
-      <a class="btn btn-outline-primary float-right">Lisää huoltaja</a>
+      <button class="btn btn-outline-primary float-right" onclick="lisaahuoltaja('{{henkilo.id}}','{{henkilo.etunimi}} {{henkilo.sukunimi}}')">Lisää huoltaja</button>
     {% endif %}
   {% endif %}
   {% if henkilo.email %}
@@ -104,7 +132,10 @@
 {% block script %}
 
 <!-- Salasanadialogin näyttäminen, salasanojen validoiminen sekä
-     sen määritteleminen, kenen salasanaa milloinkin ollaan vaihtamassa -->
+     sen määritteleminen, kenen salasanaa milloinkin ollaan vaihtamassa.
+
+    Huoltajan lisäämisen dialogin näyttäminen
+  -->
 
 <script type="text/javascript">
   $( function() {
@@ -122,6 +153,15 @@
 
     $("#eka").keyup( validoi )
     $("#toka").keyup( validoi )
+
+    {% if huoltajavirhe %}
+
+      lisaahuoltaja("{{huoltajavirhe.lapsi.id}}"", "{{huoltajavirhe.lapsi.etunimi}} {{huoltajavirhe.lapsi.sukunimi}}")
+      $("#huoltaja").prop("value","{{huoltajavirhe.huoltaja}}")
+      $("#huoltajavirhe").text("{{huoltajavirhe.virhe}}")      
+
+    {% endif %}
+
   })
 
   function salasananvaihto(id,nimi,email) {
@@ -134,6 +174,14 @@
 
     $("#viesti").val("")
     $("#salamodal").modal("show")
+  }
+
+  function lisaahuoltaja(id,nimi) {
+    $("#lapsiid").prop("value",id)
+    $("#lapsinimi").text(nimi)
+    $("#huoltaja").prop("value","")
+    $("#huoltajavirhe").text("")
+    $("#huoltajamodal").modal("show")
   }
 </script>
 

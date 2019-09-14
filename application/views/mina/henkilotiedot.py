@@ -88,3 +88,26 @@ def henkilotiedot_vaihda_salasana():
     db.session.commit()
     return redirect(url_for("henkilotiedot_index"))
 
+@app.route("/henkilotiedot/huoltaja", methods=["POST"])
+def henkilotiedot_linkita_huoltaja():
+    lapsi = kayttaja_autorisointi( request.form.get("lapsiid") )
+    if not lapsi:
+        return login_manager.unauthorized()
+    huoltajaemail = request.form.get("huoltaja")
+    huoltaja = Henkilo.query.filter(Henkilo.email == huoltajaemail).first()
+
+    if not huoltaja or not huoltaja.aikuinen():
+        return render_template("mina/henkilotiedot.html",
+                               huoltajavirhe={"lapsi":lapsi, "huoltaja":huoltajaemail, "virhe":"Sähköpostiosoitteella ei löydy aikuista."})
+
+    for huollettava in huoltaja.huollettavat :
+        if huollettava.id == lapsi.id :
+            return render_template("mina/henkilotiedot.html",
+                                   huoltajavirhe={"lapsi": lapsi, "huoltaja": huoltajaemail,
+                                                  "virhe": "On jo lapsen huoltaja."})
+
+    # Voidaan linkittää huoltajaksi
+    lapsi.huoltajat.append(huoltaja)
+    flash("{} {} lisättiin huoltajaksi".format(huoltaja.etunimi, huoltaja.sukunimi), "success")
+    db.session.commit()
+    return redirect(url_for("henkilotiedot_index"))
