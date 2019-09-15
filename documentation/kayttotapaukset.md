@@ -4,16 +4,18 @@
 
 ### Rekisteröityminen ja jäsentiedot
 
-- [ ] Aikuinen luo tunnuksen itselleen jäsenenä
-- [ ] Aikuinen luo itselleen tunnuksen huoltajana
-- [ ] Huoltaja ilmoittaa lapsensa jäseneksi
-- [ ] Huoltaja liittää lapselleen toisen huoltajan
-- [ ] Aikuinen näkee omat henkilötietonsa
-- [ ] Aikuinen näkee lastensa henkilötiedot
-- [ ] Aikuinen päivittää omia henkilötietojaan
-- [ ] Aikuinen päivittää lastensa henkilötietoja
-- [ ] Aikuinen eroaa jäsenyydestä
-- [ ] Aikuinen ilmoittaa lapsensa eronneeksi jäsenyydestä
+- [x] Aikuinen luo tunnuksen itselleen jäsenenä
+- [x] Aikuinen luo itselleen tunnuksen huoltajana
+- [x] Huoltaja ilmoittaa lapsensa jäseneksi
+- [x] Huoltaja liittää lapselleen toisen huoltajan
+- [x] Aikuinen näkee omat henkilötietonsa
+- [x] Aikuinen näkee lastensa henkilötiedot
+- [x] Aikuinen päivittää omia henkilötietojaan
+- [x] Aikuinen päivittää lastensa henkilötietoja
+- [x] Lapsi näkee omat henkilötietonsa
+- [x] Aikuinen vaihtaa oman salasanasa
+- [x] Huoltaja vaihtaa lapsensa salasanan
+- [x] Lapsi vaihtaa oman salasanansa
 
 ### Ilmoittautumiset
 
@@ -21,6 +23,7 @@
 - [ ] Aikuinen ilmoittaa lapsensa ryhmään
 - [ ] Aikuinen näkee ilmoittautumisensa
 - [ ] Aikuinen näkee lastensa ilmoittautumiseet
+- [ ] Lapsi näkee omat ilmoittautumisensa
 - [ ] Ilmoittatumisen yhteydessä näkyy ryhmän tiedot
   - [ ] Ryhmän ohjaajien yhteystiedot
   - [ ] Ryhmän kokoukset
@@ -28,18 +31,19 @@
 ### Kalenteri
 
 - [ ] Aikuinen näkee kalenterissa omat ja lastensa kokoukset
+- [ ] Lapsi näkee kanterissa omat kokouksensa
 
 ## Ryhmänohjaaja
 
-- [ ] Ryhmänohjaaja näkee ryhmänsä tiedot
-- [ ] Ryhmänohjaaja muokkaa ryhmänsä tietoja
-- [ ] Ryhmänohjaaja näkee ryhmänsä jäsenten tiedot
-  - [ ] Ryhmänohjaaja näkee lasten huoltajien yhteystiedot
-- [ ] Ryhmänohjaaja lisää jäseniä ryhmäänsä
-- [ ] Ryhmänohjaaja poistaa jäseniä ryhmästään
-- [ ] Ryhmänohjaaja lisää kokouksen ryhmälleen
-- [ ] Ryhmänohjaaja muokkaa ryhmänsä kokouksen tietoja
-- [ ] Ryhmänohjaaja peruu (poistaa) kokouksen  
+- [x] Ryhmänohjaaja näkee ryhmänsä tiedot
+- [x] Ryhmänohjaaja muokkaa ryhmänsä tietoja
+- [x] Ryhmänohjaaja näkee ryhmänsä jäsenten tiedot
+  - [x] Ryhmänohjaaja näkee lasten huoltajien yhteystiedot
+- [x] Ryhmänohjaaja lisää jäseniä ryhmäänsä
+- [x] Ryhmänohjaaja poistaa jäseniä ryhmästään
+- [x] Ryhmänohjaaja lisää kokouksen ryhmälleen
+- [x] Ryhmänohjaaja muokkaa ryhmänsä kokouksen tietoja
+- [x] Ryhmänohjaaja peruu (poistaa) kokouksen  
 - [ ] Ryhmänohjaaja merkitsee kokouksessa läsnäolleet
 - [ ] Ryhmänohjaaja näkee oman ryhmänsä läsnäolotilastot
 
@@ -68,4 +72,3 @@
 ## Tilastot
 - [ ] Toimihenkilö näkee yksittäisen ryhmän tilaston
 - [ ] Toimihenkilö näkee koko yhdistyksen tilastot
-- [ ] Toimihenkilö näkee kalenterin kaikkien ryhmien kokouksista

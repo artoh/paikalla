@@ -1,5 +1,6 @@
 from application import db
 from datetime import date
+from sqlalchemy.sql import text
 
 Huoltajuus = db.Table('Huoltajuus',
       db.Column( 'huoltaja', db.Integer, db.ForeignKey('Henkilo.id', ondelete="CASCADE"), primary_key=True),
@@ -53,3 +54,22 @@ class Henkilo(db.Model):
     def is_authenticated(self):
         return True
 
+    def mahdollisetryhmat(self):
+        stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm  "
+                    "from ryhma left outer join "
+                    "(select ryhmaid, count(id) as lkm from ryhmassa where ohjaaja = 0 group by ryhmaid) as a on ryhma.id=a.ryhmaid "
+                    "where ilmoittautuminenalkaa <= current_date and ilmoittautuminenpaattyy >= current_date "
+                    "and ikavahintaan <= :ika and ikaenintaan >= :ika "
+                    "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)"
+                    ).params(ika=self.ika(), henkiloid=self.id)
+        res = db.engine.execute(stmt)
+        lista = []
+        for rivi in res:
+            lista.append({"ryhmaId": rivi[0],
+                          "nimi":rivi[1],
+                          "paikkoja":rivi[2],
+                          "kuvaus":rivi[3],
+                          "lkm":rivi[4],
+                          "ikavahintaan":rivi[5],
+                          "ikaenintaan":rivi[6],
+                          "ilmoittautuminenpaattyy":rivi[7]})

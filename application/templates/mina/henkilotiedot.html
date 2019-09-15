@@ -15,11 +15,11 @@
           <h5 class="modal-title">Salasanan vaihtaminen</h5>
         </div>
         <div class="modal-body">
-            <label for="salasana">Anna uusi salasana käyttäjälle <span id="salanimi" class="font-weight-bold></span></label>
-            <input type=password name=salasana class="form-control"  id="eka" autocomplete="new-password"></input>
+            <label for="salasana">Anna uusi salasana käyttäjälle <span id="salanimi" class="font-weight-bold"></span></label>
+            <input type="password" name="salasana" class="form-control"  id="eka" autocomplete="new-password"></input>
 
             <label for="salasana2">Anna sama salasana uudelleen</label>
-            <input type=password name=salasana2 class="form-control" id="toka" autocomplete="new-password"></input>
+            <input type="password" name="salasana2" class="form-control" id="toka" autocomplete="new-password"></input>
             <div id="viesti" class="text-danger"></div>
         </div>
         <div class="modal-footer">
@@ -43,7 +43,7 @@
             <h5 class="modal-title">Lisää huoltaja</h5>
           </div>
           <div class="modal-body">
-            <p>Lisää huollettavallesi <span id="lapsinimi" class="font-weight-bold"></span> lisäksesi toinen huoltaja. Lisättävän huoltajan pitää
+            <p>Lisää huollettavallesi <span id="lapsinimi" class="font-weight-bold"></span> itsesi lisäksi toinen huoltaja. Lisättävän huoltajan pitää
               olla rekisteröitynyt palveluun.</p>
               <label for="huoltaja">Lisättävän huoltajan sähköpostiosoite</label>
               <input type=email name=huoltaja class="form-control"  id="huoltaja" required></input>
@@ -62,11 +62,11 @@
 {%macro henkilotiedot(henkilo) -%}
 
   {% if current_user.aikuinen() %}
-    <a href="{{url_for('henkilotiedot_muokkaus', henkilo_id=henkilo.id)}}" class="btn btn-outline-primary float-right">Muokkaa tietoja</a>
+    <a href="{{url_for('henkilotiedot_muokkaus', henkilo_id=henkilo.id)}}" class="btn btn-outline-primary float-right"><i class="fas fa-user-edit"></i> Muokkaa tietoja</a>
     {% if henkilo is eq(current_user) %}
-      <a href="{{url_for('henkilotiedot_uusi_huollettava')}}" class="btn btn-outline-primary float-right">Lisää huollettava</a>
+      <a href="{{url_for('henkilotiedot_uusi_huollettava')}}" class="btn btn-outline-primary float-right"><i class="fas fa-user-plus"></i> Lisää huollettava</a>
     {% else %}
-      <button class="btn btn-outline-primary float-right" onclick="lisaahuoltaja('{{henkilo.id}}','{{henkilo.etunimi}} {{henkilo.sukunimi}}')">Lisää huoltaja</button>
+      <button class="btn btn-outline-primary float-right" onclick="lisaahuoltaja('{{henkilo.id}}','{{henkilo.etunimi}} {{henkilo.sukunimi}}')"><i class="fas fa-link"></i>Lisää huoltaja</button>
     {% endif %}
   {% endif %}
   {% if henkilo.email %}
@@ -156,9 +156,9 @@
 
     {% if huoltajavirhe %}
 
-      lisaahuoltaja("{{huoltajavirhe.lapsi.id}}"", "{{huoltajavirhe.lapsi.etunimi}} {{huoltajavirhe.lapsi.sukunimi}}")
+      lisaahuoltaja("{{huoltajavirhe.lapsi.id}}", "{{huoltajavirhe.lapsi.etunimi}} {{huoltajavirhe.lapsi.sukunimi}}")
       $("#huoltaja").prop("value","{{huoltajavirhe.huoltaja}}")
-      $("#huoltajavirhe").text("{{huoltajavirhe.virhe}}")      
+      $("#huoltajavirhe").text("{{huoltajavirhe.virhe}}")
 
     {% endif %}
 
