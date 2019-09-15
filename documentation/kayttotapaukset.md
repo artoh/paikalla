@@ -19,19 +19,19 @@
 
 ### Ilmoittautumiset
 
-- [ ] Aikuinen ilmoittautuu ryhmään
-- [ ] Aikuinen ilmoittaa lapsensa ryhmään
-- [ ] Aikuinen näkee ilmoittautumisensa
-- [ ] Aikuinen näkee lastensa ilmoittautumiseet
-- [ ] Lapsi näkee omat ilmoittautumisensa
-- [ ] Ilmoittatumisen yhteydessä näkyy ryhmän tiedot
-  - [ ] Ryhmän ohjaajien yhteystiedot
-  - [ ] Ryhmän kokoukset
+- [x] Aikuinen ilmoittautuu ryhmään
+- [x] Aikuinen ilmoittaa lapsensa ryhmään
+- [x] Aikuinen näkee ilmoittautumisensa
+- [x] Aikuinen näkee lastensa ilmoittautumiseet
+- [x] Lapsi näkee omat ilmoittautumisensa
+- [x] Ilmoittatumisen yhteydessä näkyy ryhmän tiedot
+  - [x] Ryhmän ohjaajien yhteystiedot
+  - [x] Ryhmän kokoukset
 
 ### Kalenteri
 
-- [ ] Aikuinen näkee kalenterissa omat ja lastensa kokoukset
-- [ ] Lapsi näkee kanterissa omat kokouksensa
+- [x] Aikuinen näkee kalenterissa omat ja lastensa kokoukset
+- [x] Lapsi näkee kanterissa omat kokouksensa
 
 ## Ryhmänohjaaja
 
