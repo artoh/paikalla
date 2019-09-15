@@ -45,7 +45,7 @@ class Ryhma(db.Model):
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
-            lista.append({ "kokousId" : rivi[0],
+            lista.append({ "id" : rivi[0],
                             "alkaa": parse(rivi[1]),
                             "sijainti" : rivi[2],
                             "kuvaus" : rivi[3],

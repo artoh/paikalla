@@ -97,3 +97,7 @@ def ryhmat_muokkaa_kokous(kokous_id):
     db.session.commit()
     return redirect( url_for("ryhmat_kokoukset", ryhma_id=kokous.ryhma.id))
 
+@app.route("/ryhmat/<ryhma_id>/menneet")
+def ryhmat_menneet(ryhma_id):
+    ryhma = Ryhma.query.get(ryhma_id)
+    return render_template("ryhmat/menneet.html", ryhma=ryhma)

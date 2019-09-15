@@ -2,6 +2,7 @@ from application import db
 from datetime import date
 from sqlalchemy.sql import text
 from dateutil.parser import parse
+from flask_login import current_user
 
 Huoltajuus = db.Table('Huoltajuus',
       db.Column( 'huoltaja', db.Integer, db.ForeignKey('Henkilo.id', ondelete="CASCADE"), primary_key=True),
@@ -79,7 +80,7 @@ class Henkilo(db.Model):
         return lista
 
     def kalenteri(self):
-        stmt = text("SELECT Henkilo.etunimi, Ryhma.nimi, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus, Kokous.id "
+        stmt = text("SELECT Henkilo.etunimi, Ryhma.nimi, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus, Kokous.id, Ryhmassa.ohjaaja, Henkilo.id "
                     "FROM Henkilo JOIN Ryhmassa ON Henkilo.id=Ryhmassa.henkiloId JOIN Ryhma ON Ryhmassa.ryhmaid=Ryhma.id JOIN Kokous ON Kokous.ryhmaid=Ryhma.id " 
                     "WHERE (Ryhmassa.henkiloId=:henkiloid "
                     "OR Ryhmassa.henkiloid in (SELECT huollettava FROM Huoltajuus WHERE huoltaja=:henkiloid)) AND Kokous.paattyy >= current_date "
@@ -95,7 +96,8 @@ class Henkilo(db.Model):
                 if kokous:
                     kokoukset.append(kokous)
                 kokousid = int( rivi[6])
-                kokous = {"ryhma" : rivi[1],
+                kokous = {"id": rivi[6],
+                          "ryhma" : rivi[1],
                           "alkaa" : parse( rivi[2]),
                           "paattyy": parse( rivi[3]),
                           "sijainti": rivi[4],
@@ -103,6 +105,12 @@ class Henkilo(db.Model):
                           "osallistujat": [ rivi[0], ]}
             else:
                 kokous["osallistujat"].append(rivi[0])
+
+            print("ohjaaja {} user {} current {}".format(rivi[7], rivi[8], current_user.id))
+            if rivi[7] and current_user.id == int(rivi[8]) :
+                kokous["ohjaaja"]=True
+                print("OHJAAJA")
+
             kyspaiva = parse(rivi[2]).date()
             if kyspaiva != paiva and paiva:
                 paivat.append( {"pvm":paiva, "kokoukset": kokoukset} )

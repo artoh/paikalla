@@ -2,27 +2,44 @@
 
 {% block body %}
 
+{% macro sivutus(nykyinen,sivua) %}
+
+
+{% endmacro %}
+
   <h1>Tulevat kokoukset</h1>
+
+  {{ linkit|safe }}
+
   {% for paiva in kalenteri %}
 
    <div class="card" style="margin-top:1em;">
-     <div class="card-header">
+       {% if paiva.pvm is eq(tanaan) %}
+          <div class="card-header bg-warning text-dark">
+        Tänään
+        {% else %}
+          <div class="card-header">
+       {% endif %}
        {{paiva.pvm|kpvm}}
      </div>
 
      <ul class="list-group list-group-flush">
     {% for kokous in paiva.kokoukset %}
       <li class="list-group-item">
+        {% if kokous.ohjaaja %}
+          <a class="btn btn-outline-success float-right" href="{{url_for('ryhmat_muokkaa_kokous',kokous_id=kokous.id)}}"><i class="fas fa-user-shield"></i> Ohjaajan näkymä</a>
+        {% endif %}
         <h5 class="card-title">{{kokous.ryhma}}</h5>
         <h6 class="card-subtitle">klo {{kokous.alkaa|klo}} - {{kokous.paattyy|klo}} {{kokous.sijainti}}</h6>
         <p class="card-text">{{kokous.kuvaus}}</p>
         {% for osallistuja in kokous.osallistujat %}
           <span class="badge badge-primary">{{osallistuja}}</span>
-        {% endfor %}          
+        {% endfor %}
       </li>
     {% endfor %}
     </ul>
     </div>
   {% endfor %}
+
 
 {% endblock %}

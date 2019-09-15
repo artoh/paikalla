@@ -10,6 +10,7 @@
     <td>Läsnä</td>
      <td>Paikka</td>
      <td>Kuvaus</td>
+     <td></td>
    <tr>
  </thead>
  <tbody>
@@ -19,6 +20,9 @@
        <td>{{kokous.lasna|int}}</td>
        <td>{{kokous.sijainti}}</td>
        <td>{{kokous.kuvaus}}</td>
+       <td>
+           <a href="{{url_for('ryhmat_kokoukset_muokkaa', kokous_id=kokous.id)}}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+       </td>
      </tr>
    {% endfor %}
 </tbody>
