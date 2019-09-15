@@ -9,10 +9,13 @@ import os
 app = Flask(__name__)
 Bootstrap(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///paikalla.db"
-app.config["SQLALCHEMY_ECHO"] = True
 
-# SECRET_KEY tarvitaan viestien näyttämiseen
+if os.environ.get("HEROKU"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///paikalla.db"
+    app.config["SQLALCHEMY_ECHO"] = True
+
 app.config["SECRET_KEY"] = os.urandom(32).hex()
 
 db = SQLAlchemy(app)
@@ -26,7 +29,10 @@ login_manager.login_message = "Ole hyvä ja kirjaudu uudelleen"
 from application import models
 from application import views
 
-db.create_all()
+try:
+    db.create_all()
+except:
+    pass
 
 from application.models.henkilo import Henkilo
 
