@@ -57,19 +57,22 @@ class Henkilo(db.Model):
     def mahdollisetryhmat(self):
         stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm  "
                     "from ryhma left outer join "
-                    "(select ryhmaid, count(id) as lkm from ryhmassa where ohjaaja = 0 group by ryhmaid) as a on ryhma.id=a.ryhmaid "
+                    "(select ryhmaid, count(id) as lkm from ryhmassa where ohjaaja = 0 and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
                     "where ilmoittautuminenalkaa <= current_date and ilmoittautuminenpaattyy >= current_date "
                     "and ikavahintaan <= :ika and ikaenintaan >= :ika "
-                    "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)"
+                    "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid) "
+                    "order by nimi"
                     ).params(ika=self.ika(), henkiloid=self.id)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
+            if rivi[4] :
+                lkm = rivi[4]
+            else:
+                lkm = 0
             lista.append({"ryhmaId": rivi[0],
                           "nimi":rivi[1],
                           "paikkoja":rivi[2],
                           "kuvaus":rivi[3],
-                          "lkm":rivi[4],
-                          "ikavahintaan":rivi[5],
-                          "ikaenintaan":rivi[6],
-                          "ilmoittautuminenpaattyy":rivi[7]})
+                          "lkm":lkm})
+        return lista

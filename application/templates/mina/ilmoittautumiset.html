@@ -5,7 +5,7 @@
 
 {% if not current_user.jasenyysPaattyi %}
 {% if current_user.aikuinen() %}
-<a class="btn btn-outline-primary float-right">Uusi ilmoittautuminen</a>
+<a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=current_user.id)}}">Uusi ilmoittautuminen</a>
 {% endif %}
   <h2>Omat ryhmäni</h2>
 
@@ -34,7 +34,7 @@
 {% for lapsi in current_user.huollettavat %}
  {% if not lapsi.aikuinen() %}
  <hr/>
- <a class="btn btn-outline-primary float-right">Uusi ilmoittautuminen</a>
+ <a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=lapsi.id)}}">Uusi ilmoittautuminen</a>
   <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>
 
     {% for ryhmassa in lapsi.ryhmat %}

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h2>Uusi ilmoittautuminen</h2>
+{% if henkilo is not eq(current_user) %}
+<p>{{henkilo.etunimi}} {{henkilo.sukunimi}} {{henkilo.ika()}} v. </p>
+{% endif %}
+
+  {%for ryhma in henkilo.mahdollisetryhmat() %}
+  <div class="card">
+    <div class="card-body">
+    <h5 class="card-title">{{ryhma.nimi}}</h5>
+        {%if ryhma.lkm is lt(ryhma.paikkoja) %}
+          <p class="card-subtitle text-muted">Ilmoittautunut {{ryhma.lkm}} / {{ryhma.paikkoja}}</p>
+        {% else %}
+          <p class="card-subtitle text-danger">Ryhmä täynnä</p>
+        {% endif %}
+        <p>{{ryhma.kuvaus}}</p>
+
+        {%if ryhma.lkm is lt(ryhma.paikkoja) %}
+          <a href="#" class="btn btn-primary">Lisätiedot ja ilmoittauminen</a>
+        {% endif %}
+        </div>
+  </div>
+  {% endfor %}
+</table>
+{% endblock %}

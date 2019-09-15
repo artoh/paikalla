@@ -30,6 +30,8 @@ class RyhmaTiedotForm(FlaskForm) :
         self.paikkoja.data = ryhma.paikkoja
         self.ilmoittautuminenAlkaa.data = ryhma.ilmoittautuminenAlkaa
         self.ilmoittautuminenPaattyy.data = ryhma.ilmoittautuminenPaattyy
+        self.ikavahintaan.data = ryhma.ikavahintaan
+        self.ikaenintaan.data = ryhma.ikaenintaan
         self.kuvaus.data = ryhma.kuvaus
         self.paattynyt.data = ryhma.paattynyt
 
@@ -38,6 +40,8 @@ class RyhmaTiedotForm(FlaskForm) :
         ryhma.paikkoja = self.paikkoja.data
         ryhma.ilmoittautuminenAlkaa = self.ilmoittautuminenAlkaa.data
         ryhma.ilmoittautuminenPaattyy = self.ilmoittautuminenPaattyy.data
+        ryhma.ikavahintaan = self.ikavahintaan.data
+        ryhma.ikaenintaan = self.ikaenintaan.data
         ryhma.kuvaus = self.kuvaus.data
         ryhma.paattynyt = self.paattynyt.data
 
