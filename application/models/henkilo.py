@@ -1,6 +1,7 @@
 from application import db
 from datetime import date
 from sqlalchemy.sql import text
+from dateutil.parser import parse
 
 Huoltajuus = db.Table('Huoltajuus',
       db.Column( 'huoltaja', db.Integer, db.ForeignKey('Henkilo.id', ondelete="CASCADE"), primary_key=True),
@@ -70,9 +71,47 @@ class Henkilo(db.Model):
                 lkm = rivi[4]
             else:
                 lkm = 0
-            lista.append({"ryhmaId": rivi[0],
+            lista.append({"id": rivi[0],
                           "nimi":rivi[1],
                           "paikkoja":rivi[2],
                           "kuvaus":rivi[3],
                           "lkm":lkm})
         return lista
+
+    def kalenteri(self):
+        stmt = text("SELECT Henkilo.etunimi, Ryhma.nimi, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus, Kokous.id "
+                    "FROM Henkilo JOIN Ryhmassa ON Henkilo.id=Ryhmassa.henkiloId JOIN Ryhma ON Ryhmassa.ryhmaid=Ryhma.id JOIN Kokous ON Kokous.ryhmaid=Ryhma.id " 
+                    "WHERE (Ryhmassa.henkiloId=:henkiloid "
+                    "OR Ryhmassa.henkiloid in (SELECT huollettava FROM Huoltajuus WHERE huoltaja=:henkiloid)) AND Kokous.paattyy >= current_date "
+                    "ORDER BY Kokous.alkaa").params(henkiloid=self.id)
+        res = db.engine.execute(stmt)
+        paiva = None
+        paivat = []
+        kokoukset = []
+        kokous = None
+        kokousid = 0
+        for rivi in res:
+            if kokousid != int(rivi[6]):
+                if kokous:
+                    kokoukset.append(kokous)
+                kokousid = int( rivi[6])
+                kokous = {"ryhma" : rivi[1],
+                          "alkaa" : parse( rivi[2]),
+                          "paattyy": parse( rivi[3]),
+                          "sijainti": rivi[4],
+                          "kuvaus": rivi[5],
+                          "osallistujat": [ rivi[0], ]}
+            else:
+                kokous["osallistujat"].append(rivi[0])
+            kyspaiva = parse(rivi[2]).date()
+            if kyspaiva != paiva and paiva:
+                paivat.append( {"pvm":paiva, "kokoukset": kokoukset} )
+                kokoukset = []
+            paiva = kyspaiva
+        if kokous:
+            kokoukset.append(kokous)
+            paivat.append({"pvm": paiva, "kokoukset": kokoukset})
+
+        return paivat
+
+

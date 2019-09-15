@@ -5,6 +5,9 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 import os
+import locale
+
+locale.setlocale(locale.LC_ALL,'fi_FI.UTF-8')
 
 app = Flask(__name__)
 Bootstrap(app)

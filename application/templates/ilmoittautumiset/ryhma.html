@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if henkilo %}
+  {% if henkilo is not eq(current_user) %}
+    <p class="lead"><span class="badge badge-secondary">
+    Olet ilmoittamassa huollettavaasi {{henkilo.etunimi}} {{henkilo.sukunimi}} {{henkilo.ika()}} v.
+    </span></p>
+    {% endif %}
+  <form action="{{url_for('ilmoittautumiset_ilmoittaudu')}}" method="post">
+  <input type="hidden" name="henkilo_id" value="{{henkilo.id}}"/>
+  <input type="hidden" name="ryhma_id" value="{{ryhma.id}}"/>
+  <button class="btn btn-success float-right"><i class="fas fa-check"></i> Ilmoittaudu</button>
+  <form>
+{% endif %}
+
+<h1>{{ryhma.nimi}}</h1>
+
+<p class="lead">{{ryhma.kuvaus}}</p>
+
+<h5>Ohjaajat</h5>
+<table class="table table-borderless">
+{% for ohjaaja in ryhma.ohjaajat() %}
+  <tr>
+    <td>{{ohjaaja.etunimi}} {{ohjaaja.sukunimi}}</td>
+    <td>{{ohjaaja.puhelin}}</td>
+    <td>{{ohjaaja.email}}</td>
+  </tr>
+{% endfor %}
+</table>
+
+<h5>Tulevat kokoukset</h5>
+<table class="table table-borderless">
+{% for kokous in ryhma.tulevatkokoukset() %}
+  <tr>
+    <td>{{kokous.alkaa|pvm}}</td>
+    <td>klo {{kokous.alkaa|klo}} - {{kokous.paattyy|klo}} </td>
+    <td>{{kokous.sijainti}}</td>
+    <td>{{kokous.kuvaus}}</td>
+  </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

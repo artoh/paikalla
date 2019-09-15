@@ -9,7 +9,7 @@ from datetime import datetime
 @app.route("/henkilotiedot")
 @login_required
 def henkilotiedot_index():
-    return render_template("mina/henkilotiedot.html")
+    return render_template("henkilotiedot/henkilotiedot.html")
 
 @login_required
 @app.route("/henkilotiedot/<henkilo_id>")
@@ -19,7 +19,7 @@ def henkilotiedot_muokkaus(henkilo_id):
         return login_manager.unauthorized()
     form = HenkiloTiedotForm()
     form.lataa(henkilo)
-    return render_template("mina/muokkaatietoja.html", henkilo = henkilo, form=form )
+    return render_template("henkilotiedot/muokkaatietoja.html", henkilo = henkilo, form=form )
 
 
 @app.route("/henkilotiedot/<henkilo_id>", methods=["POST"])
@@ -29,7 +29,7 @@ def henkilotiedot_muokkaa(henkilo_id):
         return login_manager.unauthorized()
     form = HenkiloTiedotForm(request.form)
     if not form.validate() :
-        return render_template("mina/muokkaatietoja.html", henkilo=henkilo, form=form)
+        return render_template("henkilotiedot/muokkaatietoja.html", henkilo=henkilo, form=form)
     form.tallenna(henkilo)
     db.session.commit()
     return redirect(url_for("henkilotiedot_index"))
@@ -41,7 +41,7 @@ def henkilotiedot_uusi_huollettava():
         return login_manager.unauthorized()
     form = HenkiloTiedotForm();
     form.syntymaaika.validators.append(IkaValidator(max=17, message="Huollettavan on oltava alaikäinen"))
-    return render_template("mina/uusihuollettava.html", form=form)
+    return render_template("henkilotiedot/uusihuollettava.html", form=form)
 
 
 @app.route("/henkilotiedot/uusihuollettava", methods=["POST"])
@@ -51,7 +51,7 @@ def henkilotiedot_luo_huollettava():
 
     form = HenkiloTiedotForm(request.form)
     if not form.validate() :
-        return render_template("mina/uusihuollettava.html", form=form)
+        return render_template("henkilotiedot/uusihuollettava.html", form=form)
 
     lapsi = Henkilo()
     form.tallenna(lapsi)
@@ -97,12 +97,12 @@ def henkilotiedot_linkita_huoltaja():
     huoltaja = Henkilo.query.filter(Henkilo.email == huoltajaemail).first()
 
     if not huoltaja or not huoltaja.aikuinen():
-        return render_template("mina/henkilotiedot.html",
+        return render_template("henkilotiedot/henkilotiedot.html",
                                huoltajavirhe={"lapsi":lapsi, "huoltaja":huoltajaemail, "virhe":"Sähköpostiosoitteella ei löydy aikuista."})
 
     for huollettava in huoltaja.huollettavat :
         if huollettava.id == lapsi.id :
-            return render_template("mina/henkilotiedot.html",
+            return render_template("henkilotiedot/henkilotiedot.html",
                                    huoltajavirhe={"lapsi": lapsi, "huoltaja": huoltajaemail,
                                                   "virhe": "On jo lapsen huoltaja."})
 

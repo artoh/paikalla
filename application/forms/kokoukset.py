@@ -4,10 +4,11 @@ from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 
 class KokousTiedotForm(FlaskForm):
     def alkaa_ennen_paattymista(self, field):
-        if (self.alkaa.data < self.paattyy.data):
-            raise ValidationError("Jäsenyys ei voi päättyä ennen kuin se alkoi")
-    alkaa= DateTimeLocalField("Kokous alkaa", validators=[validators.InputRequired], format='%Y-%m-%dT%H:%M')
-    paattyy= DateTimeLocalField("Kokous päättyy", validators=[validators.InputRequired], format='%Y-%m-%dT%H:%M')
+        if (self.alkaa.data > self.paattyy.data):
+            raise ValidationError("Kokous ei voi päättyä ennen kuin se alkoi")
+
+    alkaa= DateTimeLocalField("Kokous alkaa", validators=[validators.InputRequired()], format='%Y-%m-%dT%H:%M')
+    paattyy= DateTimeLocalField("Kokous päättyy", validators=[validators.InputRequired(), alkaa_ennen_paattymista], format='%Y-%m-%dT%H:%M')
     sijainti= StringField("Sijainti")
     kuvaus= TextAreaField("Ennakkotiedot")
     submit = SubmitField("Tallenna")

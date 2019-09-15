@@ -3,6 +3,8 @@ from .ryhmassa import Ryhmassa
 from .henkilo import Henkilo, ika
 from sqlalchemy.sql import text
 from dateutil.parser import parse
+from .kokous import Kokous
+from datetime import datetime
 
 class Ryhma(db.Model):
     __tablename__ = "Ryhma"
@@ -49,3 +51,42 @@ class Ryhma(db.Model):
                             "kuvaus" : rivi[3],
                             "lasna" : rivi[4]})
         return lista
+
+    def seuraavaKokous(self):
+        return Kokous.query.filter(Kokous.ryhmaId == self.id).filter(Kokous.paattyy > datetime.today()).order_by("alkaa").first()
+
+    def tulevatkokoukset(self):
+        stmt = text("SELECT Kokous.id, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus FROM Kokous "
+                     "WHERE Ryhmaid=:ryhmaId AND kokous.paattyy > CURRENT_TIMESTAMP "
+                    ).params(ryhmaId=self.id)
+        res = db.engine.execute(stmt)
+        lista = []
+        for rivi in res:
+            lista.append({ "kokousId" : rivi[0],
+                            "alkaa": parse(rivi[1]),
+                            "paattyy": parse(rivi[2]),
+                            "sijainti" : rivi[3],
+                            "kuvaus" : rivi[4]})
+        return lista
+
+
+    def ohjaajat(self):
+        stmt=text("SELECT etunimi, sukunimi, puhelin, email FROM Ryhmassa JOIN Henkilo ON Ryhmassa.henkiloId=Henkilo.id "
+                  "WHERE ryhmaid=:ryhmaid AND ohjaaja=1 ").params(ryhmaid=self.id)
+        res = db.engine.execute(stmt)
+        lista = []
+        for rivi in res:
+            lista.append({ "etunimi" : rivi[0],
+                            "sukunimi": rivi[1],
+                            "puhelin" : rivi[2],
+                            "email" : rivi[3]})
+        return lista
+
+    def onkotilaa(self):
+        stmt = text("SELECT COUNT(id) FROM Ryhmassa WHERE ryhmaid=:ryhmaid AND ohjaaja = 0 AND paattyen IS NULL ").params(ryhmaid=self.id)
+        res = db.engine.execute(stmt)
+        if res[0][0] :
+            lkm = 0
+        else:
+            lkm = int( res[0][0])
+        return self.paikkoja > lkm

@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{% macro ryhmatiedot(ryhmassa) %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ryhmassa.ryhma.nimi}}</h5>
+        {% with kokous = ryhmassa.ryhma.seuraavaKokous() %}
+          {% if kokous %}
+            <p>Seuraava kokous {{kokous.alkaa|pvmaika}} - {{kokous.paattyy|klo}} {{kokous.sijainti}}<br/>
+              {{kokous.kuvaus}}</p>
+          {% else %}
+            <p>Seuraavan kokouksen ajankohta ei ole tiedossa</p>
+          {% endif %}
+        {% endwith %}
+        <a href="{{url_for('ilmoittautumiset_ryhma_tiedot', ryhma_id=ryhmassa.ryhmaId)}}" class="btn btn-outline-primary"><i class="fas fa-info-circle"></i> Ohjaajat ja kokoukset</a>
+        {%if ryhmassa.ohjaaja %}
+          <a href="{{url_for('ryhmat_tiedot', ryhma_id=ryhmassa.ryhmaId)}}" class="btn btn-outline-success"><i class="fas fa-user-shield"></i> Ohjaajan näkymä</a>
+        {% endif %}
+      </div>
+    </div>
+{% endmacro %}
+
+
+{% if not current_user.jasenyysPaattyi %}
+{% if current_user.aikuinen() %}
+  <a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=current_user.id)}}"><i class="fas fa-plus"></i> Uusi ilmoittautuminen</a>
+{% endif %}
+  <h2>Omat ryhmäni</h2>
+  {% for ryhmassa in current_user.ryhmat|sort(attribute='ryhma.nimi') %}
+    {{ ryhmatiedot(ryhmassa)}}
+    {% else  %}
+      {% if current_user.aikuinen() %}
+        Et ole vielä ilmoittautunut yhteenkään ryhmään. Uusi ilmoittautuminen-napista pääset selaamaan ryhmiä ja tekemään ilmoittautumisen.
+      {% else %}
+        Huoltajasi tekee ilmoittautumiset puolestasi omalla tunnuksellaan.
+      {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for lapsi in current_user.huollettavat %}
+ {% if not lapsi.aikuinen() %}
+ <hr/>
+ <a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=lapsi.id)}}"><i class="fas fa-plus"></i> Uusi ilmoittautuminen</a>
+  <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>
+    {% for ryhmassa in lapsi.ryhmat|sort(attribute='ryhma.nimi') %}
+      {{ ryhmatiedot(ryhmassa) }}
+    {% else %}
+      {{lapsi.etunimi}} ei ole ilmoittautunut vielä yhteenkään ryhmään. Uusi ilmoittautuminen-napista pääset selaamaan ryhmiä ja tekemään ilmoittautumisen.
+  {% endfor %}
+ {% endif %}
+{% endfor %}
+
+{% endblock %}

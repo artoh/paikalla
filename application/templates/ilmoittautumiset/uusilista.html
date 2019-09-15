@@ -3,7 +3,9 @@
 
 <h2>Uusi ilmoittautuminen</h2>
 {% if henkilo is not eq(current_user) %}
-<p>{{henkilo.etunimi}} {{henkilo.sukunimi}} {{henkilo.ika()}} v. </p>
+<p class="lead"><span class="badge badge-secondary">
+Olet ilmoittamassa huollettavaasi {{henkilo.etunimi}} {{henkilo.sukunimi}} {{henkilo.ika()}} v.
+</span></p>
 {% endif %}
 
   {%for ryhma in henkilo.mahdollisetryhmat() %}
@@ -18,8 +20,9 @@
         <p>{{ryhma.kuvaus}}</p>
 
         {%if ryhma.lkm is lt(ryhma.paikkoja) %}
-          <a href="#" class="btn btn-primary">Lisätiedot ja ilmoittauminen</a>
+          <a class="btn btn-primary" href="{{url_for('ilmoittautumiset_uusi_tiedot', henkilo_id=henkilo.id, ryhma_id=ryhma.id)}}">Lisätiedot ja ilmoittauminen</a>
         {% endif %}
+
         </div>
   </div>
   {% endfor %}

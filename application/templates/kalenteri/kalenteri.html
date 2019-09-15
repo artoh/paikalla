@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1>Tulevat kokoukset</h1>
+  {% for paiva in kalenteri %}
+
+   <div class="card" style="margin-top:1em;">
+     <div class="card-header">
+       {{paiva.pvm|kpvm}}
+     </div>
+
+     <ul class="list-group list-group-flush">
+    {% for kokous in paiva.kokoukset %}
+      <li class="list-group-item">
+        <h5 class="card-title">{{kokous.ryhma}}</h5>
+        <h6 class="card-subtitle">klo {{kokous.alkaa|klo}} - {{kokous.paattyy|klo}} {{kokous.sijainti}}</h6>
+        <p class="card-text">{{kokous.kuvaus}}</p>
+        {% for osallistuja in kokous.osallistujat %}
+          <span class="badge badge-primary">{{osallistuja}}</span>
+        {% endfor %}          
+      </li>
+    {% endfor %}
+    </ul>
+    </div>
+  {% endfor %}
+
+{% endblock %}

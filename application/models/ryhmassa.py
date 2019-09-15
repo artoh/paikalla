@@ -1,5 +1,5 @@
 from application import db
-
+from datetime import datetime
 
 class Ryhmassa(db.Model):
     __tablename__ = "Ryhmassa"
@@ -16,3 +16,4 @@ class Ryhmassa(db.Model):
         self.ryhmaId = ryhmaId
         self.henkiloId = jasenId
         self.ohjaaja = ohjaaja
+        self.alkaen = datetime.today()
