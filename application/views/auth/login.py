@@ -23,7 +23,7 @@ def auth_login():
                                virhe = "Et ole rekisteröitynyt tällä sähköpostiosoitteella.",
                                email=email)
 
-    if( bcrypt.check_password_hash( kayttaja.salasana, salasanaTiiviste )) :
+    if( bcrypt.check_password_hash( salasanaTiiviste, kayttaja.salasana )) :
         login_user(kayttaja)
         return redirect(url_for("ilmoittautumiset_index"))
     else:
