@@ -24,9 +24,14 @@ class Kokous(db.Model) :
 
 
     def paikallalista(self, ohjaaja):
+        if ohjaaja:
+            ohjaajanot = ""
+        else:
+            ohjaajanot = " not "
+
         stmt = text("select etunimi, sukunimi, ryhmassa.id, lasna.ryhmassa, henkilo.varotieto from ryhmassa join henkilo on ryhmassa.henkiloid=henkilo.id "
                     "left outer join (select ryhmassa from lasnaolo where kokous=:kokousid) as lasna on lasna.ryhmassa=ryhmassa.id "
-                    "where ryhmassa.ryhmaid=:ryhmaid and ohjaaja=:ohjaaja order by sukunimi,etunimi").params(kokousid=self.id, ryhmaid=self.ryhmaid, ohjaaja=ohjaaja)
+                    "where ryhmassa.ryhmaid=:ryhmaid and {} ohjaaja order by sukunimi,etunimi".format(ohjaajanot)).params(kokousid=self.id, ryhmaid=self.ryhmaid, ohjaaja=ohjaaja)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:

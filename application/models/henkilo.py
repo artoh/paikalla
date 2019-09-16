@@ -63,7 +63,7 @@ class Henkilo(db.Model):
     def mahdollisetryhmat(self):
         stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm  "
                     "from ryhma left outer join "
-                    "(select ryhmaid, count(id) as lkm from ryhmassa where ohjaaja = 0 and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
+                    "(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
                     "where ilmoittautuminenalkaa <= current_date and ilmoittautuminenpaattyy >= current_date "
                     "and ikavahintaan <= :ika and ikaenintaan >= :ika "
                     "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid) "
@@ -113,7 +113,6 @@ class Henkilo(db.Model):
             print("ohjaaja {} user {} current {}".format(rivi[7], rivi[8], current_user.id))
             if rivi[7] and current_user.id == int(rivi[8]) :
                 kokous["ohjaaja"]=True
-                print("OHJAAJA")
 
             kyspaiva = parse(rivi[2]).date()
             if kyspaiva != paiva and paiva:
