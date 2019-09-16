@@ -24,11 +24,16 @@ def jasenet_luo() :
         return render_template("jasenet/uusi.html", form = form)
 
     henkilo = Henkilo()
+    flash("Henkilö " + henkilo.etunimi + " " + henkilo.sukunimi + " lisätty ", "success")
+
     form.tallenna( henkilo )
     db.session.add( henkilo )
     db.session.commit()
 
-    return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo.id))
+    if henkilo.aikuinen():
+        return redirect( url_for("jasenet_huollettavat", henkilo_id=henkilo.id))
+    else:
+        return redirect(url_for("jasenet_huoltajat", henkilo_id=henkilo.id))
 
 
 @app.route("/jasenet/<henkilo_id>/tiedot/")
@@ -69,4 +74,4 @@ def jasenet_salasana(henkilo_id):
     henkilo.salasana = bcrypt.generate_password_hash( request.form.get("salasana"))
     flash( henkilo.etunimi + " " + henkilo.sukunimi + " salasana vaihdettu", "info")
     db.session.commit()
-    return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo.id))
+    return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )

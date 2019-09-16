@@ -4,6 +4,7 @@ from application.models import Ryhma, Ryhmassa, Henkilo
 from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
+from application.models.kokous import Lasnaolo
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
 def ryhmat_kokoukset(ryhma_id):
@@ -82,6 +83,10 @@ def ryhmat_poista_kokous(kokous_id):
 @app.route("/ryhmat/kokoukset/<kokous_id>")
 def ryhmat_kokoukset_muokkaa(kokous_id):
     kokous = Kokous.query.get(kokous_id)
+
+    if kokous.alkaa < datetime.today() - timedelta(minutes=15) :
+        return redirect( url_for("ryhmat_menneet_muokkaa", kokous_id=kokous_id))
+
     form = KokousTiedotForm()
     form.lataa(kokous)
     return render_template("ryhmat/muokkaakokous.html", kokous=kokous, ryhma=kokous.ryhma, form=form)
@@ -97,7 +102,31 @@ def ryhmat_muokkaa_kokous(kokous_id):
     db.session.commit()
     return redirect( url_for("ryhmat_kokoukset", ryhma_id=kokous.ryhma.id))
 
+
 @app.route("/ryhmat/<ryhma_id>/menneet")
 def ryhmat_menneet(ryhma_id):
     ryhma = Ryhma.query.get(ryhma_id)
     return render_template("ryhmat/menneet.html", ryhma=ryhma)
+
+
+@app.route("/ryhmat/menneet/<kokous_id>")
+def ryhmat_menneet_muokkaa(kokous_id):
+    kokous = Kokous.query.get(kokous_id)
+    return render_template("ryhmat/lasnalista.html", kokous=kokous, ryhma=kokous.ryhma)
+
+
+@app.route("/rymat/menneet/<kokous_id>", methods=["POST"])
+def ryhmat_muokkaa_mennyt(kokous_id):
+    kokous = Kokous.query.get(kokous_id)
+    kokous.memo = request.form.get("memo")
+    kokous.lasna = []
+
+    for key in request.form.keys():
+        if key.isdigit():
+            print("****** Läsnä {}".format(key))
+            ryhmassa = Ryhmassa.query.get( int(key) )
+            kokous.lasna.append(ryhmassa)
+
+    db.session.commit()
+    return redirect(url_for("ryhmat_menneet", ryhma_id=kokous.ryhmaId) )
+

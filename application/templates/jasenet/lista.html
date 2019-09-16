@@ -5,28 +5,29 @@
 <a href="{{ url_for('jasenet_uusi') }}" class="btn btn-outline-primary float-right"><i class="fas fa-user-plus"></i> Lisää jäsen</a>
 <h2>Jäsenet</h2>
 
-<ul>
+<table class="table table-borderless table-sm table-striped">
 
   {% for jasen in jasenet %}
 
-    <li>
-      <a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">
-        {{ jasen.etunimi}} {{ jasen.sukunimi}}
-      </a>
-      {% if jasen.toimihenkilo %}
-        <i class="fas fa-user-cog"></i>
-      {% endif %}
-      {% if jasen.jasenyysAlkoi and not jasen.jasenyysPaattyi %}
-        <i class="fas fa-user-friends"></i>
-      {% endif %}
-      {% if jasen.aikuinen %}
-        <i class="fas fa-user-tie"></i>
-      {% endif %}
 
-    </li>
+    <tr>
+      <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.sukunimi}}</a></td>
+      <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.etunimi}}</a></td>
+      <td>{{ jasen.ika() }} v.</td>
+      <td>
+        {% if jasen.jasenyysAlkoi and not jasen.jasenyysPaattyi %}
+          <i class="fas fa-user-friends"></i>
+        {% endif %}
+      </td>
+      <td>
+        {% if jasen.toimihenkilo %}
+          <i class="fas fa-user-cog"></i>
+        {% endif %}
+      </td>
+    </tr>
 
   {% endfor %}
 
-</ul>
+</table>
 
 {% endblock %}

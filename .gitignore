@@ -2,5 +2,6 @@ venv/
 *.pyc
 __pycache__/
 paikalla.db
+paikalla.db-journal
 .idea/
 .directory
