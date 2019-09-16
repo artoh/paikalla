@@ -33,7 +33,7 @@ class Henkilo(db.Model):
                             secondary=Huoltajuus,
                             primaryjoin=id == Huoltajuus.c.huollettava,
                             secondaryjoin=id == Huoltajuus.c.huoltaja,
-                            backref=db.backref('Huollettavat'))
+                            backref=db.backref('huollettavat'))
     ryhmat = db.relationship('Ryhmassa', backref='ryhmat', lazy=True)
 
     def ika(self):
