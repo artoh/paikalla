@@ -9,14 +9,14 @@ from datetime import datetime
 class Ryhma(db.Model):
     __tablename__ = "ryhma"
     id = db.Column(db.Integer, primary_key=True)
-    nimi = db.Column( db.String(128), nullable=False)
-    paikkoja = db.Column( db.Integer, default=0)
-    ilmoittautuminenalkaa = db.Column(db.Date, nullable=True)
-    ilmoittautuminenpaattyy = db.Column(db.Date, nullable=True)
-    ikavahintaan = db.Column( db.Integer, default=0);
-    ikaenintaan = db.Column( db.Integer, default=999);
+    nimi = db.Column( db.String(128), nullable=False, index=True)
+    paikkoja = db.Column( db.Integer, default=0, index=True)
+    ilmoittautuminenalkaa = db.Column(db.Date, nullable=True, index=True)
+    ilmoittautuminenpaattyy = db.Column(db.Date, nullable=True, index=True)
+    ikavahintaan = db.Column( db.Integer, default=0, index=True);
+    ikaenintaan = db.Column( db.Integer, default=999, index=True);
     kuvaus = db.Column(db.Text, nullable = True)
-    paattynyt = db.Column( db.Boolean, default=False)
+    paattynyt = db.Column( db.Boolean, default=False, index=True)
     jasenyydet = db.relationship('Ryhmassa',lazy=True)
 
     def jasenet(self):

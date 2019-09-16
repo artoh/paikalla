@@ -22,7 +22,7 @@ class Henkilo(db.Model):
     __tablename__ = "henkilo"
     id = db.Column(db.Integer, primary_key=True)
     etunimi = db.Column( db.String(128), nullable=False)
-    sukunimi = db.Column( db.String(128), nullable=False)
+    sukunimi = db.Column( db.String(128), nullable=False, index=True)
     puhelin = db.Column( db.String(32), nullable=True)
     email = db.Column( db.String(64), nullable=True, unique=True)
     salasana = db.Column( db.Text, nullable=True)

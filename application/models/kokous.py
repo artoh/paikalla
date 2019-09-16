@@ -10,7 +10,7 @@ class Kokous(db.Model) :
     __tablename__ = "kokous"
     id = db.Column(db.Integer, primary_key=True)
     ryhmaid = db.Column(db.Integer, db.ForeignKey('ryhma.id', ondelete="CASCADE"), nullable=False)
-    alkaa = db.Column( db.DateTime, nullable=False )
+    alkaa = db.Column( db.DateTime, nullable=False, index=True)
     paattyy = db.Column( db.DateTime, nullable=True)
     sijainti = db.Column( db.Text, nullable=True)
     kuvaus = db.Column( db.Text, nullable=True)
