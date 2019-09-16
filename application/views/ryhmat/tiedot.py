@@ -22,7 +22,7 @@ def ryhmat_luo():
     db.session.commit()
 
     flash("Ryhmä " + ryhma.nimi + " lisätty", "success")
-    return redirect( url_for("ryhmat_jasen", ryhma_id=ryhma.id) )
+    return redirect( url_for("ryhmat_jasenet", ryhma_id=ryhma.id) )
 
 
 @app.route("/ryhmat/<ryhma_id>/tiedot/")

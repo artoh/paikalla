@@ -7,3 +7,6 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - [Sovellus Herokussa](https://olenpaikalla.herokuapp.com)
 - [Tietokantakaavio](documentation/tietokantakaavio.svg)
 - [Käyttötapaukset](documentation/kayttotapaukset.md)
+
+Käyttäjätunnuksia Herokussa
+- Jäsenrekisterin hoitaja lennu@lepakko.com salasana *lepakko*
