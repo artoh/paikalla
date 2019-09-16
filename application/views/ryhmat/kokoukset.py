@@ -49,11 +49,9 @@ def ryhmat_luo_kokoussarja(ryhma_id):
 
     paiva = form.alkaa.data
     kokoukset = 0
-    print("Etsitään viikonpäivää {}".format(form.viikonpaiva.data))
     while paiva < form.paattyy.data:
         print("Pvm {} Viikonpäivä {} ".format(paiva, paiva.weekday()))
         if( paiva.weekday() == int(form.viikonpaiva.data) ) :
-            print("Lisätään {}".format(paiva))
             kokous = Kokous(ryhma.id)
             kokous.alkaa = datetime.combine(paiva, form.alkaaklo.data)
             kokous.paattyy = datetime.combine(paiva, form.paattyyklo.data)
@@ -123,7 +121,6 @@ def ryhmat_muokkaa_mennyt(kokous_id):
 
     for key in request.form.keys():
         if key.isdigit():
-            print("****** Läsnä {}".format(key))
             ryhmassa = Ryhmassa.query.get( int(key) )
             kokous.lasna.append(ryhmassa)
 
