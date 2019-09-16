@@ -4,7 +4,7 @@ from application.models import Ryhma, Ryhmassa, Henkilo
 from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
-from application.models.kokous import Lasnaolo
+
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
 def ryhmat_kokoukset(ryhma_id):

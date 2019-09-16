@@ -22,5 +22,3 @@ def format_date(value, format="%a %d.%m.%Y klo %H.%M"):
     if value is None:
         return ""
     return value.strftime(format)
-
-

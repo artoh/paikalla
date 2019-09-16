@@ -2,15 +2,15 @@ from application import db, bcrypt
 from datetime import date
 from sqlalchemy.sql import text
 from flask_login import current_user
-from .ryhma import parsedate
+
+from . import parsedate
 
 Huoltajuus = db.Table('huoltajuus',
       db.Column( 'huoltaja', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True),
       db.Column( 'huollettava', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True))
 
+
 def ika(syntymapaiva):
-    if isinstance(syntymapaiva,str):
-        syntymapaiva = parse(syntymapaiva)
     tanaan = date.today()
     vuotta = tanaan.year - syntymapaiva.year
     if tanaan.month < syntymapaiva.month or tanaan.month == syntymapaiva.month and tanaan.day < syntymapaiva.day:

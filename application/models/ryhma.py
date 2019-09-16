@@ -1,19 +1,12 @@
 from application import db
-from .ryhmassa import Ryhmassa
 from .henkilo import Henkilo, ika
 from sqlalchemy.sql import text
 from dateutil.parser import parse
 from .kokous import Kokous
 from datetime import datetime
 
+from . import parsedate
 
-# Postgresql-yhteensopivuuden kääreeksi
-# Koska sqlite palauttaa merkkijonon ja postgre päivämäärän,
-# pareseoidaan vain päivämäärät
-def parsedate(pvm):
-    if isinstance(pvm,str):
-        return parse(pvm)
-    return pvm
 
 class Ryhma(db.Model):
     __tablename__ = "ryhma"
@@ -42,7 +35,7 @@ class Ryhma(db.Model):
                             "etunimi" : rivi[3],
                             "varotieto" : rivi[4],
                             "henkiloId" : rivi[5],
-                            "ika": ika(rivi[6])})
+                            "ika": ika(parsedate(rivi[6]))})
         return lista
 
     def menneetKokoukset(self):
@@ -55,7 +48,7 @@ class Ryhma(db.Model):
         lista = []
         for rivi in res:
             lista.append({ "id" : rivi[0],
-                            "alkaa": parse(rivi[1]),
+                            "alkaa": parsedate(rivi[1]),
                             "sijainti" : rivi[2],
                             "kuvaus" : rivi[3],
                             "lasna" : rivi[4]})
