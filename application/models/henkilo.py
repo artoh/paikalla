@@ -3,7 +3,7 @@ from datetime import date
 from sqlalchemy.sql import text
 from flask_login import current_user
 
-from . import parsedate
+from application.models import parsedate
 
 Huoltajuus = db.Table('huoltajuus',
       db.Column( 'huoltaja', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True),

@@ -5,7 +5,7 @@ from dateutil.parser import parse
 from .kokous import Kokous
 from datetime import datetime
 
-from . import parsedate
+from application.models import parsedate
 
 
 class Ryhma(db.Model):
