@@ -71,7 +71,7 @@ def jasenet_poista(henkilo_id):
 @app.route("/jasenet/<henkilo_id>/salasana", methods=["POST"])
 def jasenet_salasana(henkilo_id):
     henkilo = Henkilo.query.get( henkilo_id )
-    henkilo.salasana = bcrypt.generate_password_hash( request.form.get("salasana"))
+    henkilo.asetaSalasana( request.form.get("salasana"))
     flash( henkilo.etunimi + " " + henkilo.sukunimi + " salasana vaihdettu", "info")
     db.session.commit()
     return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )

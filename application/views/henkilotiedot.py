@@ -82,7 +82,7 @@ def henkilotiedot_vaihda_salasana():
         if not henkilo:
             return login_manager.unauthorized()
 
-    henkilo.salasana = bcrypt.generate_password_hash(salasana)
+    henkilo.asetaSalasana(salasana)
     flash("Henkilön {} {} salasana vaihdettu".format(henkilo.etunimi, henkilo.sukunimi), "success")
     db.session.commit()
     return redirect(url_for("henkilotiedot_index"))

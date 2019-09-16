@@ -1,4 +1,4 @@
-from application import db
+from application import db, bcrypt
 from datetime import date
 from sqlalchemy.sql import text
 from dateutil.parser import parse
@@ -42,6 +42,8 @@ class Henkilo(db.Model):
     def aikuinen(self):
         return self.ika() >= 18
 
+    def asetaSalasana(selvakielisena):
+        self.salasana = bcrypt.generate_password_hash(selvakielisena).decode('utf-8')
 
     def get_id(self):
         return self.id
@@ -81,7 +83,7 @@ class Henkilo(db.Model):
 
     def kalenteri(self):
         stmt = text("SELECT Henkilo.etunimi, Ryhma.nimi, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus, Kokous.id, Ryhmassa.ohjaaja, Henkilo.id "
-                    "FROM Henkilo JOIN Ryhmassa ON Henkilo.id=Ryhmassa.henkiloId JOIN Ryhma ON Ryhmassa.ryhmaid=Ryhma.id JOIN Kokous ON Kokous.ryhmaid=Ryhma.id " 
+                    "FROM Henkilo JOIN Ryhmassa ON Henkilo.id=Ryhmassa.henkiloId JOIN Ryhma ON Ryhmassa.ryhmaid=Ryhma.id JOIN Kokous ON Kokous.ryhmaid=Ryhma.id "
                     "WHERE (Ryhmassa.henkiloId=:henkiloid "
                     "OR Ryhmassa.henkiloid in (SELECT huollettava FROM Huoltajuus WHERE huoltaja=:henkiloid)) AND Kokous.paattyy >= current_date "
                     "ORDER BY Kokous.alkaa").params(henkiloid=self.id)
@@ -121,5 +123,3 @@ class Henkilo(db.Model):
             paivat.append({"pvm": paiva, "kokoukset": kokoukset})
 
         return paivat
-
-

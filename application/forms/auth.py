@@ -22,5 +22,5 @@ class LuoKayttajaForm(HenkiloTiedotFormBase) :
         henkilo = Henkilo()
         super().tallenna(henkilo)
         henkilo.jasenyysAlkoi = datetime.today()
-        henkilo.salasana = bcrypt.generate_password_hash( self.salasana.data)
+        henkilo.asetaSalasana( self.salasana.data )
         return henkilo
