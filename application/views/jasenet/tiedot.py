@@ -24,7 +24,7 @@ def jasenet_luo() :
         return render_template("jasenet/uusi.html", form = form)
 
     henkilo = Henkilo()
-    flash("Henkilö " + henkilo.etunimi + " " + henkilo.sukunimi + " lisätty ", "success")
+    flash("Henkilö {} {} lisätty ".format(henkilo.etunimi, henkilo.sukunimi), "success")
 
     form.tallenna( henkilo )
     db.session.add( henkilo )
@@ -56,7 +56,7 @@ def jasenet_paivita(henkilo_id):
     form.tallenna(henkilo)
     db.session.commit()
 
-    flash("Henkilön " + henkilo.etunimi + " " + henkilo.sukunimi + " tiedot tallennettu", "success")
+    flash("Henkilön {} {} tiedot tallennettu".format(henkilo.etunimi, henkilo.sukunimi), "success")
     return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )
 
 
@@ -72,6 +72,6 @@ def jasenet_poista(henkilo_id):
 def jasenet_salasana(henkilo_id):
     henkilo = Henkilo.query.get( henkilo_id )
     henkilo.asetaSalasana( request.form.get("salasana"))
-    flash( henkilo.etunimi + " " + henkilo.sukunimi + " salasana vaihdettu", "info")
+    flash("{} {] salasana vaihdettu".format(henkilo.etunimi, henkilo.sukunimi), "info")
     db.session.commit()
     return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )

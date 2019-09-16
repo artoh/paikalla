@@ -44,7 +44,7 @@
 - [x] Ryhmänohjaaja lisää kokouksen ryhmälleen
 - [x] Ryhmänohjaaja muokkaa ryhmänsä kokouksen tietoja
 - [x] Ryhmänohjaaja peruu (poistaa) kokouksen  
-- [ ] Ryhmänohjaaja merkitsee kokouksessa läsnäolleet
+- [x] Ryhmänohjaaja merkitsee kokouksessa läsnäolleet
 - [ ] Ryhmänohjaaja näkee oman ryhmänsä läsnäolotilastot
 
 ## Toimihenkilö
@@ -57,7 +57,7 @@
   - [x] Toimihenkilö yhdistää lapselle huoltajan
   - [x] Toimihenkilö poistaa lapselta huoltajan
 - [x] Toimihenkilö merkitsee jäsenen eronneeksi
-- [ ] Toimihenkilö vaihtaa jäsenen salasanan
+- [x] Toimihenkilö vaihtaa jäsenen salasanan
 - [x] Toimihenkilö merkitsee jäsenen toimihenkilöksi
 
 ## Ryhmien hallinta

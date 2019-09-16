@@ -23,7 +23,7 @@
 {% endmacro %}
 
 
-{% if not current_user.jasenyysPaattyi %}
+{% if current_user.jasen() %}
 {% if current_user.aikuinen() %}
   <a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=current_user.id)}}"><i class="fas fa-plus"></i> Uusi ilmoittautuminen</a>
 {% endif %}

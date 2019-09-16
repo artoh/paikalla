@@ -9,4 +9,8 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - [Käyttötapaukset](documentation/kayttotapaukset.md)
 
 Käyttäjätunnuksia Herokussa
-- Jäsenrekisterin hoitaja lennu@lepakko.com salasana *lepakko*
+- Jäsenrekisterin hoitaja *lennu@lepakko.com* salasana *lepakko*
+- Ryhmänohjaaja *saku@sammakko.net* salasana *sammakko*
+- Lapsen vanhempi *meri@kotka@fi* salasana *merikotka*
+- Alaikäinen *janna@jaa.fi* salasana *janna*
+- ja lisäksi voi rekisteröidä uusia käyttäjiä...
