@@ -11,8 +11,8 @@ class Ryhma(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nimi = db.Column( db.String(128), nullable=False)
     paikkoja = db.Column( db.Integer, default=0)
-    ilmoittautuminenAlkaa = db.Column( db.Date, nullable=True)
-    ilmoittautuminenPaattyy = db.Column( db.Date, nullable=True)
+    ilmoittautuminenalkaa = db.Column(db.Date, nullable=True)
+    ilmoittautuminenpaattyy = db.Column(db.Date, nullable=True)
     ikavahintaan = db.Column( db.Integer, default=0);
     ikaenintaan = db.Column( db.Integer, default=999);
     kuvaus = db.Column(db.Text, nullable = True)
