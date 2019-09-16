@@ -9,6 +9,8 @@ Huoltajuus = db.Table('huoltajuus',
       db.Column( 'huollettava', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True))
 
 def ika(syntymapaiva):
+    if isinstance(syntymapaiva,str):
+        syntymapaiva = parse(syntymapaiva)
     tanaan = date.today()
     vuotta = tanaan.year - syntymapaiva.year
     if tanaan.month < syntymapaiva.month or tanaan.month == syntymapaiva.month and tanaan.day < syntymapaiva.day:

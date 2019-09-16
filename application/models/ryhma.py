@@ -33,7 +33,7 @@ class Ryhma(db.Model):
                             "etunimi" : rivi[3],
                             "varotieto" : rivi[4],
                             "henkiloId" : rivi[5],
-                            "ika": ika( parse(rivi[6]) )} )
+                            "ika": ika(rivi[6])})
         return lista
 
     def menneetKokoukset(self):
