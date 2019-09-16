@@ -34,7 +34,6 @@ def jasenet_linkita_huollettava(huoltaja_id):
 def jasenet_uusi_huollettava(huoltaja_id):
     huoltaja = Henkilo.query.get(huoltaja_id)
     form = HenkiloTiedotAdminilleForm()
-    form.syntymaaika.validators.append(IkaValidator(max=17, message="Huollettavan oltava alaikäinen"))
     form.jasenyysAlkoi.data = datetime.today()
     return render_template("jasenet/uusihuollettava.html", henkilo=huoltaja, form=form)
 

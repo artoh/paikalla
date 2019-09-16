@@ -26,9 +26,6 @@ class HenkiloTiedotFormBase(FlaskForm) :
     email = EmailField("Sähköposti", validators=[validators.Regexp("(\S+@\S+\.\w+)?", message="Sähköpostiosoite ei ole kelvollinen")])
     varotieto = TextAreaField("Huomioon otettavaa (esim. allergiat)")
 
-    class Meta:
-        csrf = False
-
     def lataa(self, henkilo):
         self.etunimi.data = henkilo.etunimi
         self.sukunimi.data = henkilo.sukunimi
@@ -46,9 +43,18 @@ class HenkiloTiedotFormBase(FlaskForm) :
             henkilo.email = self.email.data
         henkilo.varotieto = self.varotieto.data
 
-
 class HenkiloTiedotForm(HenkiloTiedotFormBase) :
     submit = SubmitField("Tallenna")
+
+class HenkiloTiedotLapsiForm(HenkiloTiedotFormBase):
+    syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired(), IkaValidator(max=17)],format='%Y-%m-%d')
+    submit = SubmitField("Tallenna")
+
+class HenkiloTiedotAikuiselleForm(HenkiloTiedotFormBase):
+    syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired(), IkaValidator(min=18)],format='%Y-%m-%d')
+    submit = SubmitField("Tallenna")
+
+
 
 class HenkiloTiedotAdminilleForm(HenkiloTiedotFormBase) :
 
@@ -74,6 +80,3 @@ class HenkiloTiedotAdminilleForm(HenkiloTiedotFormBase) :
         henkilo.jasenyysAlkoi = self.jasenyysAlkoi.data
         henkilo.jasenyysPaattyi = self.jasenyysPaattyi.data
         henkilo.toimihenkilo = self.toimihenkilo.data
-
-    class Meta:
-        csrf = False

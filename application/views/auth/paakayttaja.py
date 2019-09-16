@@ -3,6 +3,8 @@ from flask import render_template, request, url_for, redirect, flash
 from application.forms.auth import LuoKayttajaForm
 from flask_login import login_user
 from application.models.henkilo import Henkilo
+from wtforms import validators
+from application.forms.jasenet import IkaValidator
 
 @app.route("/aloita")
 def auth_paakayttaja():

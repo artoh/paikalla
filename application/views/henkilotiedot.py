@@ -2,7 +2,7 @@ from application import app, db, login_manager, bcrypt
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 from .autorisointi import kayttaja_autorisointi
-from application.forms.jasenet import HenkiloTiedotForm, IkaValidator
+from application.forms.jasenet import HenkiloTiedotForm, HenkiloTiedotLapsiForm
 from application.models.henkilo import Henkilo
 from datetime import datetime
 
@@ -39,8 +39,7 @@ def henkilotiedot_muokkaa(henkilo_id):
 def henkilotiedot_uusi_huollettava():
     if not current_user or not current_user.is_authenticated() or not current_user.aikuinen():
         return login_manager.unauthorized()
-    form = HenkiloTiedotForm();
-    form.syntymaaika.validators.append(IkaValidator(max=17, message="Huollettavan on oltava alaikäinen"))
+    form = HenkiloTiedotLapsiForm();
     return render_template("henkilotiedot/uusihuollettava.html", form=form)
 
 
