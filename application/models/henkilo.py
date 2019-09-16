@@ -1,8 +1,8 @@
 from application import db, bcrypt
 from datetime import date
 from sqlalchemy.sql import text
-from dateutil.parser import parse
 from flask_login import current_user
+from .ryhma import parsedate
 
 Huoltajuus = db.Table('huoltajuus',
       db.Column( 'huoltaja', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True),
@@ -102,8 +102,8 @@ class Henkilo(db.Model):
                 kokousid = int( rivi[6])
                 kokous = {"id": rivi[6],
                           "ryhma" : rivi[1],
-                          "alkaa" : parse( rivi[2]),
-                          "paattyy": parse( rivi[3]),
+                          "alkaa" : parsedate( rivi[2]),
+                          "paattyy": parsedate( rivi[3]),
                           "sijainti": rivi[4],
                           "kuvaus": rivi[5],
                           "osallistujat": [ rivi[0], ]}
@@ -114,7 +114,7 @@ class Henkilo(db.Model):
             if rivi[7] and current_user.id == int(rivi[8]) :
                 kokous["ohjaaja"]=True
 
-            kyspaiva = parse(rivi[2]).date()
+            kyspaiva = parsedate(rivi[2]).date()
             if kyspaiva != paiva and paiva:
                 paivat.append( {"pvm":paiva, "kokoukset": kokoukset} )
                 kokoukset = []

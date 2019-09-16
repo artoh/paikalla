@@ -6,6 +6,15 @@ from dateutil.parser import parse
 from .kokous import Kokous
 from datetime import datetime
 
+
+# Postgresql-yhteensopivuuden kääreeksi
+# Koska sqlite palauttaa merkkijonon ja postgre päivämäärän,
+# pareseoidaan vain päivämäärät
+def parsedate(pvm):
+    if isinstance(pvm,str):
+        return parse(pvm)
+    return pvm
+
 class Ryhma(db.Model):
     __tablename__ = "ryhma"
     id = db.Column(db.Integer, primary_key=True)
@@ -63,8 +72,8 @@ class Ryhma(db.Model):
         lista = []
         for rivi in res:
             lista.append({ "kokousId" : rivi[0],
-                            "alkaa": parse(rivi[1]),
-                            "paattyy": parse(rivi[2]),
+                            "alkaa": parsedate(rivi[1]),
+                            "paattyy": parsedate(rivi[2]),
                             "sijainti" : rivi[3],
                             "kuvaus" : rivi[4]})
         return lista
