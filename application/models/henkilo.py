@@ -42,7 +42,7 @@ class Henkilo(db.Model):
     def aikuinen(self):
         return self.ika() >= 18
 
-    def asetaSalasana(selvakielisena):
+    def asetaSalasana(self, selvakielisena):
         self.salasana = bcrypt.generate_password_hash(selvakielisena).decode('utf-8')
 
     def get_id(self):
