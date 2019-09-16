@@ -14,9 +14,9 @@
             <p>Seuraavan kokouksen ajankohta ei ole tiedossa</p>
           {% endif %}
         {% endwith %}
-        <a href="{{url_for('ilmoittautumiset_ryhma_tiedot', ryhma_id=ryhmassa.ryhmaId)}}" class="btn btn-outline-primary"><i class="fas fa-info-circle"></i> Ohjaajat ja kokoukset</a>
+        <a href="{{url_for('ilmoittautumiset_ryhma_tiedot', ryhma_id=ryhmassa.ryhmaid)}}" class="btn btn-outline-primary"><i class="fas fa-info-circle"></i> Ohjaajat ja kokoukset</a>
         {%if ryhmassa.ohjaaja %}
-          <a href="{{url_for('ryhmat_tiedot', ryhma_id=ryhmassa.ryhmaId)}}" class="btn btn-outline-success"><i class="fas fa-user-shield"></i> Ohjaajan näkymä</a>
+          <a href="{{url_for('ryhmat_tiedot', ryhma_id=ryhmassa.ryhmaid)}}" class="btn btn-outline-success"><i class="fas fa-user-shield"></i> Ohjaajan näkymä</a>
         {% endif %}
       </div>
     </div>

@@ -28,8 +28,8 @@ class RyhmaTiedotForm(FlaskForm) :
     def lataa(self, ryhma):
         self.nimi.data = ryhma.nimi
         self.paikkoja.data = ryhma.paikkoja
-        self.ilmoittautuminenAlkaa.data = ryhma.ilmoittautuminenAlkaa
-        self.ilmoittautuminenPaattyy.data = ryhma.ilmoittautuminenPaattyy
+        self.ilmoittautuminenAlkaa.data = ryhma.ilmoittautuminenalkaa
+        self.ilmoittautuminenPaattyy.data = ryhma.ilmoittautuminenpaattyy
         self.ikavahintaan.data = ryhma.ikavahintaan
         self.ikaenintaan.data = ryhma.ikaenintaan
         self.kuvaus.data = ryhma.kuvaus
@@ -38,8 +38,8 @@ class RyhmaTiedotForm(FlaskForm) :
     def tallenna(self, ryhma):
         ryhma.nimi = self.nimi.data
         ryhma.paikkoja = self.paikkoja.data
-        ryhma.ilmoittautuminenAlkaa = self.ilmoittautuminenAlkaa.data
-        ryhma.ilmoittautuminenPaattyy = self.ilmoittautuminenPaattyy.data
+        ryhma.ilmoittautuminenalkaa = self.ilmoittautuminenAlkaa.data
+        ryhma.ilmoittautuminenpaattyy = self.ilmoittautuminenPaattyy.data
         ryhma.ikavahintaan = self.ikavahintaan.data
         ryhma.ikaenintaan = self.ikaenintaan.data
         ryhma.kuvaus = self.kuvaus.data

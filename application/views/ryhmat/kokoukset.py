@@ -124,5 +124,5 @@ def ryhmat_muokkaa_mennyt(kokous_id):
             kokous.lasna.append(ryhmassa)
 
     db.session.commit()
-    return redirect(url_for("ryhmat_menneet", ryhma_id=kokous.ryhmaId) )
+    return redirect(url_for("ryhmat_menneet", ryhma_id=kokous.ryhmaid) )
 
