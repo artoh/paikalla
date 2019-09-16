@@ -50,7 +50,6 @@ def ryhmat_luo_kokoussarja(ryhma_id):
     paiva = form.alkaa.data
     kokoukset = 0
     while paiva < form.paattyy.data:
-        print("Pvm {} Viikonpäivä {} ".format(paiva, paiva.weekday()))
         if( paiva.weekday() == int(form.viikonpaiva.data) ) :
             kokous = Kokous(ryhma.id)
             kokous.alkaa = datetime.combine(paiva, form.alkaaklo.data)
