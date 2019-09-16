@@ -9,7 +9,7 @@ from application.models.kokous import Lasnaolo
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
 def ryhmat_kokoukset(ryhma_id):
     ryhma = Ryhma.query.get(ryhma_id)
-    kokoukset = Kokous.query.filter(Kokous.ryhmaId == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa")
+    kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa")
     return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset)
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusi")

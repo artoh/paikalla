@@ -4,9 +4,9 @@ from sqlalchemy.sql import text
 from dateutil.parser import parse
 from flask_login import current_user
 
-Huoltajuus = db.Table('Huoltajuus',
-      db.Column( 'huoltaja', db.Integer, db.ForeignKey('Henkilo.id', ondelete="CASCADE"), primary_key=True),
-      db.Column( 'huollettava', db.Integer, db.ForeignKey('Henkilo.id', ondelete="CASCADE"), primary_key=True))
+Huoltajuus = db.Table('huoltajuus',
+      db.Column( 'huoltaja', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True),
+      db.Column( 'huollettava', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True))
 
 def ika(syntymapaiva):
     tanaan = date.today()
@@ -17,7 +17,7 @@ def ika(syntymapaiva):
 
 
 class Henkilo(db.Model):
-    __tablename__ = "Henkilo"
+    __tablename__ = "henkilo"
     id = db.Column(db.Integer, primary_key=True)
     etunimi = db.Column( db.String(128), nullable=False)
     sukunimi = db.Column( db.String(128), nullable=False)
@@ -33,7 +33,7 @@ class Henkilo(db.Model):
                             secondary=Huoltajuus,
                             primaryjoin=id == Huoltajuus.c.huollettava,
                             secondaryjoin=id == Huoltajuus.c.huoltaja,
-                            backref=db.backref('huollettavat'))
+                            backref=db.backref('Huollettavat'))
     ryhmat = db.relationship('Ryhmassa', backref='ryhmat', lazy=True)
 
     def ika(self):
@@ -82,11 +82,11 @@ class Henkilo(db.Model):
         return lista
 
     def kalenteri(self):
-        stmt = text("SELECT Henkilo.etunimi, Ryhma.nimi, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus, Kokous.id, Ryhmassa.ohjaaja, Henkilo.id "
-                    "FROM Henkilo JOIN Ryhmassa ON Henkilo.id=Ryhmassa.henkiloId JOIN Ryhma ON Ryhmassa.ryhmaid=Ryhma.id JOIN Kokous ON Kokous.ryhmaid=Ryhma.id "
-                    "WHERE (Ryhmassa.henkiloId=:henkiloid "
-                    "OR Ryhmassa.henkiloid in (SELECT huollettava FROM Huoltajuus WHERE huoltaja=:henkiloid)) AND Kokous.paattyy >= current_date "
-                    "ORDER BY Kokous.alkaa").params(henkiloid=self.id)
+        stmt = text("SELECT henkilo.etunimi, ryhma.nimi, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus, kokous.id, ryhmassa.ohjaaja, Henkilo.id "
+                    "FROM henkilo JOIN ryhmassa ON henkilo.id=ryhmassa.henkiloid JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id JOIN kokous ON kokous.ryhmaid=ryhma.id "
+                    "WHERE (ryhmassa.henkiloid=:henkiloid "
+                    "OR ryhmassa.henkiloid in (SELECT huollettava FROM huoltajuus WHERE huoltaja=:henkiloid)) AND kokous.paattyy >= current_date "
+                    "ORDER BY kokous.alkaa").params(henkiloid=self.id)
         res = db.engine.execute(stmt)
         paiva = None
         paivat = []

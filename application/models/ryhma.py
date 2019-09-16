@@ -7,7 +7,7 @@ from .kokous import Kokous
 from datetime import datetime
 
 class Ryhma(db.Model):
-    __tablename__ = "Ryhma"
+    __tablename__ = "ryhma"
     id = db.Column(db.Integer, primary_key=True)
     nimi = db.Column( db.String(128), nullable=False)
     paikkoja = db.Column( db.Integer, default=0)
@@ -21,9 +21,9 @@ class Ryhma(db.Model):
 
     def jasenet(self):
         stmt = text("SELECT ryhmassa.id, ohjaaja, sukunimi, etunimi, varotieto, Henkilo.id, syntymaaika  "
-                    "FROM Ryhmassa JOIN Henkilo ON Ryhmassa.henkiloId=Henkilo.Id "
-                    "WHERE Ryhmassa.ryhmaId=:ryhmaId AND Ryhmassa.paattyen IS NULL "
-                    "ORDER BY sukunimi, etunimi").params(ryhmaId=self.id)
+                    "FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloId=henkilo.Id "
+                    "WHERE ryhmassa.ryhmaid=:ryhmaid AND ryhmassa.paattyen IS NULL "
+                    "ORDER BY sukunimi, etunimi").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -37,11 +37,11 @@ class Ryhma(db.Model):
         return lista
 
     def menneetKokoukset(self):
-        stmt = text("SELECT Kokous.id, Kokous.alkaa, Kokous.sijainti, Kokous.kuvaus, l.lkm FROM Kokous"
+        stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, l.lkm FROM kokous"
                     " LEFT OUTER JOIN "
-                    "( SELECT kokous, count(kokous) as lkm FROM Lasnaolo GROUP BY kokous) AS l "
-                    "ON l.kokous=kokous.id WHERE Ryhmaid=:ryhmaId AND kokous.alkaa < CURRENT_TIMESTAMP "
-                    ).params(ryhmaId=self.id)
+                    "( SELECT kokous, count(kokous) as lkm FROM lasnaolo GROUP BY kokous) AS l "
+                    "ON l.kokous=kokous.id WHERE ryhmaid=:ryhmaid AND kokous.alkaa < CURRENT_TIMESTAMP "
+                    ).params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -53,12 +53,12 @@ class Ryhma(db.Model):
         return lista
 
     def seuraavaKokous(self):
-        return Kokous.query.filter(Kokous.ryhmaId == self.id).filter(Kokous.paattyy > datetime.today()).order_by("alkaa").first()
+        return Kokous.query.filter(Kokous.ryhmaid == self.id).filter(Kokous.paattyy > datetime.today()).order_by("alkaa").first()
 
     def tulevatkokoukset(self):
-        stmt = text("SELECT Kokous.id, Kokous.alkaa, Kokous.paattyy, Kokous.sijainti, Kokous.kuvaus FROM Kokous "
-                     "WHERE Ryhmaid=:ryhmaId AND kokous.paattyy > CURRENT_TIMESTAMP "
-                    ).params(ryhmaId=self.id)
+        stmt = text("SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus FROM kokous "
+                     "WHERE ryhmaid=:ryhmaid AND kokous.paattyy > CURRENT_TIMESTAMP "
+                    ).params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -71,7 +71,7 @@ class Ryhma(db.Model):
 
 
     def ohjaajat(self):
-        stmt=text("SELECT etunimi, sukunimi, puhelin, email FROM Ryhmassa JOIN Henkilo ON Ryhmassa.henkiloId=Henkilo.id "
+        stmt=text("SELECT etunimi, sukunimi, puhelin, email FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloid=henkilo.id "
                   "WHERE ryhmaid=:ryhmaid AND ohjaaja=1 ").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         lista = []
@@ -83,7 +83,7 @@ class Ryhma(db.Model):
         return lista
 
     def onkotilaa(self):
-        stmt = text("SELECT COUNT(id) FROM Ryhmassa WHERE ryhmaid=:ryhmaid AND ohjaaja = 0 AND paattyen IS NULL ").params(ryhmaid=self.id)
+        stmt = text("SELECT COUNT(id) FROM ryhmassa WHERE ryhmaid=:ryhmaid AND ohjaaja = 0 AND paattyen IS NULL ").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         if res[0][0] :
             lkm = 0
