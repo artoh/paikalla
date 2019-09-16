@@ -72,7 +72,7 @@ class Ryhma(db.Model):
 
     def ohjaajat(self):
         stmt=text("SELECT etunimi, sukunimi, puhelin, email FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloid=henkilo.id "
-                  "WHERE ryhmaid=:ryhmaid AND ohjaaja=1 ").params(ryhmaid=self.id)
+                  "WHERE ryhmaid=:ryhmaid AND ohjaaja ").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -83,7 +83,7 @@ class Ryhma(db.Model):
         return lista
 
     def onkotilaa(self):
-        stmt = text("SELECT COUNT(id) FROM ryhmassa WHERE ryhmaid=:ryhmaid AND ohjaaja = 0 AND paattyen IS NULL ").params(ryhmaid=self.id)
+        stmt = text("SELECT COUNT(id) FROM ryhmassa WHERE ryhmaid=:ryhmaid AND not ohjaaja AND paattyen IS NULL ").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         if res[0][0] :
             lkm = 0
