@@ -72,6 +72,6 @@ def jasenet_poista(henkilo_id):
 def jasenet_salasana(henkilo_id):
     henkilo = Henkilo.query.get( henkilo_id )
     henkilo.asetaSalasana( request.form.get("salasana"))
-    flash("{} {] salasana vaihdettu".format(henkilo.etunimi, henkilo.sukunimi), "info")
+    flash("{} {} salasana vaihdettu".format(henkilo.etunimi, henkilo.sukunimi), "info")
     db.session.commit()
     return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )

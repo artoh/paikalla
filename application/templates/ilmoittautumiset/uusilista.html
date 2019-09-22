@@ -25,6 +25,15 @@ Olet ilmoittamassa huollettavaasi {{henkilo.etunimi}} {{henkilo.sukunimi}} {{hen
 
         </div>
   </div>
+  {% else %}
+    <p>Tällä hetkellä ilmoittautuminen ei ole käynnissä yhdessäkään
+    sellaisessa ryhmässä, johon
+    {% if henkilo is not eq(current_user) %}
+      voisit ilmoittaa huollettavasi.
+    {% else %}
+      voisit ilmoittautua.
+    {% endif %}
+    </p>
   {% endfor %}
 </table>
 {% endblock %}

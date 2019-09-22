@@ -10,9 +10,6 @@
 	- [Uusi ilmoittautuminen](#uusi-ilmoittautuminen)
 	- [Kalenteri](#kalenteri)
 - [Ohje alle 18-vuotiaalle jäsenelle](#ohje-alle-18-vuotiaalle-jäsenelle)
-	- [Kirjautuminen](#kirjautuminen)
-	- [Omat ilmoittautumiset](#omat-ilmoittautumiset)
-	- [Omat henkilötiedot](#omat-henkilötiedot)
 	- [Kalenteri](#kalenteri)
 - [Ohje ryhmän ohjaajalle](#ohje-ryhmän-ohjaajalle)
 	- [Ryhmän tiedot](#ryhmän-tiedot)
@@ -80,20 +77,22 @@ Jos olet merkinnyt lapsesi tietoihin sähköpostiosoitteen, voit antaa luoda lap
 
 Ilmoittaudu uuteen ryhmään *Ilmoittautumiset*-välilehdellä olevalla *Uusi ilmoittautuminen*-painikkeella. Ilmoittaaksesi lapsen paina lapsen nimen vieressä olevaa ilmoittautumispainiketta.
 
+![Lista mahdollisista ryhmistä](pic/ilmolista.png)
+
+Näet luettelon ryhmistä, joihin voit ilmoittautua. Paina haluamasi ryhmän kohdalla *Lisätiedot ja ilmoittautuminen*-painiketta, niin näet yksityiskohtaisemmat tiedot ryhmästä, ohjaajista ja kokoontumisista.
+
+![Ryhmän tiedot](pic/ilmotiedot.png)
+
+Vahvista ilmoittautumisesi *Ilmoittaudu* -painikkeella.
+
+Jos haluat perua ilmoittautumisen, ota yhteyttä jäsenrekisterin hoitajaan tai ryhmäsi ohjaajaan.
 
 ### Kalenteri
 
 
+
 ## Ohje alle 18-vuotiaalle jäsenelle
 
-
-### Kirjautuminen
-
-
-### Omat ilmoittautumiset
-
-
-### Omat henkilötiedot
 
 
 ### Kalenteri
