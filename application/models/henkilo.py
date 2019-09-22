@@ -2,6 +2,7 @@ from application import db, bcrypt
 from datetime import date
 from sqlalchemy.sql import text
 from flask_login import current_user
+from datetime import datetime
 
 from application.models import parsedate
 
@@ -67,11 +68,11 @@ class Henkilo(db.Model):
         stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  "
                     "from ryhma left outer join "
                     "(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
-                    "where ilmoittautuminenalkaa <= current_date and ilmoittautuminenpaattyy >= current_date "
+                    "where ilmoittautuminenalkaa <= :tanaan and ilmoittautuminenpaattyy >= :tanaan "
                     "and ikavahintaan <= :ika and ikaenintaan >= :ika "
                     "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid) "
                     "order by nimi"
-                    ).params(ika=self.ika(), henkiloid=self.id)
+                    ).params(ika=self.ika(), henkiloid=self.id, tanaan=datetime.today())
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -92,8 +93,8 @@ class Henkilo(db.Model):
         stmt = text("SELECT henkilo.etunimi, ryhma.nimi, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus, kokous.id, ryhmassa.ohjaaja, Henkilo.id "
                     "FROM henkilo JOIN ryhmassa ON henkilo.id=ryhmassa.henkiloid JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id JOIN kokous ON kokous.ryhmaid=ryhma.id "
                     "WHERE (ryhmassa.henkiloid=:henkiloid "
-                    "OR ryhmassa.henkiloid in (SELECT huollettava FROM huoltajuus WHERE huoltaja=:henkiloid)) AND kokous.paattyy >= current_date "
-                    "ORDER BY kokous.alkaa").params(henkiloid=self.id)
+                    "OR ryhmassa.henkiloid in (SELECT huollettava FROM huoltajuus WHERE huoltaja=:henkiloid)) AND kokous.paattyy >= :tanaan "
+                    "ORDER BY kokous.alkaa").params(henkiloid=self.id, tanaan=datetime.today())
         res = db.engine.execute(stmt)
         paiva = None
         paivat = []
