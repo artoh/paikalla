@@ -64,7 +64,7 @@ class Henkilo(db.Model):
         return True
 
     def mahdollisetryhmat(self):
-        stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm  "
+        stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  "
                     "from ryhma left outer join "
                     "(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
                     "where ilmoittautuminenalkaa <= current_date and ilmoittautuminenpaattyy >= current_date "
@@ -83,7 +83,9 @@ class Henkilo(db.Model):
                           "nimi":rivi[1],
                           "paikkoja":rivi[2],
                           "kuvaus":rivi[3],
-                          "lkm":lkm})
+                          "lkm":lkm,
+                          "ikavahintaan" : rivi[5],
+                          "ikaenintaan": rivi[6]})
         return lista
 
     def kalenteri(self):

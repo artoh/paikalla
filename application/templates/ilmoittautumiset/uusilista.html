@@ -13,7 +13,7 @@ Olet ilmoittamassa huollettavaasi {{henkilo.etunimi}} {{henkilo.sukunimi}} {{hen
     <div class="card-body">
     <h5 class="card-title">{{ryhma.nimi}}</h5>
         {%if ryhma.lkm is lt(ryhma.paikkoja) %}
-          <p class="card-subtitle text-muted">Ilmoittautunut {{ryhma.lkm}} / {{ryhma.paikkoja}}</p>
+          <p class="card-subtitle text-muted">{{ryhma.ikavahintaan}} &ndash; {{ryhma.ikaenintaan}} -vuotiaille <br/>Ilmoittautunut {{ryhma.lkm}} / {{ryhma.paikkoja}}</p>
         {% else %}
           <p class="card-subtitle text-danger">Ryhmä täynnä</p>
         {% endif %}

@@ -13,7 +13,7 @@ app = Flask(__name__)
 Bootstrap(app)
 
 
-if os.environ.get("HEROKU"):
+if os.environ.get("PRODUCTION"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///paikalla.db"
