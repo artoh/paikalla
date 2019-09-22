@@ -8,7 +8,7 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - [Tietokantakaavio](documentation/tietokantakaavio.svg)
 - [Käyttötapaukset käyttäjärooleittain](documentation/kayttotapaukset.md)
 - Yksityiskohtaiset käyttötapaukset tietokantakyselyineen
-- Käyttöohje
+- [Käyttöohje](documentation/kayttoohje.md)
 - [Asennusohje](documentation/asennus.md)
 - [Tietokantarakenne](dokumentation/tietokantarakenne.md)
 - Jatkokehitysideat

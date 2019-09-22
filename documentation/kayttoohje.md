@@ -10,7 +10,6 @@
 	- [Uusi ilmoittautuminen](#uusi-ilmoittautuminen)
 	- [Kalenteri](#kalenteri)
 - [Ohje alle 18-vuotiaalle jäsenelle](#ohje-alle-18-vuotiaalle-jäsenelle)
-	- [Kalenteri](#kalenteri)
 - [Ohje ryhmän ohjaajalle](#ohje-ryhmän-ohjaajalle)
 	- [Ryhmän tiedot](#ryhmän-tiedot)
 	- [Ryhmän jäsenet](#ryhmän-jäsenet)
@@ -89,24 +88,80 @@ Jos haluat perua ilmoittautumisen, ota yhteyttä jäsenrekisterin hoitajaan tai 
 
 ### Kalenteri
 
+![Kalenteri](pic/kalenteri.png)
 
+*Kalenteri*-välilehdellä näet sekä omat että huollettaviesi tulevat kokoontumiset.
 
 ## Ohje alle 18-vuotiaalle jäsenelle
 
+Huoltajasi voi asettaa sinulle salasanan, jolla pääset kirjautumaan Paikalla-sovellukseen ja näet ilmoittautumiset.
 
+Kirjaudu palveluun huoltajasi ilmoittaalla sähköpostiosoitteella ja salasanalla.
 
-### Kalenteri
+![Alaikäisen ryhmät](pic/lapsiryhmat.png)
+
+*Ilmoittautumiset*-välilehdelle näet omat ryhmäsi. *Ohjaajat ja kokoukset*-painikkeesta pääset näkemään ryhmäsi ohjaajien yhteystiedot ja kaikkien tiedossa olevien tulevien kokousten tiedot.
+
+Uudet ilmoittautumiset tekee huoltajasi sinun puolestasi omalla tunnuksellaan.
+
+![Alaikäisen henkilötiedot](pic/lapsitiedot.png)
+
+*Henkilötiedot*-välilehdellä näet omat henkilötietosi. Jos tietosi ovat muuttuneet, tekee huoltajasi muutokset omalla tunnuksellaan.
+
+*Vaihda salasanaa* -painikkeella voit vaihtaa oman salasanasi.
+
+![Alaikäisen kalenteri](pic/lapsikalenteri.png)
+
+*Kalenteri*-välilehdellä näet tulevien kokousten ajankohdat.
 
 
 ## Ohje ryhmän ohjaajalle
 
+![Ohjaajan ilmoittautumislista](pic/ohjaajailmot.png)
+
+Kun toimit ryhmän ohjaajana, on sinulla *Ilmoittautumiset*-välilehdellä ryhmäsi kohdalla *Ohjaajan näkymä*-painike.
+
 ### Ryhmän tiedot
+
+![Ryhmän tiedot](pic/ryhmatiedot.png)
+
+Pääset muokkaamaan ryhmäsi tietoja. *Ryhmän kuvaus* näkyy, kun jäsenet selaavat ilmoittautumistoiminnolla ryhmien tietoja.
+
+Ellei ryhmässä ole määritelty ilmoittautumisaikaa tai paikkoja, ei ryhmään voi ilmoittautua itse. Ryhmän ohjaaja tai jäsenrekisterin hoitaja voi kuitenkin lisätä jäseniä ryhmään.
 
 ### Ryhmän jäsenet
 
+![Ryhmän jäsenet](pic/ryhmajasenet.png)
+
+Voit lisätä ryhmän jäsenen valitsemalla jäsenen *Valitse lisättävä jäsen* -valikosta ja painamalla *Lisää ryhmään*.
+
+Jos nimen perässä on kolmio, on ryhmäläiselle ilmoitettu huomioon otettavia asioita, jotka näet koskettamalla kolmiota. Painamalla nimeä näet ryhmän jäsenen tarkemmat tiedot sekä huoltajan yhteystiedot, sekä voit myös merkitä jäsenen eronneeksi ryhmästä.
+
 ### Ryhmän kokoukset
 
+![Tulevien kokousten lista](pic/tulevatkokoukset.png)
+
+Painikkeella *Lisää kokous* lisäät yksittäisen kokouksen ja painikkeella *Lisää kokoussarja* lisäät viikoittain samana viikonpäivänä ja samaan kellonaikaan toistuvia kokouksia haluamallesi aikavälille.
+
+![Kokoussarjan lisaaminen](pic/toistuva.png)
+
+Jos olet lisäämässä esimerkiksi koko syksyn kokouksia, mutta ryhmänne ei kokoonnu syyslomalla, lisää ensin kokoussarja koko ajalle ja poista sen jälkeen sen yksittäisen viikon kokous, kun ryhmänne ei kokoonnu.
+
+Kokouksen tiedoissa *Ennakkotiedot* on näytetään ryhmän jäsenille kokouslistauksen ja kalenterin yhteydessä. Siihen voi merkitä kokouksen aiheen, mukaan tarvittavat varusteet tai muuta kokoukseen liittyvää tietoa.
+
 ### Läsnäolleiden merkitseminen
+
+Helpoiten pääset merkitsemään läsnäolevia painamalla omassa kalenterissasi kokouksen kohdalla *Ohjaajan näkymä* -painiketta. Läsnäolleiden merkitsemisnäkymä avautuu 15 minuuttia ennen kokouksen alkamista - sitä ennen painikkeesta pääsee muokkaamaan kokoontumsen ennakkotietoja.
+
+Jälkeenpäin pääset merkitsemään läsnäolleet ryhmän *Menneet kokoukset* -välilehdeltä.
+
+![Läsnäolleiden merkitseminen](pic/lasna.png)
+
+Merkitse rastittamalla kokouksessa läsnäolleet.
+Voit myös tehdä muistiinpanoja kokouksista.
+
+Jäsenen nimeä painamalla näet jäsenen tiedot sekä huoltajan yhteystiedot.
+
 
 ### Ryhmän tilasto
 
