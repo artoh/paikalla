@@ -10,7 +10,7 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - Yksityiskohtaiset käyttötapaukset tietokantakyselyineen
 - [Käyttöohje](documentation/kayttoohje.md)
 - [Asennusohje](documentation/asennus.md)
-- [Tietokantarakenne](dokumentation/tietokantarakenne.md)
+- [Tietokantarakenne](documentation/tietokantarakenne.md)
 - Jatkokehitysideat
 
 Käyttäjätunnuksia Herokussa
