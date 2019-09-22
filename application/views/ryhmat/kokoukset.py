@@ -81,6 +81,8 @@ def ryhmat_poista_kokous(kokous_id):
 def ryhmat_kokoukset_muokkaa(kokous_id):
     kokous = Kokous.query.get(kokous_id)
 
+    # Jos kokouksen alkamiseen on aikaa vähemmän kuin 15 minuuttia, ohjataan länsnäolotaulukon
+    # näyttävään muokkausnäkymään
     if kokous.alkaa < datetime.today() - timedelta(minutes=15) :
         return redirect( url_for("ryhmat_menneet_muokkaa", kokous_id=kokous_id))
 

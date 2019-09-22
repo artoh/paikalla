@@ -3,7 +3,7 @@ from .henkilo import Henkilo, ika
 from sqlalchemy.sql import text
 from dateutil.parser import parse
 from .kokous import Kokous
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from application.models import parsedate
 
@@ -39,11 +39,14 @@ class Ryhma(db.Model):
         return lista
 
     def menneetKokoukset(self):
+        aika = datetime.now() - timedelta( minutes=30)
         stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, l.lkm FROM kokous"
                     " LEFT OUTER JOIN "
                     "( SELECT kokous, count(kokous) as lkm FROM lasnaolo GROUP BY kokous) AS l "
-                    "ON l.kokous=kokous.id WHERE ryhmaid=:ryhmaid AND kokous.alkaa < CURRENT_TIMESTAMP "
-                    ).params(ryhmaid=self.id)
+                    "ON l.kokous=kokous.id WHERE ryhmaid=:ryhmaid AND kokous.alkaa < :aika "
+                    ).params(ryhmaid=self.id, aika=aika )
+                    # Ajan vertailu tehdään datetime-funktioilla eikä SQL:n aikafunktioilla, jotta
+                    # palvelimen aikavyöhyke ei vaikuttaisi vertailuun.
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -58,9 +61,10 @@ class Ryhma(db.Model):
         return Kokous.query.filter(Kokous.ryhmaid == self.id).filter(Kokous.paattyy > datetime.today()).order_by("alkaa").first()
 
     def tulevatkokoukset(self):
+        aika = datetime.now()
         stmt = text("SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus FROM kokous "
-                     "WHERE ryhmaid=:ryhmaid AND kokous.paattyy > CURRENT_TIMESTAMP "
-                    ).params(ryhmaid=self.id)
+                     "WHERE ryhmaid=:ryhmaid AND kokous.paattyy > :aika"
+                    ).params(ryhmaid=self.id, aika=aika)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
