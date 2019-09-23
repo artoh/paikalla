@@ -23,6 +23,6 @@ class LuoKayttajaForm(HenkiloTiedotFormBase) :
         henkilo = Henkilo()
         super().tallenna(henkilo)
         if self.jasen.data:
-            henkilo.jasenyysAlkoi = datetime.today()
+            henkilo.jasenyysalkoi = datetime.today()
         henkilo.asetaSalasana( self.salasana.data )
         return henkilo

@@ -54,7 +54,7 @@ def henkilotiedot_luo_huollettava():
 
     lapsi = Henkilo()
     form.tallenna(lapsi)
-    lapsi.jasenyysAlkoi = datetime.today()
+    lapsi.jasenyysalkoi = datetime.today()
     lapsi.huoltajat.append(current_user)
     db.session.add(lapsi)
     db.session.commit()

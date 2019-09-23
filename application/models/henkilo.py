@@ -30,8 +30,8 @@ class Henkilo(db.Model):
     syntymaaika = db.Column( db.Date, nullable=False)
     toimihenkilo = db.Column( db.Boolean, default=False )
     varotieto = db.Column (db.Text, nullable=True)
-    jasenyysAlkoi = db.Column( db.Date, nullable=True)
-    jasenyysPaattyi = db.Column( db.Date, nullable=True)
+    jasenyysalkoi = db.Column(db.Date, nullable=True)
+    jasenyyspaattyi = db.Column(db.Date, nullable=True)
     huoltajat = db.relationship('Henkilo',
                             secondary=Huoltajuus,
                             primaryjoin=id == Huoltajuus.c.huollettava,
@@ -46,7 +46,7 @@ class Henkilo(db.Model):
         return self.ika() >= 18
 
     def jasen(self):
-        return self.jasenyysAlkoi and not self.jasenyysPaattyi
+        return self.jasenyysalkoi and not self.jasenyyspaattyi
 
     def asetaSalasana(self, selvakielisena):
         self.salasana = bcrypt.generate_password_hash(selvakielisena).decode('utf-8')

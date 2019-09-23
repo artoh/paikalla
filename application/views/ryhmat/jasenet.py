@@ -12,8 +12,8 @@ def ryhmat_jasenet(ryhma_id):
     for jasen in jasenet :
         ryhmassaidt.append( jasen["henkiloId"] )
 
-    kaikkijasenet = Henkilo.query.filter(Henkilo.jasenyysAlkoi.isnot(None),
-                                         Henkilo.jasenyysPaattyi == None).order_by(Henkilo.sukunimi)
+    kaikkijasenet = Henkilo.query.filter(Henkilo.jasenyysalkoi.isnot(None),
+                                         Henkilo.jasenyyspaattyi == None).order_by(Henkilo.sukunimi)
     eiryhmassa = []
     for henkilo in kaikkijasenet:
         if henkilo.id not in ryhmassaidt:

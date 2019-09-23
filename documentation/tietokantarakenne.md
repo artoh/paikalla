@@ -17,8 +17,8 @@ CREATE TABLE "Henkilo" (
  syntymaaika DATE NOT NULL,
  toimihenkilo BOOLEAN,
  varotieto TEXT,
- "jasenyysAlkoi" DATE,
- "jasenyysPaattyi" DATE,
+ jasenyysalkoi DATE,
+ jasenyyspaattyi DATE,
  PRIMARY KEY (id),
  UNIQUE (email)
 );
