@@ -96,3 +96,36 @@ class Ryhma(db.Model):
         else:
             lkm = int( res[0][0])
         return self.paikkoja > lkm
+
+    KAIKKIRYHMAT = 0
+    AKTIIVISETRYHMAT = 1
+    PAATTYNEETRYHMAT = 2
+
+    @staticmethod
+    def lista(paattymissuodatin):
+        if paattymissuodatin == Ryhma.AKTIIVISETRYHMAT:
+            ehto = "WHERE NOT paattynyt"
+        elif paattymissuodatin == Ryhma.PAATTYNEETRYHMAT:
+            ehto = "WHERE paattynyt"
+        else:
+            ehto = ""
+
+        stmt = text("SELECT ryhma.id, ryhma.nimi, ryhma.ikavahintaan, ryhma.ikaenintaan, ryhma.ilmoittautuminenalkaa, ryhma.ilmoittautuminenpaattyy, "
+                    "ryhma.paikkoja, a.lkm "            
+                    "FROM ryhma LEFT OUTER JOIN "
+                    "(SELECT ryhmaid, count(id) as lkm FROM ryhmassa WHERE NOT ohjaaja AND paattyen IS NULL GROUP BY ryhmaid) "
+                    "AS a ON ryhma.id=a.ryhmaid " + ehto + " ORDER BY ryhma.nimi")
+
+        res = db.engine.execute(stmt)
+        lista = []
+
+        for rivi in res:
+            lista.append({"id" : rivi[0],
+                          "nimi": rivi[1],
+                          "ikavahintaan": rivi[2],
+                          "ikaenintaan": rivi[3],
+                          "ilmoittautuminenalkaa": parsedate(rivi[4]),
+                          "ilmoittautuminenpaattyy": parsedate(rivi[5]),
+                          "paikkoja": rivi[6],
+                          "ilmoittautuneita" : rivi[7]})
+        return lista

@@ -71,12 +71,12 @@ class HenkiloTiedotAdminilleForm(HenkiloTiedotFormBase) :
 
     def lataa(self, henkilo):
         super().lataa(henkilo)
-        self.jasenyysAlkoi.data = henkilo.jasenyysAlkoi
-        self.jasenyysPaattyi.data = henkilo.jasenyysPaattyi
+        self.jasenyysAlkoi.data = henkilo.jasenyysalkoi
+        self.jasenyysPaattyi.data = henkilo.jasenyyspaattyi
         self.toimihenkilo.data = henkilo.toimihenkilo
 
     def tallenna(self, henkilo):
         super().tallenna(henkilo)
-        henkilo.jasenyysAlkoi = self.jasenyysAlkoi.data
-        henkilo.jasenyysPaattyi = self.jasenyysPaattyi.data
+        henkilo.jasenyysalkoi = self.jasenyysAlkoi.data
+        henkilo.jasenyyspaattyi = self.jasenyysPaattyi.data
         henkilo.toimihenkilo = self.toimihenkilo.data

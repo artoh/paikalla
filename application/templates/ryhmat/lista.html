@@ -38,14 +38,37 @@
   </li>
 </ul>
 
-<ul>
-{% for ryhma in ryhmat %}
-<li>
-    <a href="{{ url_for('ryhmat_tiedot', ryhma_id=ryhma.id)}}">
-      {{ ryhma.nimi }}
-  </a>
-</li>
-{% endfor %}
-</ul>
+<table class="table table-sm table-borderless table-striped">
+  <thead>
+    <tr>
+      <th>Ryhmän nimi</th>
+      <th>Ikäraja</th>
+      <th>Ilmoittautuminen</th>
+      <th>Jäseniä / paikkoja</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ryhma in ryhmat %}
+    <tr>
+      <td>
+        <a href="{{ url_for('ryhmat_tiedot', ryhma_id=ryhma.id)}}">
+          {{ ryhma.nimi }}
+        </a>
+      </td>
+      <td>
+        {{ ryhma.ikavahintaan }} &ndash; {{ ryhma.ikaenintaan }} v.
+      </td>
+      <td>
+        {% if ryhma.ilmoittautuminenalkaa %}
+          {{ ryhma.ilmoittautuminenalkaa|pvm }} &ndash; {{ryhma.ilmoittautuminenpaattyy|pvm}}
+        {% endif %}
+      </td>
+      <td>
+        {{ ryhma.ilmoittautuneita or 0}} / {{ryhma.paikkoja}}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}

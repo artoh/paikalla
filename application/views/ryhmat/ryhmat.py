@@ -5,11 +5,11 @@ from application.models import Ryhma
 @app.route("/ryhmat/")
 def ryhmat_index():
     if( "aktiiviset" in request.args.keys()) :
-        ryhmat = Ryhma.query.filter_by(paattynyt=False).order_by(Ryhma.nimi).all()
+        ryhmat = Ryhma.lista(Ryhma.AKTIIVISETRYHMAT)
     elif( "paattyneet" in request.args.keys()) :
-        ryhmat = Ryhma.query.filter_by(paattynyt=True).order_by(Ryhma.nimi).all()
+        ryhmat = Ryhma.lista(Ryhma.PAATTYNEETRYHMAT)
     else:
-        ryhmat = Ryhma.query.order_by(Ryhma.nimi).all()
+        ryhmat = Ryhma.lista(Ryhma.KAIKKIRYHMAT)
     return render_template("ryhmat/lista.html", ryhmat = ryhmat )
 
 

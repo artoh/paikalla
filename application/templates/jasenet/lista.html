@@ -5,29 +5,84 @@
 <a href="{{ url_for('jasenet_uusi') }}" class="btn btn-outline-primary float-right"><i class="fas fa-user-plus"></i> Lisää jäsen</a>
 <h2>Jäsenet</h2>
 
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    {% if  request.args.to_dict()|length == 0 %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="{{ url_for('jasenet_index')}}">
+    {% endif %}
+      Kaikki
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "jasen" in request.args.keys() %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="?jasen">
+    {% endif %}
+      Jäsenet
+    </a>
+  </li>
+
+  <li class="nav-item">
+    {% if "eijasen" in request.args.keys() %}
+    <a class="nav-link active" href="#">
+    {% else %}
+    <a class="nav-link" href="?eijasen">
+    {% endif %}
+      Ei-jäsenet
+    </a>
+  </li>
+</ul>
+
+<input type="text" placeholder="Etsi nimellä" class="form-control" id="suodatus"></input>
+
 <table class="table table-borderless table-sm table-striped">
-
+  <thead>
+    <tr>
+      <td>Sukunimi</td>
+      <td>Etunimi</td>
+      <td>Ikä</td>
+      <td align="center">Jäsen</td>
+      <td align="center">Toimihenkilö</td>
+    </tr>
+  </thead>
   {% for jasen in jasenet %}
-
-
+  <tbody id="jasenlista">
     <tr>
       <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.sukunimi}}</a></td>
       <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.etunimi}}</a></td>
       <td>{{ jasen.ika() }} v.</td>
-      <td>
-        {% if jasen.jasenyysAlkoi and not jasen.jasenyysPaattyi %}
-          <i class="fas fa-user-friends"></i>
+      <td align="center">
+        {% if jasen.jasen() %}
+          <i class="fas fa-check"></i>
         {% endif %}
       </td>
-      <td>
+      <td align="center">
         {% if jasen.toimihenkilo %}
-          <i class="fas fa-user-cog"></i>
+          <i class="fas fa-check"></i>
         {% endif %}
       </td>
     </tr>
 
   {% endfor %}
-
+  </tbody>
 </table>
 
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+  $("#suodatus").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#jasenlista tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 {% endblock %}

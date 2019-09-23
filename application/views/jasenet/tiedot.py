@@ -6,8 +6,12 @@ from datetime import datetime
 
 @app.route("/jasenet/")
 def jasenet_index() :
-    return render_template("jasenet/lista.html", jasenet = Henkilo.query.order_by(Henkilo.sukunimi, Henkilo.etunimi)  )
-
+    if( "jasen" in request.args.keys()) :
+        return render_template("jasenet/lista.html", jasenet = Henkilo.query.filter(Henkilo.jasenyysalkoi.isnot(None)).filter(Henkilo.jasenyyspaattyi == None).order_by(Henkilo.sukunimi, Henkilo.etunimi)  )
+    elif( "eijasen" in request.args.keys()) :
+        return render_template("jasenet/lista.html", jasenet=Henkilo.query.filter((Henkilo.jasenyysalkoi == None) | (Henkilo.jasenyyspaattyi.isnot(None))).order_by(Henkilo.sukunimi, Henkilo.etunimi))
+    else:
+        return render_template("jasenet/lista.html", jasenet=Henkilo.query.order_by(Henkilo.sukunimi, Henkilo.etunimi))
 
 @app.route("/jasenet/uusi")
 def jasenet_uusi() :
