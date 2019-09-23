@@ -50,25 +50,24 @@
       <td align="center">Toimihenkilö</td>
     </tr>
   </thead>
-  {% for jasen in jasenet %}
   <tbody id="jasenlista">
-    <tr>
-      <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.sukunimi}}</a></td>
-      <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.etunimi}}</a></td>
-      <td>{{ jasen.ika() }} v.</td>
-      <td align="center">
-        {% if jasen.jasen() %}
-          <i class="fas fa-check"></i>
-        {% endif %}
-      </td>
-      <td align="center">
-        {% if jasen.toimihenkilo %}
-          <i class="fas fa-check"></i>
-        {% endif %}
-      </td>
-    </tr>
-
-  {% endfor %}
+    {% for jasen in jasenet %}
+      <tr>
+        <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.sukunimi}}</a></td>
+        <td><a href="{{ url_for('jasenet_tiedot', henkilo_id=jasen.id) }}">{{jasen.etunimi}}</a></td>
+        <td>{{ jasen.ika() }} v.</td>
+        <td align="center">
+          {% if jasen.jasen() %}
+            <i class="fas fa-check"></i>
+          {% endif %}
+        </td>
+        <td align="center">
+          {% if jasen.toimihenkilo %}
+            <i class="fas fa-check"></i>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 
