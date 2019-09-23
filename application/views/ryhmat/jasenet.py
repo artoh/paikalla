@@ -44,7 +44,8 @@ def ryhmat_erota_jasen(ryhmassa_id):
     ryhmassa=Ryhmassa.query.get(ryhmassa_id)
     ryhmassa.paattyen=datetime.today()
     db.session.commit()
-    return redirect(url_for("ryhmat_jasenet", ryhma_id=ryhmassa.ryhmaId))
+    return redirect(url_for("ryhmat_jasenet", ryhma_id=ryhmassa.ryhmaid))
+
 
 @app.route("/ryhmat/ryhmassa/<ryhmassa_id>")
 def ryhmat_jasen_tiedot(ryhmassa_id):

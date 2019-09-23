@@ -131,3 +131,22 @@ class Henkilo(db.Model):
             paivat.append({"pvm": paiva, "kokoukset": kokoukset})
 
         return paivat
+
+    def omatryhmat(self):
+        stmt = text("SELECT ryhma.id, ryhma.nimi, ryhmassa.ohjaaja,kokous.alkaa, kokous.sijainti, kokous.kuvaus, kokous.paattyy "
+                    "FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id " 
+                    "LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND  Kokous.alkaa = (SELECT MIN(kokous.alkaa) FROM kokous WHERE kokous.alkaa > :tanaan AND kokous.ryhmaid = ryhma.id) "
+                    "WHERE ryhmassa.henkiloid=:henkiloid AND NOT ryhma.paattynyt AND ryhmassa.paattyen IS NULL "
+                    "ORDER BY nimi").params(henkiloid=self.id, tanaan=datetime.today())
+
+        res = db.engine.execute(stmt)
+        ryhmat = []
+        for rivi in res:
+            ryhmat.append({"id":rivi[0],
+                           "nimi":rivi[1],
+                           "ohjaaja":rivi[2],
+                           "kokousalkaa":parsedate(rivi[3]),
+                           "kokoussijainti": rivi[4],
+                           "kokouskuvaus": rivi[5],
+                           "kokouspaattyy": parsedate(rivi[6]) })
+        return ryhmat
