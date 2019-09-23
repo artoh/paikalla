@@ -165,11 +165,31 @@ Jäsenen nimeä painamalla näet jäsenen tiedot sekä huoltajan yhteystiedot.
 
 ### Ryhmän tilasto
 
-
 ## Ohje jäsenrekisterin hoitajalle
 
 ### Jäsenten hallinta
 
+![Jäsenluettelo](pic/jasenet.png)
+
+*Jäsenet*-välilehdellä pääset lisäämään uusia jäseniä, sekä muokkaamaan jäsenten kaikkia tietoja.
+
+![Jäsenen tiedot](pic/jasentiedot.png)
+
+Jäsen merkitään eronneeksi lisäämällä eroamispäivämäärä *Jäsenyys päättyi* -kenttään. Voit myös poistaa jäsenen kokonaan jäsenrekisteristä *Poista jäsen* -napilla.
+
+Jäsentietojen *Huoltajat* ja *Huollettavat* -välilehdellä *Linkitä*-toiminto lisää huoltajaksi henkilön, joka on jo jäsenrekisterissä (jäsenenä tai huoltajana) ja *Lisää uusi henkilö* lisää jäsenrekisteriin kokonaan uuden henkilön.
+
+Merkitsemällä ruksin kohtaan *Jäsentietojen käsittelyyn oikeutettu yhdistyksen toimihenkilö* annat toiselle käyttäjälle kaikki pääkäyttäjän oikeudet, myös oikeuden muuttaa kenen tahansa käyttäjän salasana.
+
+
 ### Ryhmien hallinta
+
+![Ryhmien luettelo](pic/ryhmalista.png)
+
+Jäsenrekisterin hoitajalla on kaikkiin ryhmiin kaikki samat oikeudet kuin ryhmän ohjaajalla. Lisäksi voit lisätä uusia ryhmiä sekä poistaa olemassaolevan ryhmän.
+
+Kun ryhmä on perustettu, vain jäsenrekisterin hoitaja voi lisätä sille ensimmäisen ohjaajan.
+
+Jos poistat ryhmät, poistuvat myös kaikki siihen liittyvät tilastomerkinnät. Merkitse ryhmä mieluummin päättyneeksi, jolloin se ei turhaan näy ilmoittautumiset-luetteloissa.
 
 ### Tilastot
