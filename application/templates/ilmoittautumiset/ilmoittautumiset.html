@@ -28,7 +28,7 @@
   <a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=current_user.id)}}"><i class="fas fa-plus"></i> Uusi ilmoittautuminen</a>
 {% endif %}
   <h2>Omat ryhmäni</h2>
-  {% for ryhmassa in current_user.ryhmat|sort(attribute='ryhma.nimi') %}
+  {% for ryhmassa in current_user.ryhmat|selectattr("ryhma.paattynyt","sameas",false)|sort(attribute='ryhma.nimi') %}
     {{ ryhmatiedot(ryhmassa)}}
     {% else  %}
       {% if current_user.aikuinen() %}
@@ -41,6 +41,7 @@
 
 {% for lapsi in current_user.huollettavat %}
  {% if not lapsi.aikuinen() %}
+ {# Tämä if poistaa entisen huollettavan, joka on täyttänyt 18 vuotta, huoltajan näkymästä #}
  <hr/>
  <a class="btn btn-outline-primary float-right" href="{{url_for('ilmoittautumiset_uusi_lista', henkilo_id=lapsi.id)}}"><i class="fas fa-plus"></i> Uusi ilmoittautuminen</a>
   <h2>{{lapsi.etunimi}} {{lapsi.sukunimi}}</h2>

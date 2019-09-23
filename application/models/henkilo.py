@@ -71,6 +71,7 @@ class Henkilo(db.Model):
                     "where ilmoittautuminenalkaa <= :tanaan and ilmoittautuminenpaattyy >= :tanaan "
                     "and ikavahintaan <= :ika and ikaenintaan >= :ika "
                     "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid) "
+                    "and not ryhma.paattynyt "
                     "order by nimi"
                     ).params(ika=self.ika(), henkiloid=self.id, tanaan=datetime.today())
         res = db.engine.execute(stmt)
