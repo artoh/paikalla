@@ -7,7 +7,7 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - [Sovellus Herokussa](https://olenpaikalla.herokuapp.com)
 - [Tietokantakaavio](documentation/tietokantakaavio.svg)
 - [Käyttötapaukset käyttäjärooleittain](documentation/kayttotapaukset.md)
-- Yksityiskohtaiset käyttötapaukset tietokantakyselyineen
+- [Yksityiskohtaiset käyttötapaukset tietokantakyselyineen](kyselyt.md)
 - [Käyttöohje](documentation/kayttoohje.md)
 - [Asennusohje](documentation/asennus.md)
 - [Tietokantarakenne](documentation/tietokantarakenne.md)
@@ -19,3 +19,16 @@ Käyttäjätunnuksia Herokussa
 - Lapsen vanhempi *meri@kotka.fi* salasana *merikotka*
 - Alaikäinen *janna@jaa.fi* salasana *janna*
 - ja lisäksi voi rekisteröidä uusia käyttäjiä...
+
+Vielä tekemättä
+- Tilastotoiminnot
+  - [ ] Ryhmien tilastosivu
+  - [ ] Yhdistyksen tilastosivu
+  - [ ] Tilastotoimintojen käyttöohje
+- Autorisointeja
+  - [ ] Jäsenhallinnan autorisaatio
+  - [ ] Ryhmähallinnan autorisaatio
+  - [ ] Tilastojen autorisaatio
+- Kyselyiden optimointi
+- Testaamista
+- Dokumentaatiota
