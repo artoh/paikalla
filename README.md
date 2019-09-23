@@ -4,23 +4,26 @@ Paikalla-palvelun avulla yhdistyksen jäsenet (tai heidän huoltajansa) voivat i
 
 Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimintatilastot.
 
-- [Sovellus Herokussa](https://olenpaikalla.herokuapp.com)
-- [Tietokantakaavio](documentation/tietokantakaavio.svg)
-- [Käyttötapaukset käyttäjärooleittain](documentation/kayttotapaukset.md)
-- [Yksityiskohtaiset käyttötapaukset tietokantakyselyineen](kyselyt.md)
-- [Käyttöohje](documentation/kayttoohje.md)
-- [Asennusohje](documentation/asennus.md)
-- [Tietokantarakenne](documentation/tietokantarakenne.md)
-- Jatkokehitysideat
+[Sovellus Herokussa](https://olenpaikalla.herokuapp.com)
 
-Käyttäjätunnuksia Herokussa
+### Käyttäjätunnuksia Herokussa
 - Jäsenrekisterin hoitaja *lennu@lepakko.com* salasana *lepakko*
 - Ryhmänohjaaja *saku@sammakko.net* salasana *sammakko*
 - Lapsen vanhempi *meri@kotka.fi* salasana *merikotka*
 - Alaikäinen *janna@jaa.fi* salasana *janna*
 - ja lisäksi voi rekisteröidä uusia käyttäjiä...
 
-Vielä tekemättä
+
+### Dokumentaatio
+- [Tietokantakaavio](documentation/tietokantakaavio.svg)
+- [Käyttötapaukset käyttäjärooleittain](documentation/kayttotapaukset.md)
+- [Yksityiskohtaiset käyttötapaukset tietokantakyselyineen](documentation/kyselyt.md)
+- [Käyttöohje](documentation/kayttoohje.md)
+- [Asennusohje](documentation/asennus.md)
+- [Tietokantarakenne](documentation/tietokantarakenne.md)
+- Jatkokehitysideat
+
+### Vielä tekemättä
 - Tilastotoiminnot
   - [ ] Ryhmien tilastosivu
   - [ ] Yhdistyksen tilastosivu
