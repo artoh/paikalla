@@ -2,6 +2,7 @@ from application import db
 from datetime import datetime
 
 class Ryhmassa(db.Model):
+    """Tieto yhden henkilön jäsenyydestä yhdessä ryhmässä"""
     __tablename__ = "ryhmassa"
     id = db.Column(db.Integer, primary_key=True)
     ryhmaid = db.Column(db.Integer, db.ForeignKey('ryhma.id', ondelete="CASCADE"), nullable=False)

@@ -1,11 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, TextAreaField, validators, ValidationError
 from wtforms.fields.html5 import EmailField, DateField
-from application.models.henkilo import ika
+from application.models.henkilo import ika, Henkilo
 
 from . import NullableDateField
 
+
 class IkaValidator(object):
+    """Validaattori, jolla voidaan vaatia syntymäaika syötettäväksi tietylle ikävälille"""
     def __init__(self, min=0, max=120, message=None):
         self.min = min
         self.max = max
@@ -18,7 +20,9 @@ class IkaValidator(object):
         if vuotta < self.min or vuotta > self.max:
             raise ValidationError(self.message)
 
+
 class HenkiloTiedotFormBase(FlaskForm) :
+    """Kantaluokka erilaisille henkilötietojen lomakkeille"""
     etunimi = StringField("Etunimi", validators=[ validators.DataRequired()])
     sukunimi = StringField("Sukunimi", validators=[validators.DataRequired()])
     syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired()],format='%Y-%m-%d')
@@ -26,7 +30,8 @@ class HenkiloTiedotFormBase(FlaskForm) :
     email = EmailField("Sähköposti", validators=[validators.Regexp("(\S+@\S+\.\w+)?", message="Sähköpostiosoite ei ole kelvollinen")])
     varotieto = TextAreaField("Huomioon otettavaa (esim. allergiat)")
 
-    def lataa(self, henkilo):
+    def lataa(self, henkilo : Henkilo) -> None:
+        """Täyttää lomakeen kentät olemassaolevan Henkilön perusteella"""
         self.etunimi.data = henkilo.etunimi
         self.sukunimi.data = henkilo.sukunimi
         self.syntymaaika.data = henkilo.syntymaaika
@@ -34,7 +39,8 @@ class HenkiloTiedotFormBase(FlaskForm) :
         self.email.data = henkilo.email
         self.varotieto.data = henkilo.varotieto
 
-    def tallenna(self, henkilo):
+    def tallenna(self, henkilo) -> None:
+        """Tallentaa lomakkeen kentätä Henkilö-olioon"""
         henkilo.etunimi = self.etunimi.data
         henkilo.sukunimi = self.sukunimi.data
         henkilo.syntymaaika = self.syntymaaika.data
@@ -43,20 +49,29 @@ class HenkiloTiedotFormBase(FlaskForm) :
             henkilo.email = self.email.data
         henkilo.varotieto = self.varotieto.data
 
+
 class HenkiloTiedotForm(HenkiloTiedotFormBase) :
+    """Perusmuotoinen lomake henkilötietojen muokkaamiseen"""
     submit = SubmitField("Tallenna")
 
+
 class HenkiloTiedotLapsiForm(HenkiloTiedotFormBase):
+    """Henkilötietolomake, joka vaatii henkilön olevan alle 18-vuotias.
+       Käytetään, kun ollaan lisäämässä huollettavaa."""
     syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired(), IkaValidator(max=17)],format='%Y-%m-%d')
     submit = SubmitField("Tallenna")
 
+
 class HenkiloTiedotAikuiselleForm(HenkiloTiedotFormBase):
+    """Henkilötietolomake, joka vaatii henkilön olevan vähintään 18-vuotias.
+       Käytetään, kun ollaan lisäämässä huoltajaa."""
     syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired(), IkaValidator(min=18)],format='%Y-%m-%d')
     submit = SubmitField("Tallenna")
 
 
-
 class HenkiloTiedotAdminilleForm(HenkiloTiedotFormBase) :
+    """Henkilötietolomake, kun toimihenkilö muokkaa henkilöä.
+       Mahdollisuus myös jäsenyystietojen muuttamiseen."""
 
     def alkaa_ennen_paattymista(self, field):
         if( self.jasenyysPaattyi.data and self.jasenyysPaattyi.data < self.jasenyysAlkoi.data):
@@ -69,13 +84,13 @@ class HenkiloTiedotAdminilleForm(HenkiloTiedotFormBase) :
     toimihenkilo = BooleanField("Jäsentietojen käsittelyyn oikeutettu yhdistyksen toimihenkilö")
     submit = SubmitField("Tallenna")
 
-    def lataa(self, henkilo):
+    def lataa(self, henkilo: Henkilo) -> None:
         super().lataa(henkilo)
         self.jasenyysAlkoi.data = henkilo.jasenyysalkoi
         self.jasenyysPaattyi.data = henkilo.jasenyyspaattyi
         self.toimihenkilo.data = henkilo.toimihenkilo
 
-    def tallenna(self, henkilo):
+    def tallenna(self, henkilo: Henkilo) -> None:
         super().tallenna(henkilo)
         henkilo.jasenyysalkoi = self.jasenyysAlkoi.data
         henkilo.jasenyyspaattyi = self.jasenyysPaattyi.data

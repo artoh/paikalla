@@ -11,7 +11,8 @@ Huoltajuus = db.Table('huoltajuus',
       db.Column( 'huollettava', db.Integer, db.ForeignKey('henkilo.id', ondelete="CASCADE"), primary_key=True))
 
 
-def ika(syntymapaiva):
+def ika(syntymapaiva : datetime.date) -> int:
+    """Ikä tänään täysinä vuosina syntymäpäivän perusteella"""
     tanaan = date.today()
     vuotta = tanaan.year - syntymapaiva.year
     if tanaan.month < syntymapaiva.month or tanaan.month == syntymapaiva.month and tanaan.day < syntymapaiva.day:
@@ -20,6 +21,7 @@ def ika(syntymapaiva):
 
 
 class Henkilo(db.Model):
+    """Yksittäisen henkilön (jäsen tai huoltaja) tiedot"""
     __tablename__ = "henkilo"
     id = db.Column(db.Integer, primary_key=True)
     etunimi = db.Column( db.String(128), nullable=False)
@@ -39,24 +41,28 @@ class Henkilo(db.Model):
                             backref=db.backref('huollettavat'))
     ryhmat = db.relationship('Ryhmassa', backref='ryhmat', lazy=True)
 
-    def ika(self):
+    def ika(self) -> int:
+        """Henkilön ikä täysinä vuosina tänään"""
         return ika(self.syntymaaika)
 
-    def aikuinen(self):
+    def aikuinen(self) -> bool:
+        """Henkilö on vähintään 18-vuotias"""
         return self.ika() >= 18
 
-    def jasen(self):
+    def jasen(self) -> bool:
+        """Henkilö on yhdistyksen jäsen"""
         return self.jasenyysalkoi and not self.jasenyyspaattyi
 
-    def asetaSalasana(self, selvakielisena):
+    def asetaSalasana(self, selvakielisena : str):
+        """Kryptaa ja asettaa salasanan"""
         self.salasana = bcrypt.generate_password_hash(selvakielisena).decode('utf-8')
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self.id
 
-    # Vain aikuinen jolla on salasana voi kirjautua
     def is_active(self):
-        return self.aikuinen and len( self.salasana )
+        """Käyttäjä voi kirjautua, jos sähköposti ja salasana asetettu"""
+        return  len(self.email) and len( self.salasana )
 
     def is_anonymous(self):
         return False
@@ -64,7 +70,8 @@ class Henkilo(db.Model):
     def is_authenticated(self):
         return True
 
-    def mahdollisetryhmat(self):
+    def mahdollisetryhmat(self) -> list:
+        """Ryhmät, joihin voi ilmoittautua iän puolesta"""
         stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  "
                     "from ryhma left outer join "
                     "(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
@@ -90,7 +97,8 @@ class Henkilo(db.Model):
                           "ikaenintaan": rivi[6]})
         return lista
 
-    def kalenteri(self):
+    def kalenteri(self) -> list:
+        """Lista omista ja huollettavien tulevista kokoontumisista, päivittäin koottuna"""
         stmt = text("SELECT henkilo.etunimi, ryhma.nimi, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus, kokous.id, ryhmassa.ohjaaja, Henkilo.id "
                     "FROM henkilo JOIN ryhmassa ON henkilo.id=ryhmassa.henkiloid JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id JOIN kokous ON kokous.ryhmaid=ryhma.id "
                     "WHERE (ryhmassa.henkiloid=:henkiloid "
@@ -132,7 +140,8 @@ class Henkilo(db.Model):
 
         return paivat
 
-    def omatryhmat(self):
+    def omatryhmat(self) -> list:
+        """Lista aktiivisista ryhmistä, joissa jäsenenä tai ohjaajana"""
         stmt = text("SELECT ryhma.id, ryhma.nimi, ryhmassa.ohjaaja,kokous.alkaa, kokous.sijainti, kokous.kuvaus, kokous.paattyy "
                     "FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id " 
                     "LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND  Kokous.alkaa = (SELECT MIN(kokous.alkaa) FROM kokous WHERE kokous.alkaa > :tanaan AND kokous.ryhmaid = ryhma.id) "

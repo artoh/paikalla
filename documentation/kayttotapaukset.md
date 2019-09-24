@@ -51,6 +51,7 @@
 
 ### Jäsenten hallinta
 
+- [x] Toimihenkilö näkee kaikkien jäsenten tiedot
 - [x] Toimihenkilö lisää jäsenen
 - [x] Toimihenkilö lisää huoltajan, joka ei ole jäsen
 - [x] Toimihenkilö muokkaa jäsenen tietoja

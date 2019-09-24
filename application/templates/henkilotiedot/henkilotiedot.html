@@ -102,7 +102,7 @@
     <tr>
       <td>Yhdistyksen jäsenyys</td>
       <td>
-        {% if henkilo.jasenyysAlkoi and not henkilo.jasenyysPaattyi %}
+        {% if henkilo.jasen() %}
           Jäsen
         {% else %}
           Ei ole jäsen

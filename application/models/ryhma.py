@@ -1,7 +1,6 @@
 from application import db
-from .henkilo import Henkilo, ika
+from .henkilo import ika
 from sqlalchemy.sql import text
-from dateutil.parser import parse
 from .kokous import Kokous
 from datetime import datetime, timedelta
 
@@ -9,6 +8,7 @@ from application.models import parsedate
 
 
 class Ryhma(db.Model):
+    """Ryhmän tiedot"""
     __tablename__ = "ryhma"
     id = db.Column(db.Integer, primary_key=True)
     nimi = db.Column( db.String(128), nullable=False, index=True)
@@ -21,7 +21,8 @@ class Ryhma(db.Model):
     paattynyt = db.Column( db.Boolean, default=False, index=True)
     jasenyydet = db.relationship('Ryhmassa',lazy=True)
 
-    def jasenet(self):
+    def jasenet(self) -> list:
+        """Luettelo ryhmän nykyisistä jäsenistä ja ohjaajista"""
         stmt = text("SELECT ryhmassa.id, ohjaaja, sukunimi, etunimi, varotieto, Henkilo.id, syntymaaika  "
                     "FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloId=henkilo.Id "
                     "WHERE ryhmassa.ryhmaid=:ryhmaid AND ryhmassa.paattyen IS NULL "
@@ -38,7 +39,8 @@ class Ryhma(db.Model):
                             "ika": ika(parsedate(rivi[6]))})
         return lista
 
-    def menneetKokoukset(self):
+    def menneetKokoukset(self) -> list:
+        """Luettelo ryhmän menneistä kokoontumisista ja läsnäolleiden määrästä"""
         aika = datetime.now() - timedelta( minutes=30)
         stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, l.lkm FROM kokous"
                     " LEFT OUTER JOIN "
@@ -57,10 +59,12 @@ class Ryhma(db.Model):
                             "lasna" : rivi[4]})
         return lista
 
-    def seuraavaKokous(self):
+    def seuraavaKokous(self) -> Kokous:
+        """Tämän ryhmän seuraava kokous"""
         return Kokous.query.filter(Kokous.ryhmaid == self.id).filter(Kokous.paattyy > datetime.today()).order_by("alkaa").first()
 
-    def tulevatkokoukset(self):
+    def tulevatkokoukset(self) -> list:
+        """Ryhmän tulevat kokoukset (kokoukset, jotka eivät ole vielä päättyneet"""
         aika = datetime.now()
         stmt = text("SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus FROM kokous "
                      "WHERE ryhmaid=:ryhmaid AND kokous.paattyy > :aika"
@@ -76,7 +80,8 @@ class Ryhma(db.Model):
         return lista
 
 
-    def ohjaajat(self):
+    def ohjaajat(self) -> list:
+        """Lista ryhmän ohjaajista ja heidän yhteystiedoistaan"""
         stmt=text("SELECT etunimi, sukunimi, puhelin, email FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloid=henkilo.id "
                   "WHERE ryhmaid=:ryhmaid AND ohjaaja ").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
@@ -88,7 +93,8 @@ class Ryhma(db.Model):
                             "email" : rivi[3]})
         return lista
 
-    def onkotilaa(self):
+    def onkotilaa(self) -> bool:
+        """Onko ryhmässä tilaa uusille ilmoittautumisille"""
         stmt = text("SELECT COUNT(id) FROM ryhmassa WHERE ryhmaid=:ryhmaid AND not ohjaaja AND paattyen IS NULL ").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         if res[0][0] :
@@ -102,7 +108,10 @@ class Ryhma(db.Model):
     PAATTYNEETRYHMAT = 2
 
     @staticmethod
-    def lista(paattymissuodatin):
+    def lista(paattymissuodatin) -> list:
+        """Luettelo kaikista ryhmista
+
+        :param paattymissuodatin: Luetellaanko kaikki ryhmät, aktiiviset ryhmät vai päättyneet ryhmät"""
         if paattymissuodatin == Ryhma.AKTIIVISETRYHMAT:
             ehto = "WHERE NOT paattynyt"
         elif paattymissuodatin == Ryhma.PAATTYNEETRYHMAT:

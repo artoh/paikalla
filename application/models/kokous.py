@@ -7,6 +7,7 @@ Lasnaolo = db.Table('lasnaolo',
 
 
 class Kokous(db.Model) :
+    """Ryhmän yhden kokoontumisen tiedot"""
     __tablename__ = "kokous"
     id = db.Column(db.Integer, primary_key=True)
     ryhmaid = db.Column(db.Integer, db.ForeignKey('ryhma.id', ondelete="CASCADE"), nullable=False)
@@ -23,7 +24,10 @@ class Kokous(db.Model) :
         self.ryhmaid = ryhmaId
 
 
-    def paikallalista(self, ohjaaja):
+    def paikallalista(self, ohjaaja : bool) -> list:
+        """Lista ryhmän jäsenistä paikallaololistaa varten, sekä tieto paikalla olemisesta
+
+        :param ohjaaja : Tulostetaanko lista ryhmän ohjaajista vai jäsenistä"""
         if ohjaaja:
             ohjaajanot = ""
         else:
