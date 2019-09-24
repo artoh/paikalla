@@ -6,12 +6,13 @@ from datetime import datetime
 
 @app.template_filter('kpvm')
 def format_date(value):
+    """Kalenterin käyttämä filtteri päivämäärän näyttämiseksi niin, että mukana on myös viikonpäivä"""
     return value.strftime("%A %d.%m.%Y")
 
 @login_required
 @app.route("/kalenteri")
 def kalenteri():
-
+    """Näyttää kalenterin, jossa nykyisen käyttäjän ja hänen huollettaviensa tulevat kokoukset"""
     kalenteri = current_user.kalenteri()
     sivutus = Sivutus( len(kalenteri), request.args.get("sivu", type=int, default=1) )
 

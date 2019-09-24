@@ -5,11 +5,17 @@ from application.models import Henkilo
 
 from flask_login import login_user, logout_user
 
+
 @app.route("/", methods = ["GET", "POST"])
 def auth_login():
+    """Käyttäjän kirjautumistoiminnallisuus
+
+       GET-metodilla näyttää kirjautumissivun
+       POST-metodilla toteuttaa kirjautumisen, ja ohjaa onnistuneen kirjautumisen eteenpäin
+    """
     if request.method == "GET":
         if not Henkilo.query.first() :
-            # Tyhjä tietokanta
+            # Jos tietokanta on tyhjä, ohjataan tietokannan alustamissivulle
             return redirect( url_for("auth_paakayttaja"))
 
         return render_template("auth/login.html", email="")

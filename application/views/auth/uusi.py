@@ -5,12 +5,14 @@ from flask_login import login_user
 
 @app.route("/auth/uusi")
 def auth_uusikayttaja():
+    """Käyttäjän itserekisteröimislomakkeen näyttäminen"""
     form = LuoKayttajaForm()
-
     return  render_template("auth/uusikayttaja.html", form = form)
+
 
 @app.route("/auth/uusi", methods=["POST"])
 def auth_luo_uusikayttaja():
+    """Uuden käyttäjän luominen itserekisteröitymisellä"""
     form = LuoKayttajaForm(request.form)
 
     if not form.validate():

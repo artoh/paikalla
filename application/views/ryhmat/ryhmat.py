@@ -2,8 +2,10 @@ from application import app, db
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma
 
+
 @app.route("/ryhmat/")
 def ryhmat_index():
+    """Ryhmien luettelon näyttäminen"""
     if( "aktiiviset" in request.args.keys()) :
         ryhmat = Ryhma.lista(Ryhma.AKTIIVISETRYHMAT)
     elif( "paattyneet" in request.args.keys()) :
@@ -14,7 +16,8 @@ def ryhmat_index():
 
 
 @app.route("/ryhmat/<ryhma_id>/poista", methods=["POST"])
-def ryhmat_poista(ryhma_id):
+def ryhmat_poista(ryhma_id: int):
+    """Ryhmän poistaminen tietokannasta"""
     ryhma = Ryhma.query.get( ryhma_id )
     flash("Ryhmä " + ryhma.nimi + " poistettu", "danger")
     db.session.delete(ryhma)

@@ -6,14 +6,18 @@ from application.forms.jasenet import HenkiloTiedotForm, HenkiloTiedotLapsiForm
 from application.models.henkilo import Henkilo
 from datetime import datetime
 
+
 @app.route("/henkilotiedot")
 @login_required
 def henkilotiedot_index():
+    """Omien ja huollettavien henkilötietojen näyttäminen"""
     return render_template("henkilotiedot/henkilotiedot.html")
+
 
 @login_required
 @app.route("/henkilotiedot/<henkilo_id>")
-def henkilotiedot_muokkaus(henkilo_id):
+def henkilotiedot_muokkaus(henkilo_id: int):
+    """Omien tai huollettavan henkilötietojen muokkausnäkymän näyttäminen"""
     henkilo = kayttaja_autorisointi(henkilo_id)
     if not henkilo:
         return login_manager.unauthorized()
@@ -24,6 +28,7 @@ def henkilotiedot_muokkaus(henkilo_id):
 
 @app.route("/henkilotiedot/<henkilo_id>", methods=["POST"])
 def henkilotiedot_muokkaa(henkilo_id):
+    """Omien tai huollettavan henkilötietojen muokkauksien tallentaminen"""
     henkilo = kayttaja_autorisointi(henkilo_id)
     if not henkilo:
         return login_manager.unauthorized()
@@ -37,6 +42,7 @@ def henkilotiedot_muokkaa(henkilo_id):
 
 @app.route("/henkilotiedot/uusihuollettava")
 def henkilotiedot_uusi_huollettava():
+    """Uuden huollettavan itselisääminen - lomakkeen näyttäminen"""
     if not current_user or not current_user.is_authenticated() or not current_user.aikuinen():
         return login_manager.unauthorized()
     form = HenkiloTiedotLapsiForm();
@@ -45,6 +51,8 @@ def henkilotiedot_uusi_huollettava():
 
 @app.route("/henkilotiedot/uusihuollettava", methods=["POST"])
 def henkilotiedot_luo_huollettava():
+    """Uuden huollettavan itselisääminen - tietojen tallentaminen"""
+
     if not current_user or not current_user.is_authenticated() or not current_user.aikuinen():
         return login_manager.unauthorized()
 
@@ -63,6 +71,11 @@ def henkilotiedot_luo_huollettava():
 
 @app.route("/henkilotiedot/salasana", methods=["POST"])
 def henkilotiedot_vaihda_salasana():
+    """Oman tai huollettavan sanasanan vaihtaminen
+
+    Kaikki parametrit välitetään lomakkeen kentissä
+    """
+
     salasana = request.form.get("salasana")
     if not current_user or not current_user.is_authenticated():
         return login_manager.unauthorized()
@@ -87,8 +100,14 @@ def henkilotiedot_vaihda_salasana():
     db.session.commit()
     return redirect(url_for("henkilotiedot_index"))
 
+
 @app.route("/henkilotiedot/huoltaja", methods=["POST"])
 def henkilotiedot_linkita_huoltaja():
+    """Olemassaolevan henkilön lisääminen huoltajaksi itsensä lisäksi
+
+    Tarvittavat parametrit välitetään lomakkeen kentissä.
+    """
+
     lapsi = kayttaja_autorisointi( request.form.get("lapsiid") )
     if not lapsi:
         return login_manager.unauthorized()

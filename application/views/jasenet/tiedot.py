@@ -4,8 +4,10 @@ from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm, HenkiloTiedotForm
 from datetime import datetime
 
+
 @app.route("/jasenet/")
 def jasenet_index() :
+    """Henkilöiden luettelon näyttäminen"""
     if( "jasen" in request.args.keys()) :
         return render_template("jasenet/lista.html", jasenet = Henkilo.query.filter(Henkilo.jasenyysalkoi.isnot(None)).filter(Henkilo.jasenyyspaattyi == None).order_by(Henkilo.sukunimi, Henkilo.etunimi)  )
     elif( "eijasen" in request.args.keys()) :
@@ -13,8 +15,10 @@ def jasenet_index() :
     else:
         return render_template("jasenet/lista.html", jasenet=Henkilo.query.order_by(Henkilo.sukunimi, Henkilo.etunimi))
 
+
 @app.route("/jasenet/uusi")
 def jasenet_uusi() :
+    """Uuden henkilön luontilomake"""
     form = HenkiloTiedotAdminilleForm()
     form.jasenyysAlkoi.data = datetime.now()
     return render_template("jasenet/uusi.html", form = form)
@@ -22,6 +26,7 @@ def jasenet_uusi() :
 
 @app.route("/jasenet", methods=["POST"])
 def jasenet_luo() :
+    """Uuden jäsenen luominen"""
     form = HenkiloTiedotAdminilleForm( request.form )
 
     if not form.validate() :
@@ -41,7 +46,8 @@ def jasenet_luo() :
 
 
 @app.route("/jasenet/<henkilo_id>/tiedot/")
-def jasenet_tiedot(henkilo_id) :
+def jasenet_tiedot(henkilo_id: int):
+    """Henkilön tietojen näyttäminen"""
     henkilo = Henkilo.query.get(henkilo_id)
     form = HenkiloTiedotAdminilleForm()
     form.lataa(henkilo)
@@ -50,7 +56,8 @@ def jasenet_tiedot(henkilo_id) :
 
 
 @app.route("/jasenet/<henkilo_id>/tiedot", methods=["POST"])
-def jasenet_paivita(henkilo_id):
+def jasenet_paivita(henkilo_id: int):
+    """Henkilön tiedon muokkausten tallentaminen"""
     form = HenkiloTiedotAdminilleForm( request.form)
     henkilo = Henkilo.query.get(henkilo_id)
 
@@ -65,15 +72,18 @@ def jasenet_paivita(henkilo_id):
 
 
 @app.route("/jasenet/<henkilo_id>/poista", methods=["POST"])
-def jasenet_poista(henkilo_id):
+def jasenet_poista(henkilo_id: int):
+    """Henkilön poistaminen tietokannasta"""
     henkilo = Henkilo.query.get( henkilo_id )
     flash( henkilo.etunimi + " " + henkilo.sukunimi + " poistettu", "danger")
     db.session.delete(henkilo)
     db.session.commit()
     return redirect( url_for("jasenet_index") )
 
+
 @app.route("/jasenet/<henkilo_id>/salasana", methods=["POST"])
-def jasenet_salasana(henkilo_id):
+def jasenet_salasana(henkilo_id: int):
+    """Henkilön sanansana vaihtaminen ylläpidon toimin"""
     henkilo = Henkilo.query.get( henkilo_id )
     henkilo.asetaSalasana( request.form.get("salasana"))
     flash("{} {} salasana vaihdettu".format(henkilo.etunimi, henkilo.sukunimi), "info")

@@ -1,9 +1,10 @@
 from dateutil.parser import parse
 
-# Postgresql-yhteensopivuuden kääreeksi
-# Koska sqlite palauttaa merkkijonon ja postgre päivämäärän,
-# pareseoidaan vain päivämäärät
 def parsedate(pvm):
+    """Palauttaa syötteensä päivämääränä
+
+      Funktiota tarvitaan haettaessa tietoa SQL-kyselyistä, koska SQLite palauttaa päivämäärät
+      merkkijonoina mutta PostgreSQL päivämääräolioina"""
     if isinstance(pvm,str):
         return parse(pvm)
     return pvm

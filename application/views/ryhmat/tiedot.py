@@ -6,11 +6,13 @@ from application.forms.ryhmat import RyhmaTiedotForm
 
 @app.route("/ryhmat/uusi/")
 def ryhmat_uusi():
+    """Uuden ryhmän luontilomakkeen näyttäminen"""
     return render_template("ryhmat/uusi.html", form = RyhmaTiedotForm())
 
 
 @app.route("/ryhmat/", methods=["POST"])
 def ryhmat_luo():
+    """Uuden ryhmän tallentaminen tietokantaan"""
     form = RyhmaTiedotForm( request.form)
 
     if not form.validate() :
@@ -26,7 +28,8 @@ def ryhmat_luo():
 
 
 @app.route("/ryhmat/<ryhma_id>/tiedot/")
-def ryhmat_tiedot(ryhma_id) :
+def ryhmat_tiedot(ryhma_id: int):
+    """Ryhmän tietojen näyttäminen"""
     ryhma = Ryhma.query.get(ryhma_id)
     form = RyhmaTiedotForm()
     form.lataa(ryhma)
@@ -35,7 +38,8 @@ def ryhmat_tiedot(ryhma_id) :
 
 
 @app.route("/ryhmat/<ryhma_id>/tiedot/", methods=["POST"])
-def ryhmat_paivita(ryhma_id) :
+def ryhmat_paivita(ryhma_id: int) :
+    """Ryhmän tietojen päivittäminen tietokantaan"""
     form = RyhmaTiedotForm( request.form )
     ryhma = Ryhma.query.get(ryhma_id)
 

@@ -7,19 +7,23 @@ from application.models import Kokous
 
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
-def ryhmat_kokoukset(ryhma_id):
+def ryhmat_kokoukset(ryhma_id: int):
+    """Luettelon ryhmän tulevista kokouksista (ei vielä päättyneistä)"""
     ryhma = Ryhma.query.get(ryhma_id)
     kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa")
     return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset)
 
+
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusi")
-def ryhmat_kokoukset_uusi(ryhma_id):
+def ryhmat_kokoukset_uusi(ryhma_id: int):
+    """Lomake uuden kokouksen lisäämiseen"""
     ryhma = Ryhma.query.get(ryhma_id)
     form = KokousTiedotForm()
     return render_template("ryhmat/uusikokous.html", ryhma=ryhma, form=form)
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset/", methods=["POST"])
-def ryhmat_luo_kokous(ryhma_id):
+def ryhmat_luo_kokous(ryhma_id: int):
+    """Yksittäisen kokouksen lisääminen tietokantaan"""
     form = KokousTiedotForm(request.form)
     ryhma = Ryhma.query.get(ryhma_id)
 
@@ -33,14 +37,18 @@ def ryhmat_luo_kokous(ryhma_id):
 
     return redirect( url_for("ryhmat_kokoukset", ryhma_id=ryhma_id) )
 
+
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusisarja")
-def ryhmat_kokoukset_uusisarja(ryhma_id):
+def ryhmat_kokoukset_uusisarja(ryhma_id: int):
+    """Lomake toistuvien kokousten sarjan lisäämiseksi"""
     ryhma = Ryhma.query.get(ryhma_id)
     form = KokousSarjaForm()
     return render_template("ryhmat/uusisarja.html", ryhma=ryhma, form=form)
 
+
 @app.route("/ryhmat/<ryhma_id>/kokoussarja/", methods=["POST"])
-def ryhmat_luo_kokoussarja(ryhma_id):
+def ryhmat_luo_kokoussarja(ryhma_id: int):
+    """Toistuvien kokousten sarjan lisääminen tietokantaan"""
     form = KokousSarjaForm(request.form)
     ryhma = Ryhma.query.get(ryhma_id)
 
@@ -68,7 +76,8 @@ def ryhmat_luo_kokoussarja(ryhma_id):
 
 
 @app.route("/ryhmat/poistakokous/<kokous_id>", methods=["POST"])
-def ryhmat_poista_kokous(kokous_id):
+def ryhmat_poista_kokous(kokous_id: int):
+    """Yksittäisen kokouksen poistaminen tietokannasta"""
     kokous = Kokous.query.get(kokous_id)
     ryhma = kokous.ryhma
     flash("Kokous {:%d.%m.%y klo %H.%M} poistettiin".format(kokous.alkaa),"danger")
@@ -78,11 +87,14 @@ def ryhmat_poista_kokous(kokous_id):
 
 
 @app.route("/ryhmat/kokoukset/<kokous_id>")
-def ryhmat_kokoukset_muokkaa(kokous_id):
+def ryhmat_kokoukset_muokkaa(kokous_id: int):
+    """Yksittäisen kokouksen muokkausnäkymän näyttäminen.
+
+      Jos kokouksen alkamiseen on aikaa vähemmän kuin 15 minuuttia, ohjataan lomakkeeseen,
+      jolla merkitään kokouksen läsnäolijat.
+    """
     kokous = Kokous.query.get(kokous_id)
 
-    # Jos kokouksen alkamiseen on aikaa vähemmän kuin 15 minuuttia, ohjataan länsnäolotaulukon
-    # näyttävään muokkausnäkymään
     if kokous.alkaa < datetime.today() - timedelta(minutes=15) :
         return redirect( url_for("ryhmat_menneet_muokkaa", kokous_id=kokous_id))
 
@@ -92,7 +104,8 @@ def ryhmat_kokoukset_muokkaa(kokous_id):
 
 
 @app.route("/ryhmat/kokoukset/<kokous_id>", methods=["POST"])
-def ryhmat_muokkaa_kokous(kokous_id):
+def ryhmat_muokkaa_kokous(kokous_id: int):
+    """Kokouksen muutosten tallentaminen tietokantaan"""
     kokous = Kokous.query.get(kokous_id)
     form = KokousTiedotForm( request.form )
     if not form.validate():
@@ -103,7 +116,8 @@ def ryhmat_muokkaa_kokous(kokous_id):
 
 
 @app.route("/ryhmat/<ryhma_id>/menneet")
-def ryhmat_menneet(ryhma_id):
+def ryhmat_menneet(ryhma_id: int):
+    """Näyttää luettelon ryhmän menneistä kokouksista läsnäolomäärien kanssa"""
     ryhma = Ryhma.query.get(ryhma_id)
     return render_template("ryhmat/menneet.html", ryhma=ryhma)
 
