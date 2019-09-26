@@ -50,7 +50,7 @@ Tehdäksesi ilmoittatumisia lapsesi puolesta, lisää lapsen tiedot valitsemalla
 ![Lapsen tietojen lisääminen](pic/lisaalapsi.png)
 Merkitse *Huomioon otettavaa* kohtaan sellaiset asiat, joita lapsesi ryhmien ohjaajien on hyvä tietää lapsestasi.
 
-Kun olet tallentanut tiedot, tulevat lapsesi henkilötiedot näkyvilla omien henkilötietojesi alapuolelle:
+Kun olet tallentanut tiedot, tulevat lapsesi henkilötiedot näkyville omien henkilötietojesi alapuolelle:
 
 ![Lapsen henkilötiedot näkyvillä](pic/lapsinakyy.png)
 
@@ -60,7 +60,7 @@ Lisätäksesi lapsellesi toisen huoltajan, pitää toisen huoltajan luoda ensin 
 
 Anna se sähköpostiosoite, millä toinen huoltaja on rekisteröityt palveluun, ja paina *Lisää huoltaja*.
 
-Jos olet merkinnyt lapsesi tietoihin sähköpostiosoitteen, voit antaa luoda lapsellesi salananan, jolla hän pääsee katsomaan omia ilmoittautumisiaan ja kalenteriaan. Paina lapsen nimen vieressä olevaa *Vaihda salasana* -painiketta. Samalla painikkeella voit myös vaihtaa lapsesi puolesta salasanan, jos hän on unohtanut sen.
+Jos olet merkinnyt lapsesi tietoihin sähköpostiosoitteen, voit luoda lapsellesi salananan, jolla hän pääsee katsomaan omia ilmoittautumisiaan ja kalenteriaan. Paina lapsen nimen vieressä olevaa *Vaihda salasana* -painiketta. Samalla painikkeella voit myös vaihtaa lapsesi puolesta salasanan, jos hän on unohtanut sen.
 
 ### Omat henkilötiedot
 
@@ -70,7 +70,7 @@ Jos olet merkinnyt lapsesi tietoihin sähköpostiosoitteen, voit antaa luoda lap
 
 ![Omat ilmoittautumiset](pic/ilmoittautumiset.png)
 
-*Ilmoittautumiset*-välilehdellä näet omat ja lastesi ilmoittautumiset. Ryhmän yhteydessä olevasta *Ohjaajat ja kokoukset*-napista näet ryhmäsi ohjaajien yhteystiedot sekä kaikki tiedossa olevat ryhmän tulevat kokoontumiset.
+*Ilmoittautumiset*-välilehdellä näet omat ja lastesi ilmoittautumiset. Ryhmän yhteydessä olevasta *Ohjaajat ja kokoukset*-napista näet ryhmäsi ohjaajien yhteystiedot sekä tiedossa olevat ryhmän tulevat kokoontumiset.
 
 ### Uusi ilmoittautuminen
 
@@ -125,7 +125,7 @@ Kun toimit ryhmän ohjaajana, on sinulla *Ilmoittautumiset*-välilehdellä ryhm�
 
 ![Ryhmän tiedot](pic/ryhmatiedot.png)
 
-Pääset muokkaamaan ryhmäsi tietoja. *Ryhmän kuvaus* näkyy, kun jäsenet selaavat ilmoittautumistoiminnolla ryhmien tietoja.
+Pääset muokkaamaan ryhmäsi tietoja. *Ryhmän kuvaus* näkyy, kun yhdistyksen jäsenet selaavat ilmoittautumistoiminnolla ryhmien tietoja.
 
 Ellei ryhmässä ole määritelty ilmoittautumisaikaa tai paikkoja, ei ryhmään voi ilmoittautua itse. Ryhmän ohjaaja tai jäsenrekisterin hoitaja voi kuitenkin lisätä jäseniä ryhmään.
 
@@ -151,7 +151,7 @@ Kokouksen tiedoissa *Ennakkotiedot* on näytetään ryhmän jäsenille kokouslis
 
 ### Läsnäolleiden merkitseminen
 
-Helpoiten pääset merkitsemään läsnäolevia painamalla omassa kalenterissasi kokouksen kohdalla *Ohjaajan näkymä* -painiketta. Läsnäolleiden merkitsemisnäkymä avautuu 15 minuuttia ennen kokouksen alkamista - sitä ennen painikkeesta pääsee muokkaamaan kokoontumsen ennakkotietoja.
+Helpoiten pääset merkitsemään läsnäolevia painamalla omassa kalenterissasi kokouksen kohdalla *Ohjaajan näkymä* -painiketta. Läsnäolleiden merkitsemisnäkymä avautuu 15 minuuttia ennen kokouksen alkamista - sitä ennen painikkeesta pääsee muokkaamaan kokoontumisen ennakkotietoja.
 
 Jälkeenpäin pääset merkitsemään läsnäolleet ryhmän *Menneet kokoukset* -välilehdeltä.
 
@@ -164,6 +164,8 @@ Jäsenen nimeä painamalla näet jäsenen tiedot sekä huoltajan yhteystiedot.
 
 
 ### Ryhmän tilasto
+
+(Toimintoa ei vielä toteutettu)
 
 ## Ohje jäsenrekisterin hoitajalle
 
@@ -190,6 +192,8 @@ Jäsenrekisterin hoitajalla on kaikkiin ryhmiin kaikki samat oikeudet kuin ryhm�
 
 Kun ryhmä on perustettu, vain jäsenrekisterin hoitaja voi lisätä sille ensimmäisen ohjaajan.
 
-Jos poistat ryhmät, poistuvat myös kaikki siihen liittyvät tilastomerkinnät. Merkitse ryhmä mieluummin päättyneeksi, jolloin se ei turhaan näy ilmoittautumiset-luetteloissa.
+Jos poistat ryhmät, poistuvat myös kaikki siihen liittyvät tilastomerkinnät. Merkitse ryhmä mieluummin päättyneeksi.
 
 ### Tilastot
+
+(Toimintoa ei vielä toteutettu)

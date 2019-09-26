@@ -5,7 +5,7 @@
 {% macro ryhmatiedot(ryhmassa) %}
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">{{ryhmassanimi}}</h5>
+        <h5 class="card-title">{{ryhmassa.nimi}}</h5>
           {% if ryhmassa.kokousalkaa %}
             <p>Seuraava kokous {{ryhmassa.kokousalkaa|pvmaika}} - {{ryhmassa.kokouspaattyy|klo}} {{ryhmassa.kokoussijainti}}<br/>
               {{ryhmassa.kokouskuvaus}}</p>
