@@ -4,6 +4,7 @@ from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm, IkaValidator
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/jasenet/<henkilo_id>/huollettavat")
@@ -51,12 +52,20 @@ def jasenet_luo_huollettava(huoltaja_id: int):
     huoltaja = Henkilo.query.get(huoltaja_id)
 
     if not form.validate() :
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("jasenet/uusihuollettava.html", form = form, henkilo=huoltaja)
 
     henkilo = Henkilo()
     form.tallenna( henkilo )
     db.session.add( henkilo )
     huoltaja.huollettavat.append(henkilo)
-    db.session.commit()
 
+    try:
+        db.session.commit()
+    except IntegrityError:
+        flash("Sähköpostiosoite on jo käytössä", "danger")
+        form.email.errors.append("Sähköpostiosoite on jo käytössä");
+        return render_template("jasenet/uusihuollettava.html", form = form, henkilo=huoltaja)
+
+    flash("Henkilö {} {} lisätty".format(huoltaja.etunimi, huoltaja.sukunimi),"success")
     return redirect( url_for("jasenet_huollettavat", henkilo_id=huoltaja_id))

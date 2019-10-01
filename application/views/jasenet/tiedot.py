@@ -3,7 +3,7 @@ from flask import render_template, request, url_for, redirect, flash
 from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm, HenkiloTiedotForm
 from datetime import datetime
-
+from sqlalchemy.exc import IntegrityError
 
 @app.route("/jasenet/")
 def jasenet_index() :
@@ -29,15 +29,23 @@ def jasenet_luo() :
     """Uuden jäsenen luominen"""
     form = HenkiloTiedotAdminilleForm( request.form )
 
-    if not form.validate() :
+    if not form.validate():
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("jasenet/uusi.html", form = form)
 
     henkilo = Henkilo()
-    flash("Henkilö {} {} lisätty ".format(henkilo.etunimi, henkilo.sukunimi), "success")
 
     form.tallenna( henkilo )
-    db.session.add( henkilo )
-    db.session.commit()
+    db.session.add(henkilo)
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        flash("Sähköpostiosoite on jo käytössä", "danger")
+        form.email.errors.append("Sähköpostiosoite on jo käytössä");
+        return render_template("jasenet/uusi.html", form=form)
+
+    flash("Henkilö {} {} lisätty ".format(henkilo.etunimi, henkilo.sukunimi), "success")
 
     if henkilo.aikuinen():
         return redirect( url_for("jasenet_huollettavat", henkilo_id=henkilo.id))
@@ -62,10 +70,17 @@ def jasenet_paivita(henkilo_id: int):
     henkilo = Henkilo.query.get(henkilo_id)
 
     if not form.validate():
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("jasenet/tiedot.html", jasen=henkilo, form=form)
 
     form.tallenna(henkilo)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError:
+        flash("Sähköpostiosoite on jo käytössä", "danger")
+        form.email.errors.append("Sähköpostiosoite on jo käytössä");
+        return render_template("jasenet/tiedot.html", jasen=henkilo, form=form)
+
 
     flash("Henkilön {} {} tiedot tallennettu".format(henkilo.etunimi, henkilo.sukunimi), "success")
     return redirect( url_for("jasenet_tiedot", henkilo_id=henkilo_id) )

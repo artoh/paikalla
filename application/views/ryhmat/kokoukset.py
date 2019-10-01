@@ -109,6 +109,7 @@ def ryhmat_muokkaa_kokous(kokous_id: int):
     kokous = Kokous.query.get(kokous_id)
     form = KokousTiedotForm( request.form )
     if not form.validate():
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("ryhmat/muokkaakokous.html", kokous=kokous, ryhma=kokous.ryhma, form=form)
     form.tallenna(kokous)
     db.session.commit()

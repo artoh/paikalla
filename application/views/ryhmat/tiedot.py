@@ -15,7 +15,8 @@ def ryhmat_luo():
     """Uuden ryhmän tallentaminen tietokantaan"""
     form = RyhmaTiedotForm( request.form)
 
-    if not form.validate() :
+    if not form.validate():
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("ryhmat/uusi.html", form=form)
 
     ryhma = Ryhma()
@@ -43,7 +44,8 @@ def ryhmat_paivita(ryhma_id: int) :
     form = RyhmaTiedotForm( request.form )
     ryhma = Ryhma.query.get(ryhma_id)
 
-    if not form.validate() :
+    if not form.validate():
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("ryhmat/tiedot.html", ryhma=ryhma, form=form)
 
     form.tallenna( ryhma )

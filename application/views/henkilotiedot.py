@@ -5,7 +5,7 @@ from .autorisointi import kayttaja_autorisointi
 from application.forms.jasenet import HenkiloTiedotForm, HenkiloTiedotLapsiForm
 from application.models.henkilo import Henkilo
 from datetime import datetime
-
+from sqlalchemy.exc import IntegrityError
 
 @app.route("/henkilotiedot")
 @login_required
@@ -34,9 +34,17 @@ def henkilotiedot_muokkaa(henkilo_id):
         return login_manager.unauthorized()
     form = HenkiloTiedotForm(request.form)
     if not form.validate() :
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("henkilotiedot/muokkaatietoja.html", henkilo=henkilo, form=form)
     form.tallenna(henkilo)
-    db.session.commit()
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        flash("Sähköpostiosoite on jo käytössä", "danger")
+        form.email.errors.append("Sähköpostiosoite on jo käytössä");
+        return render_template("henkilotiedot/muokkaatietoja.html", henkilo=henkilo, form=form)
+
     return redirect(url_for("henkilotiedot_index"))
 
 
@@ -58,6 +66,7 @@ def henkilotiedot_luo_huollettava():
 
     form = HenkiloTiedotForm(request.form)
     if not form.validate() :
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("henkilotiedot/uusihuollettava.html", form=form)
 
     lapsi = Henkilo()
@@ -65,7 +74,14 @@ def henkilotiedot_luo_huollettava():
     lapsi.jasenyysalkoi = datetime.today()
     lapsi.huoltajat.append(current_user)
     db.session.add(lapsi)
-    db.session.commit()
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        flash("Sähköpostiosoite on jo käytössä", "danger")
+        form.email.errors.append("Sähköpostiosoite on jo käytössä");
+        return render_template("henkilotiedot/uusihuollettava.html", form=form);
+
     return redirect(url_for("henkilotiedot_index"))
 
 

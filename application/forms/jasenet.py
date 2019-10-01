@@ -25,9 +25,9 @@ class HenkiloTiedotFormBase(FlaskForm) :
     """Kantaluokka erilaisille henkilötietojen lomakkeille"""
     etunimi = StringField("Etunimi", validators=[ validators.DataRequired()])
     sukunimi = StringField("Sukunimi", validators=[validators.DataRequired()])
-    syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired()],format='%Y-%m-%d')
+    syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired(), IkaValidator()], format='%Y-%m-%d')
     puhelin = StringField("Puhelinnumero")
-    email = EmailField("Sähköposti", validators=[validators.Regexp("(\S+@\S+\.\w+)?", message="Sähköpostiosoite ei ole kelvollinen")])
+    email = EmailField("Sähköposti", validators=[validators.Email( message="Sähköpostiosoite ei ole kelvollinen"), validators.Optional()])
     varotieto = TextAreaField("Huomioon otettavaa (esim. allergiat)")
 
     def lataa(self, henkilo : Henkilo) -> None:

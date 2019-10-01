@@ -2,8 +2,9 @@ from application import app, db
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/jasenet/<henkilo_id>/huoltajat")
@@ -46,14 +47,21 @@ def jasenet_luo_huoltaja(huollettava_id :int):
     form = HenkiloTiedotAdminilleForm( request.form )
 
     if not form.validate() :
-        return render_template("jasenet/uusi.html", form = form)
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
+        return render_template("jasenet/uusihuoltaja.html", henkilo=huollettava, form=form)
 
     huollettava = Henkilo.query.get(huollettava_id)
     henkilo = Henkilo()
     form.tallenna( henkilo )
     db.session.add(henkilo)
     huollettava.huoltajat.append(henkilo)
-    db.session.commit()
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        flash("Sähköpostiosoite on jo käytössä", "danger")
+        form.email.errors.append("Sähköpostiosoite on jo käytössä");
+        return render_template("jasenet/uusihuoltaja.html", henkilo=huollettava, form=form)
 
     return redirect( url_for("jasenet_huoltajat", henkilo_id=huollettava_id))
 
