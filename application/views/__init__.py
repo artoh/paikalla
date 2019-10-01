@@ -4,6 +4,7 @@ from .auth import *
 from .henkilotiedot import *
 from .ilmoittautumiset import *
 from .kalenteri import *
+from .tilasto import *
 
 
 @app.template_filter('pvm')

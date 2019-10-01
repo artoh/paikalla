@@ -1,0 +1,61 @@
+{% extends "ryhmat/layout.html" %}
+
+{% block intab %}
+
+
+<h2>Tilasto</h2>
+
+<div class="card" style="margin-bottom: 1em;">
+    <div class="card-body">
+        <form method="get" action="{{url_for('ryhmat_tilasto', ryhma_id=ryhma.id) }}" class="form-inline">
+            <input type="date" class="form-control" name="mista" value="{{mista|pvm('%Y-%m-%d')}}" required/>
+             &emsp;&ndash;&emsp;
+            <input type="date" class="form-control" name="mihin" value="{{mihin|pvm('%Y-%m-%d')}}" required/>
+            <button type="submit" class="btn btn-primary" style="margin-left: 1em;"><i class="fas fa-sync-alt"></i> Päivitä</button>
+        </form>
+    </div>
+</div>
+
+<p>
+    <table class="table-borderless table-sm">
+    <tr><td>Kokoontumisia yhteensä </td><td>{{ tiedot.tilasto.kokouksia }}</td></tr>
+    <tr><td>Läsnäoloja yhteensä </td><td>{{ tiedot.tilasto.lasna }}</td></tr>
+    <tr><td>Läsnä keskimäärin </td>
+        <td>
+            {% if tiedot.tilasto.lasna > 0 %}
+                {{ ( tiedot.tilasto.lasna / tiedot.tilasto.kokouksia )|round(1) }}
+            {% endif %}
+        </td></tr>
+    </table>
+</p>
+
+{% if tiedot.tilasto.lasna > 0 %}
+
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <th></th>
+            <th>Sukunimi</th>
+            <th>Etunimi</th>
+            <th>Läsnä</th>
+            <th>%</th>
+        </thead>
+        <tbody>
+            {% for lasna in tiedot.lasnaolot %}
+                <tr>
+                    <td>{{loop.index}}.</td>
+                    <td>{{lasna.sukunimi}}</td>
+                    <td>{{lasna.etunimi}}
+                        {% if lasna.ohjaaja %}
+                           <i class="fas fa-user-shield"></i>
+                        {% endif %}
+                    </td>
+                    <td>{{lasna.lasna}}</td>
+                    <td>{{ (lasna.lasna * 100 / tiedot.tilasto.kokouksia)|round(1) }} %</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+
+{% endblock %}

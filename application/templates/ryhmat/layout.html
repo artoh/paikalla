@@ -74,10 +74,10 @@
 
 
   <li class="nav-item">
-    {% if "tilasto" in request.path %}
+    {% if "ryhmatilasto" in request.path %}
     <a class="nav-link active" href="#">
     {% else %}
-    <a class="nav-link disabled" href="tilasto">
+    <a class="nav-link" href="{{url_for('ryhmat_tilasto', ryhma_id=ryhma.id)}}">
     {% endif %}
       Tilasto
     </a>

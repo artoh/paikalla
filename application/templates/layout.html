@@ -46,8 +46,12 @@
               {% endif %}
                 <a class="nav-link" href="{{url_for('ryhmat_index')}}">Ryhmät</a>
               </li>
+              {% if "yleistilasto" in request.path %}
+              <li class="nav-item active">
+              {% else %}
               <li class="nav-item">
-                <a class="nav-link disabled" href="/tilasto">Tilasto</a>
+              {% endif %}
+                <a class="nav-link" href="{{url_for('yleistilasto')}}">Tilasto</a>
               </li>
             {% endif %}
           </ul>

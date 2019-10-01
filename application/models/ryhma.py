@@ -2,7 +2,7 @@ from application import db
 from .henkilo import ika
 from sqlalchemy.sql import text
 from .kokous import Kokous
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from application.models import parsedate
 
@@ -138,3 +138,50 @@ class Ryhma(db.Model):
                           "paikkoja": rivi[6],
                           "ilmoittautuneita" : rivi[7]})
         return lista
+
+    @staticmethod
+    def yhteistilasto(mista: date, mihin: date) -> list:
+        """Yhdistyksen yleistilastoon ryhmien kokoontumistiedot"""
+        stmt = text("select ryhma.nimi, kokous.ryhmaid, count(distinct kokous.id), count(lasnaolo.kokous) from kokous "
+                    "left outer join lasnaolo on lasnaolo.kokous=kokous.id "
+                    "join ryhma on kokous.ryhmaid=ryhma.id "
+                    "where kokous.alkaa between :alkaa and :loppuu "
+                    "group by kokous.ryhmaid "
+                    "order by nimi").params(alkaa = mista, loppuu=mihin)
+        res = db.engine.execute(stmt)
+        lista = []
+        for rivi in res:
+            lista.append({"nimi" : rivi[0],
+                          "id": rivi[1],
+                          "kokouksia" : rivi[2],
+                          "lasna": rivi[3]})
+
+        return lista
+
+    def ryhmantilasto(self, mista: date, mihin: date) -> dict:
+        """Ryhmän oma tilasto, jossa myös läsnäolotilastot """
+        stmt = text("select count(distinct kokous.id), count(lasnaolo.kokous) from kokous "
+                    "left outer join lasnaolo on lasnaolo.kokous=kokous.id "                    
+                    "where kokous.alkaa between :alkaa and :loppuu "
+                    "and kokous.ryhmaid=:ryhmaid ").params(alkaa=mista, loppuu=mihin, ryhmaid=self.id)
+        res = db.engine.execute(stmt)
+        tulos = {}
+        for rivi in res:
+            tulos["tilasto"] = {"kokouksia" : rivi[0], "lasna" : rivi[1]}
+
+        stmt = text("select sukunimi, etunimi, count(lasnaolo.kokous) as lasna, ryhmassa.ohjaaja from lasnaolo "
+                    "join ryhmassa on lasnaolo.ryhmassa=ryhmassa.id "
+                    "join henkilo on ryhmassa.henkiloid=henkilo.id "
+                    " join kokous on lasnaolo.kokous=kokous.id "
+                    "where kokous.ryhmaid=:ryhmaid and "
+                    "kokous.alkaa between :alkaa and :loppuu group by henkilo.id order by lasna desc"
+                    ).params(alkaa=mista, loppuu=mihin, ryhmaid=self.id )
+        res = db.engine.execute(stmt)
+        lasnaolot = []
+        for rivi in res:
+            lasnaolot.append({"sukunimi":rivi[0],
+                              "etunimi": rivi[1],
+                              "lasna" : rivi[2],
+                              "ohjaaja": rivi[3]})
+        tulos["lasnaolot"]=lasnaolot
+        return tulos

@@ -9,7 +9,7 @@
           <option></option>
           {% for henkilo in eiryhmassa %}
           <option value="{{ henkilo.id }}">
-            {{ henkilo.sukunimi }} {{ henkilo.etunimi }}
+            {{ henkilo.sukunimi }} {{ henkilo.etunimi }} ({{henkilo.ika()}})
           </option>
           {% endfor %}
         </select>

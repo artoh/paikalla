@@ -1,0 +1,51 @@
+{% extends "ryhmat/layout.html" %}
+
+{% block body %}
+
+
+<h2>Tilasto</h2>
+
+<div class="card" style="margin-bottom: 1em;">
+    <div class="card-body">
+        <form method="get" action="{{url_for('yleistilasto') }}" class="form-inline">
+            <input type="date" class="form-control" name="mista" value="{{mista|pvm('%Y-%m-%d')}}" required/>
+             &emsp;&ndash;&emsp;
+            <input type="date" class="form-control" name="mihin" value="{{mihin|pvm('%Y-%m-%d')}}" required/>
+            <button type="submit" class="btn btn-primary" style="margin-left: 1em;"><i class="fas fa-sync-alt"></i> Päivitä</button>
+        </form>
+    </div>
+</div>
+
+<p>
+    <table class="table-borderless table-sm">
+    <tr><td>Aktiivisia ryhmiä </td><td>{{ ryhmat|length() }}</td></tr>
+    <tr><td>Kokoontumisia yhteensä </td><td>{{ ryhmat|sum(attribute='kokouksia') }}</td></tr>
+    <tr><td>Läsnäoloja yhteensä </td><td>{{ ryhmat|sum(attribute='lasna') }}</td></tr>
+    <tr><td>Läsnä keskimäärin </td>
+        <td>
+            {% if ryhmat|sum(attribute='kokouksia') > 0 %}
+                {{ ( ryhmat|sum(attribute='lasna') / ryhmat|sum(attribute='kokouksia') )|round(1) }}
+            {% endif %}
+        </td></tr>
+    </table>
+</p>
+
+<table class="table table-sm">
+    <thead class="thead-light">
+        <th>Ryhmä</th>
+        <th>Kokoontumiskertoja</th>
+        <th>Läsnäoloja</th>
+        <th>Läsnä keskimäärin</th>
+    </thead>
+    <tbody>
+        {% for ryhma in ryhmat %}
+            <tr>
+                <td>{{ryhma.nimi}}</td>
+                <td>{{ryhma.kokouksia}}</td>
+                <td>{{ryhma.lasna}}</td>
+                <td>{{ (ryhma.lasna / ryhma.kokouksia)|round(1) }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
