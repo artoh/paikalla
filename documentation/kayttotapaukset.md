@@ -45,7 +45,7 @@
 - [x] Ryhmänohjaaja muokkaa ryhmänsä kokouksen tietoja
 - [x] Ryhmänohjaaja peruu (poistaa) kokouksen  
 - [x] Ryhmänohjaaja merkitsee kokouksessa läsnäolleet
-- [ ] Ryhmänohjaaja näkee oman ryhmänsä läsnäolotilastot
+- [x] Ryhmänohjaaja näkee oman ryhmänsä läsnäolotilastot
 
 ## Toimihenkilö
 
@@ -71,5 +71,5 @@
   - [x] Ryhmän kokoukset
 
 ## Tilastot
-- [ ] Toimihenkilö näkee yksittäisen ryhmän tilaston
-- [ ] Toimihenkilö näkee koko yhdistyksen tilastot
+- [x] Toimihenkilö näkee yksittäisen ryhmän tilaston
+- [x] Toimihenkilö näkee koko yhdistyksen tilastot

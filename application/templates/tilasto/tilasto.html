@@ -40,7 +40,7 @@
     <tbody>
         {% for ryhma in ryhmat %}
             <tr>
-                <td>{{ryhma.nimi}}</td>
+                <td><a href="{{url_for('ryhmat_tilasto',ryhma_id=ryhma.id)}}">{{ryhma.nimi}}</a></td>
                 <td>{{ryhma.kokouksia}}</td>
                 <td>{{ryhma.lasna}}</td>
                 <td>{{ (ryhma.lasna / ryhma.kokouksia)|round(1) }}</td>

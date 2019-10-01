@@ -38,10 +38,10 @@ Sisään kirjauduttaessa haetaan henkilön tiedot. Näihin liittyviä huoltajuus
 
 ```sql
 # Henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, 
-    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, 
-    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, 
-    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, 
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi,
+    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
+    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
+    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
     henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo
 WHERE henkilo.email = ?
@@ -70,8 +70,8 @@ SELECT id FROM ryhmassa WHERE ryhmaid=:ryhmaid AND henkiloid=:henkiloid AND ohja
 #### Kysely
 
 ```sql
-INSERT INTO henkilo (etunimi, sukunimi, puhelin, email, salasana, syntymaaika, toimihenkilo, 
-    varotieto, jasenyysalkoi, jasenyyspaattyi) 
+INSERT INTO henkilo (etunimi, sukunimi, puhelin, email, salasana, syntymaaika, toimihenkilo,
+    varotieto, jasenyysalkoi, jasenyyspaattyi)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ```
 
@@ -106,19 +106,19 @@ INSERT INTO huoltajuus (huoltaja, huollettava) VALUES (?, ?)
 
 ```sql
 # Omat henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, 
-    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, 
-    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, 
-    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, 
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi,
+    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
+    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
+    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
     henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo
 WHERE henkilo.id = ?
 
 # Huollettavien henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, 
-    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, 
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi,
+    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
     henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
-    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, 
+    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
     henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo, huoltajuus
 WHERE ? = huoltajuus.huoltaja AND henkilo.id = huoltajuus.huollettava
@@ -383,3 +383,51 @@ INSERT INTO lasnaolo (ryhmassa, kokous) VALUES (?, ?)
 
 
 ## Tilastot
+
+### Yksittäisen ryhmän tilasto
+
+Tilaston yhteydessä näytetään ryhmän läsnäolotiedot.
+
+#### Roolit
+
+- [x] Ryhmänohjaaja näkee oman ryhmänsä läsnäolotilastot
+- [x] Toimihenkilö näkee yksittäisen ryhmän tilaston
+
+#### Kysely
+
+```sql
+select ryhma.nimi, kokous.ryhmaid, count(distinct kokous.id), count(lasnaolo.kokous)
+ from kokous
+ left outer join lasnaolo on lasnaolo.kokous=kokous.id
+ join ryhma on kokous.ryhmaid=ryhma.id
+ where kokous.alkaa between :alkaa and :loppuu
+ group by kokous.ryhmaid
+ order by nimi
+```
+
+### Koko yhdistyksen tilasto
+
+#### Roolit
+
+- [x] Toimihenkilö näkee koko yhdistyksen tilastot
+
+#### Kysely
+
+##### Ryhmän yhteenvetotilasto
+```sql
+select count(distinct kokous.id), count(lasnaolo.kokous) from kokous
+left outer join lasnaolo on lasnaolo.kokous=kokous.id                     
+where kokous.alkaa between :alkaa and :loppuu
+and kokous.ryhmaid=:ryhmaid
+```
+
+#### Läsnäolotilasto
+```sql
+select sukunimi, etunimi, count(lasnaolo.kokous) as lasna, ryhmassa.ohjaaja from lasnaolo
+join ryhmassa on lasnaolo.ryhmassa=ryhmassa.id
+join henkilo on ryhmassa.henkiloid=henkilo.id
+join kokous on lasnaolo.kokous=kokous.id
+where kokous.ryhmaid=:ryhmaid and
+kokous.alkaa between :alkaa and :loppuu group by henkilo.id
+order by lasna desc
+```
