@@ -1,5 +1,7 @@
+from application import db
 from application.models import Henkilo
 from flask_login import current_user
+from sqlalchemy.sql import text
 
 
 def kayttaja_autorisointi(henkilo_id: int) -> Henkilo:
@@ -21,3 +23,21 @@ def kayttaja_autorisointi(henkilo_id: int) -> Henkilo:
             if huoltaja.id == current_user.id :
                 return henkilo
     return None
+
+
+def ryhma_autorisaatio(ryhma_id: int) -> bool:
+    """Autorisointi näkymissä, joita saa käyttää pääkäyttäjä taikka ryhmän ohjaaja
+
+    :param ryhma_id: Ryhmän id, jota tarkastellaan
+    :return Onko oikeutta ryhmän tietoihin
+    """
+    if not current_user or not current_user.is_authenticated:
+        return False
+
+    if current_user.toimihenkilo:
+        return True
+
+    res = db.engine.execute( text("SELECT id FROM ryhmassa WHERE ryhmaid=:ryhmaid AND "
+                                  "henkiloid=:henkiloid AND ohjaaja")
+                             .params(ryhmaid=ryhma_id, henkiloid=current_user.id))
+    return len(res) > 0

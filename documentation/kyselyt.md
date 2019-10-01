@@ -38,7 +38,11 @@ Sisään kirjauduttaessa haetaan henkilön tiedot. Näihin liittyviä huoltajuus
 
 ```sql
 # Henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, 
+    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, 
+    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, 
+    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, 
+    henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo
 WHERE henkilo.email = ?
 
@@ -47,9 +51,8 @@ SELECT henkilo.id
 FROM henkilo, huoltajuus
 WHERE ? = huoltajuus.huollettava AND henkilo.id = huoltajuus.huoltaja
 
-
-
 #Ryhmänohjaajan autorisaatio
+SELECT id FROM ryhmassa WHERE ryhmaid=:ryhmaid AND henkiloid=:henkiloid AND ohjaaja
 
 ```
 ## Käyttäjähallinta
@@ -67,7 +70,9 @@ WHERE ? = huoltajuus.huollettava AND henkilo.id = huoltajuus.huoltaja
 #### Kysely
 
 ```sql
-INSERT INTO henkilo (etunimi, sukunimi, puhelin, email, salasana, syntymaaika, toimihenkilo, varotieto, jasenyysalkoi, jasenyyspaattyi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO henkilo (etunimi, sukunimi, puhelin, email, salasana, syntymaaika, toimihenkilo, 
+    varotieto, jasenyysalkoi, jasenyyspaattyi) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ```
 
 Jos vanhempi lisää lapsensa, suoritetaan välittömästi myös huoltajuuden liittäminen (katso seuraava)
@@ -101,12 +106,20 @@ INSERT INTO huoltajuus (huoltaja, huollettava) VALUES (?, ?)
 
 ```sql
 # Omat henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, 
+    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, 
+    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, 
+    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, 
+    henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo
 WHERE henkilo.id = ?
 
 # Huollettavien henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, 
+    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, 
+    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
+    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, 
+    henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo, huoltajuus
 WHERE ? = huoltajuus.huoltaja AND henkilo.id = huoltajuus.huollettava
 
@@ -129,6 +142,7 @@ FROM henkilo, huoltajuus
 
 ```sql
 UPDATE henkilo SET etunimi=?, sukunimi=?, puhelin=?, syntymaaika=?, email=?, varotieto=? WHERE henkilo.id = ?
+
 
 ```
 

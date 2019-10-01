@@ -1,4 +1,4 @@
-from application import app, db, bcrypt
+from application import app, db, admin_required
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm, HenkiloTiedotForm
@@ -6,6 +6,7 @@ from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 
 @app.route("/jasenet/")
+@admin_required()
 def jasenet_index() :
     """Henkilöiden luettelon näyttäminen"""
     if( "jasen" in request.args.keys()) :
@@ -17,6 +18,7 @@ def jasenet_index() :
 
 
 @app.route("/jasenet/uusi")
+@admin_required()
 def jasenet_uusi() :
     """Uuden henkilön luontilomake"""
     form = HenkiloTiedotAdminilleForm()
@@ -25,6 +27,7 @@ def jasenet_uusi() :
 
 
 @app.route("/jasenet", methods=["POST"])
+@admin_required()
 def jasenet_luo() :
     """Uuden jäsenen luominen"""
     form = HenkiloTiedotAdminilleForm( request.form )
@@ -54,6 +57,7 @@ def jasenet_luo() :
 
 
 @app.route("/jasenet/<henkilo_id>/tiedot/")
+@admin_required()
 def jasenet_tiedot(henkilo_id: int):
     """Henkilön tietojen näyttäminen"""
     henkilo = Henkilo.query.get(henkilo_id)
@@ -64,6 +68,7 @@ def jasenet_tiedot(henkilo_id: int):
 
 
 @app.route("/jasenet/<henkilo_id>/tiedot", methods=["POST"])
+@admin_required()
 def jasenet_paivita(henkilo_id: int):
     """Henkilön tiedon muokkausten tallentaminen"""
     form = HenkiloTiedotAdminilleForm( request.form)
@@ -87,6 +92,7 @@ def jasenet_paivita(henkilo_id: int):
 
 
 @app.route("/jasenet/<henkilo_id>/poista", methods=["POST"])
+@admin_required()
 def jasenet_poista(henkilo_id: int):
     """Henkilön poistaminen tietokannasta"""
     henkilo = Henkilo.query.get( henkilo_id )
@@ -97,6 +103,7 @@ def jasenet_poista(henkilo_id: int):
 
 
 @app.route("/jasenet/<henkilo_id>/salasana", methods=["POST"])
+@admin_required()
 def jasenet_salasana(henkilo_id: int):
     """Henkilön sanansana vaihtaminen ylläpidon toimin"""
     henkilo = Henkilo.query.get( henkilo_id )

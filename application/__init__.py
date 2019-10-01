@@ -2,7 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
+from functools import wraps
 
 import os
 import locale
@@ -35,6 +36,19 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view="auth_login"
 login_manager.login_message = "Ole hyvä ja kirjaudu uudelleen"
+
+
+def admin_required():
+    """Käytetään vain adminille varatuissa näkymissä"""
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            if not current_user or not current_user.is_authenticated or not current_user.toimihenkilo:
+                return login_manager.unauthorized()
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper
+
 
 from application import models
 from application import views

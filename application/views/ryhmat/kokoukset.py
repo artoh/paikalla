@@ -1,14 +1,18 @@
-from application import app, db
+from application import app, db, login_manager
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma, Ryhmassa, Henkilo
 from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
+from application.views.autorisointi import ryhma_autorisaatio
 
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
 def ryhmat_kokoukset(ryhma_id: int):
     """Luettelon ryhmän tulevista kokouksista (ei vielä päättyneistä)"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
+
     ryhma = Ryhma.query.get(ryhma_id)
     kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa")
     return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset)
@@ -17,6 +21,8 @@ def ryhmat_kokoukset(ryhma_id: int):
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusi")
 def ryhmat_kokoukset_uusi(ryhma_id: int):
     """Lomake uuden kokouksen lisäämiseen"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     ryhma = Ryhma.query.get(ryhma_id)
     form = KokousTiedotForm()
     return render_template("ryhmat/uusikokous.html", ryhma=ryhma, form=form)
@@ -24,6 +30,9 @@ def ryhmat_kokoukset_uusi(ryhma_id: int):
 @app.route("/ryhmat/<ryhma_id>/kokoukset/", methods=["POST"])
 def ryhmat_luo_kokous(ryhma_id: int):
     """Yksittäisen kokouksen lisääminen tietokantaan"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
+
     form = KokousTiedotForm(request.form)
     ryhma = Ryhma.query.get(ryhma_id)
 
@@ -41,6 +50,8 @@ def ryhmat_luo_kokous(ryhma_id: int):
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusisarja")
 def ryhmat_kokoukset_uusisarja(ryhma_id: int):
     """Lomake toistuvien kokousten sarjan lisäämiseksi"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     ryhma = Ryhma.query.get(ryhma_id)
     form = KokousSarjaForm()
     return render_template("ryhmat/uusisarja.html", ryhma=ryhma, form=form)
@@ -49,6 +60,9 @@ def ryhmat_kokoukset_uusisarja(ryhma_id: int):
 @app.route("/ryhmat/<ryhma_id>/kokoussarja/", methods=["POST"])
 def ryhmat_luo_kokoussarja(ryhma_id: int):
     """Toistuvien kokousten sarjan lisääminen tietokantaan"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
+
     form = KokousSarjaForm(request.form)
     ryhma = Ryhma.query.get(ryhma_id)
 
@@ -79,11 +93,12 @@ def ryhmat_luo_kokoussarja(ryhma_id: int):
 def ryhmat_poista_kokous(kokous_id: int):
     """Yksittäisen kokouksen poistaminen tietokannasta"""
     kokous = Kokous.query.get(kokous_id)
-    ryhma = kokous.ryhma
+    if not ryhma_autorisaatio(kokous.ryhmaid):
+        return login_manager.unauthorized();
     flash("Kokous {:%d.%m.%y klo %H.%M} poistettiin".format(kokous.alkaa),"danger")
     db.session.delete(kokous)
     db.session.commit()
-    return redirect( url_for("ryhmat_kokoukset", ryhma_id=ryhma.id))
+    return redirect( url_for("ryhmat_kokoukset", ryhma_id=kokous.ryhmaid))
 
 
 @app.route("/ryhmat/kokoukset/<kokous_id>")
@@ -94,6 +109,8 @@ def ryhmat_kokoukset_muokkaa(kokous_id: int):
       jolla merkitään kokouksen läsnäolijat.
     """
     kokous = Kokous.query.get(kokous_id)
+    if not ryhma_autorisaatio(kokous.ryhmaid):
+        return login_manager.unauthorized();
 
     if kokous.alkaa < datetime.today() - timedelta(minutes=15) :
         return redirect( url_for("ryhmat_menneet_muokkaa", kokous_id=kokous_id))
@@ -107,6 +124,8 @@ def ryhmat_kokoukset_muokkaa(kokous_id: int):
 def ryhmat_muokkaa_kokous(kokous_id: int):
     """Kokouksen muutosten tallentaminen tietokantaan"""
     kokous = Kokous.query.get(kokous_id)
+    if not ryhma_autorisaatio(kokous.ryhmaid):
+        return login_manager.unauthorized();
     form = KokousTiedotForm( request.form )
     if not form.validate():
         flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
@@ -119,6 +138,8 @@ def ryhmat_muokkaa_kokous(kokous_id: int):
 @app.route("/ryhmat/<ryhma_id>/menneet")
 def ryhmat_menneet(ryhma_id: int):
     """Näyttää luettelon ryhmän menneistä kokouksista läsnäolomäärien kanssa"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     ryhma = Ryhma.query.get(ryhma_id)
     return render_template("ryhmat/menneet.html", ryhma=ryhma)
 
@@ -126,12 +147,16 @@ def ryhmat_menneet(ryhma_id: int):
 @app.route("/ryhmat/menneet/<kokous_id>")
 def ryhmat_menneet_muokkaa(kokous_id):
     kokous = Kokous.query.get(kokous_id)
+    if not ryhma_autorisaatio(kokous.ryhmaid):
+        return login_manager.unauthorized();
     return render_template("ryhmat/lasnalista.html", kokous=kokous, ryhma=kokous.ryhma)
 
 
 @app.route("/rymat/menneet/<kokous_id>", methods=["POST"])
 def ryhmat_muokkaa_mennyt(kokous_id):
     kokous = Kokous.query.get(kokous_id)
+    if not ryhma_autorisaatio(kokous.ryhmaid):
+        return login_manager.unauthorized();
     kokous.memo = request.form.get("memo")
     kokous.lasna = []
 

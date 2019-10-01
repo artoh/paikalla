@@ -1,9 +1,10 @@
-from application import app, db
+from application import app, db, admin_required
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma
 
 
 @app.route("/ryhmat/")
+@admin_required()
 def ryhmat_index():
     """Ryhmien luettelon näyttäminen"""
     if( "aktiiviset" in request.args.keys()) :
@@ -16,6 +17,7 @@ def ryhmat_index():
 
 
 @app.route("/ryhmat/<ryhma_id>/poista", methods=["POST"])
+@admin_required()
 def ryhmat_poista(ryhma_id: int):
     """Ryhmän poistaminen tietokannasta"""
     ryhma = Ryhma.query.get( ryhma_id )

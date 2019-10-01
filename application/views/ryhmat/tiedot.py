@@ -1,16 +1,19 @@
-from application import app, db
+from application import app, db, admin_required, login_manager
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma
 from application.forms.ryhmat import RyhmaTiedotForm
+from application.views.autorisointi import ryhma_autorisaatio
 
 
 @app.route("/ryhmat/uusi/")
+@admin_required()
 def ryhmat_uusi():
     """Uuden ryhmän luontilomakkeen näyttäminen"""
     return render_template("ryhmat/uusi.html", form = RyhmaTiedotForm())
 
 
 @app.route("/ryhmat/", methods=["POST"])
+@admin_required()
 def ryhmat_luo():
     """Uuden ryhmän tallentaminen tietokantaan"""
     form = RyhmaTiedotForm( request.form)
@@ -31,6 +34,8 @@ def ryhmat_luo():
 @app.route("/ryhmat/<ryhma_id>/tiedot/")
 def ryhmat_tiedot(ryhma_id: int):
     """Ryhmän tietojen näyttäminen"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     ryhma = Ryhma.query.get(ryhma_id)
     form = RyhmaTiedotForm()
     form.lataa(ryhma)
@@ -41,6 +46,8 @@ def ryhmat_tiedot(ryhma_id: int):
 @app.route("/ryhmat/<ryhma_id>/tiedot/", methods=["POST"])
 def ryhmat_paivita(ryhma_id: int) :
     """Ryhmän tietojen päivittäminen tietokantaan"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     form = RyhmaTiedotForm( request.form )
     ryhma = Ryhma.query.get(ryhma_id)
 

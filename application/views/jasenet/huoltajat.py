@@ -1,4 +1,4 @@
-from application import app, db
+from application import app, db, admin_required
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Henkilo
 from application.forms.jasenet import HenkiloTiedotAdminilleForm
@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/jasenet/<henkilo_id>/huoltajat")
+@admin_required()
 def jasenet_huoltajat(henkilo_id: int):
     """Jäsentietojen hallinnassa alaikäisen jäsenen tietojen väliehti huoltajien tiedoille"""
     henkilo = Henkilo.query.get(henkilo_id)
@@ -22,6 +23,7 @@ def jasenet_huoltajat(henkilo_id: int):
 
 
 @app.route("/jasenet/<henkilo_id>/linkitahuoltaja", methods=["POST"])
+@admin_required()
 def jasenet_linkita_huoltaja(henkilo_id: int):
     """Linkittää olemassa olevan henkilön muokattavana olevan henkilön huoltajaksi"""
     henkilo = Henkilo.query.get(henkilo_id)
@@ -32,6 +34,7 @@ def jasenet_linkita_huoltaja(henkilo_id: int):
 
 
 @app.route("/jasenet/<huollettava_id>/uusihuoltaja")
+@admin_required()
 def jasenet_uusi_huoltaja(huollettava_id: int):
     """Uuden henkilön luominen muokattavana olevan henkilön huoltajaksi: lomakkeen näyttäminen"""
     huollettava = Henkilo.query.get(huollettava_id)
@@ -42,6 +45,7 @@ def jasenet_uusi_huoltaja(huollettava_id: int):
 
 
 @app.route("/jasenet/<huollettava_id>/huoltajat", methods=["POST"])
+@admin_required()
 def jasenet_luo_huoltaja(huollettava_id :int):
     """Uuden henkilön luominen muokattavana olevan henkilön huoltajaksi: tietojen tallentaminen"""
     form = HenkiloTiedotAdminilleForm( request.form )
@@ -67,6 +71,7 @@ def jasenet_luo_huoltaja(huollettava_id :int):
 
 
 @app.route("/jasenet/poistahuoltajuus", methods=["POST"])
+@admin_required()
 def jasenet_poista_huoltajuus():
     """Huoltajuuden poistaminen
 

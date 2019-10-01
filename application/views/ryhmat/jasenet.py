@@ -1,12 +1,16 @@
-from application import app, db
+from application import app, db, login_manager
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma, Ryhmassa, Henkilo
 from datetime import datetime
+from application.views.autorisointi import ryhma_autorisaatio
 
 
 @app.route("/ryhmat/<ryhma_id>/ryhmassa")
 def ryhmat_jasenet(ryhma_id: int):
     """Ryhmän jäsenluettelon näyttäminen"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
+
     ryhma = Ryhma.query.get(ryhma_id)
     jasenet = ryhma.jasenet()
 
@@ -30,7 +34,9 @@ def ryhmat_jasenet(ryhma_id: int):
 
 @app.route("/ryhmat/<ryhma_id>/linkitaohjaaja", methods=["POST"])
 def ryhmat_linkita_ohjaaja(ryhma_id: int):
-    """Lisää ryhmään ohjaajam"""
+    """Lisää ryhmään ohjaaja"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     ryhmassa = Ryhmassa(ryhmaId=ryhma_id, jasenId=request.form.get("linkita"), ohjaaja=True)
     ryhmassa.alkaen = datetime.today()
     db.session.add(ryhmassa)
@@ -41,6 +47,8 @@ def ryhmat_linkita_ohjaaja(ryhma_id: int):
 @app.route("/ryhmat/<ryhma_id>/linkitajasen", methods=["POST"])
 def ryhmat_linkita_jasen(ryhma_id: int):
     """Lisää ryhmään jäsenen"""
+    if not ryhma_autorisaatio(ryhma_id):
+        return login_manager.unauthorized();
     ryhmassa = Ryhmassa(ryhmaId=ryhma_id, jasenId=request.form.get("linkita"), ohjaaja=False)
     ryhmassa.alkaen = datetime.today()
     db.session.add(ryhmassa)
@@ -54,6 +62,8 @@ def ryhmat_erota_jasen(ryhmassa_id: int):
        Jotta tilastoinnit yms. onnistuvat, ei jäsenyyttä tuhota, vaan siihen
        merkitään loppumspäivä,"""
     ryhmassa=Ryhmassa.query.get(ryhmassa_id)
+    if not ryhma_autorisaatio(ryhmassa.ryhmaid):
+        return login_manager.unauthorized();
     ryhmassa.paattyen=datetime.today()
     db.session.commit()
     return redirect(url_for("ryhmat_jasenet", ryhma_id=ryhmassa.ryhmaid))
@@ -64,5 +74,6 @@ def ryhmat_jasen_tiedot(ryhmassa_id: int):
     """Näyttää yksittäisen jäsenen tiedot.
        Alaikäiselle näytetään myös huoltajien yhteystiedot."""
     ryhmassa = Ryhmassa.query.get(ryhmassa_id)
-
+    if not ryhma_autorisaatio(ryhmassa.ryhmaid):
+        return login_manager.unauthorized();
     return render_template("ryhmat/jasentiedot.html",jasenyys=ryhmassa, ryhma=ryhmassa.ryhma)
