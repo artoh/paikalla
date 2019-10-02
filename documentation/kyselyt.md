@@ -38,11 +38,9 @@ Sisään kirjauduttaessa haetaan henkilön tiedot. Näihin liittyviä huoltajuus
 
 ```sql
 # Henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi,
-    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
-    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
-    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
-    henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id, henkilo.etunimi, henkilo.sukunimi, henkilo.puhelin,
+	henkilo.email, henkilo.salasana, henkilo.syntymaaika, henkilo.toimihenkilo,
+  henkilo.varotieto, henkilo.jasenyysalkoi, henkilo.jasenyyspaattyi
 FROM henkilo
 WHERE henkilo.email = ?
 
@@ -378,7 +376,8 @@ GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus
 ##### Läsnäololistan hakeminen
 
 ```sql
-select etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto, ryhmassa.ohjaaja from ryhmassa
+select etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto,
+	ryhmassa.ohjaaja from ryhmassa
 join henkilo on ryhmassa.henkiloid=henkilo.id
 left outer join lasnaolo on ryhmassa.id=lasnaolo.ryhmassa and lasnaolo.kokous=?
 where ryhmassa.ryhmaid=? order by sukunimi,etunimi

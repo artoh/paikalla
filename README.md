@@ -24,6 +24,5 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - Jatkokehitysideat
 
 ### Vielä tekemättä
-- [ ] Kyselyiden optimointi
 - [ ] Testaamista
 - [ ] Dokumentaatiota
