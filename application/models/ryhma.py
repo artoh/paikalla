@@ -42,10 +42,10 @@ class Ryhma(db.Model):
     def menneetKokoukset(self) -> list:
         """Luettelo ryhmän menneistä kokoontumisista ja läsnäolleiden määrästä"""
         aika = datetime.now() - timedelta( minutes=30)
-        stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, l.lkm FROM kokous"
-                    " LEFT OUTER JOIN "
-                    "( SELECT kokous, count(kokous) as lkm FROM lasnaolo GROUP BY kokous) AS l "
-                    "ON l.kokous=kokous.id WHERE ryhmaid=:ryhmaid AND kokous.alkaa < :aika "
+        stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, count(lasnaolo.ryhmassa) FROM kokous"
+                    "LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous " 
+                    "WHERE ryhmaid=:ryhmaid AND kokous.alkaa < :aika "
+                    "GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus "
                     ).params(ryhmaid=self.id, aika=aika )
                     # Ajan vertailu tehdään datetime-funktioilla eikä SQL:n aikafunktioilla, jotta
                     # palvelimen aikavyöhyke ei vaikuttaisi vertailuun.

@@ -26,7 +26,7 @@ class HenkiloTiedotFormBase(FlaskForm) :
     etunimi = StringField("Etunimi", validators=[ validators.DataRequired(), validators.Length(min=1,max=128)])
     sukunimi = StringField("Sukunimi", validators=[validators.DataRequired(), validators.Length(min=1,max=128)])
     syntymaaika = DateField("Syntymäaika", validators=[validators.InputRequired(), IkaValidator()], format='%Y-%m-%d')
-    puhelin = StringField("Puhelinnumero", validators.Length(min=0,max=32))
+    puhelin = StringField("Puhelinnumero", [validators.Length(min=0,max=32)] )
     email = EmailField("Sähköposti", validators=[validators.Email( message="Sähköpostiosoite ei ole kelvollinen"),
                                                  validators.Optional(), validators.length(max=64)])
     varotieto = TextAreaField("Huomioon otettavaa (esim. allergiat)")
