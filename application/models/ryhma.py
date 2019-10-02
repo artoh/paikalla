@@ -42,7 +42,7 @@ class Ryhma(db.Model):
     def menneetKokoukset(self) -> list:
         """Luettelo ryhmän menneistä kokoontumisista ja läsnäolleiden määrästä"""
         aika = datetime.now() - timedelta( minutes=30)
-        stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, count(lasnaolo.ryhmassa) FROM kokous"
+        stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, count(lasnaolo.ryhmassa) FROM kokous "
                     "LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous " 
                     "WHERE ryhmaid=:ryhmaid AND kokous.alkaa < :aika "
                     "GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus "

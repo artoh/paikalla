@@ -24,18 +24,14 @@ class Kokous(db.Model) :
         self.ryhmaid = ryhmaId
 
 
-    def paikallalista(self, ohjaaja : bool) -> list:
-        """Lista ryhmän jäsenistä paikallaololistaa varten, sekä tieto paikalla olemisesta
+    def paikallalista(self) -> list:
+        """Lista ryhmän jäsenistä paikallaololistaa varten, sekä tieto paikalla olemisesta"""
 
-        :param ohjaaja : Tulostetaanko lista ryhmän ohjaajista vai jäsenistä"""
-        if ohjaaja:
-            ohjaajanot = ""
-        else:
-            ohjaajanot = " not "
-
-        stmt = text("select etunimi, sukunimi, ryhmassa.id, lasna.ryhmassa, henkilo.varotieto from ryhmassa join henkilo on ryhmassa.henkiloid=henkilo.id "
-                    "left outer join (select ryhmassa from lasnaolo where kokous=:kokousid) as lasna on lasna.ryhmassa=ryhmassa.id "
-                    "where ryhmassa.ryhmaid=:ryhmaid and {} ohjaaja order by sukunimi,etunimi".format(ohjaajanot)).params(kokousid=self.id, ryhmaid=self.ryhmaid, ohjaaja=ohjaaja)
+        stmt = text(" select etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto, ryhmassa.ohjaaja from ryhmassa "
+                    "join henkilo on ryhmassa.henkiloid=henkilo.id "
+                    "left outer join lasnaolo on ryhmassa.id=lasnaolo.ryhmassa and lasnaolo.kokous=:kokousid "
+                    "where ryhmassa.ryhmaid=:ryhmaid order by sukunimi,etunimi "
+                    ).params(kokousid=self.id, ryhmaid=self.ryhmaid)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -43,5 +39,6 @@ class Kokous(db.Model) :
                           "sukunimi":rivi[1],
                           "ryhmassa":rivi[2],
                           "lasna":rivi[3],
-                          "varotieto":rivi[4]})
+                          "varotieto":rivi[4],
+                          "ohjaaja": rivi[5]})
         return lista

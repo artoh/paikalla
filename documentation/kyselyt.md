@@ -106,31 +106,24 @@ INSERT INTO huoltajuus (huoltaja, huollettava) VALUES (?, ?)
 
 ```sql
 # Omat henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi,
-    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
-    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
-    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
-    henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT id, etunimi, sukunimi,puhelin, email, salasana,syntymaaika, toimihenkilo,
+    varotieto, jasenyysalkoi, jasenyyspaattyi
 FROM henkilo
 WHERE henkilo.id = ?
 
 # Huollettavien henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi,
-    henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
-    henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
-    henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
-    henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id, henkilo.etunimi, henkilo.sukunimi, henkilo.puhelin,
+		henkilo.email, henkilo.salasana, henkilo.syntymaaika, henkilo.toimihenkilo,
+    henkilo.varotieto, henkilo.jasenyysalkoi, henkilo.jasenyyspaattyi
 FROM henkilo, huoltajuus
 WHERE ? = huoltajuus.huoltaja AND henkilo.id = huoltajuus.huollettava
 
 #Huoltajan henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi,
-henkilo.sukunimi AS henkilo_sukunimi, henkilo.puhelin AS henkilo_puhelin,
-henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
-henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
-henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
-henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id, henkilo.etunimi, henkilo.sukunimi, henkilo.puhelin,
+henkilo.email, henkilo.salasana, henkilo.syntymaaika, henkilo.toimihenkilo,
+henkilo.varotieto, henkilo.jasenyysalkoi, henkilo.jasenyyspaattyi
 FROM henkilo, huoltajuus
+WHERE ? = huoltajuus.huollettava AND henkilo.id=huoltajuus.huoltaja
 ```
 
 ### Henkilötietojen muokkaaminen
@@ -184,7 +177,7 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
  SELECT ryhma.id, ryhma.nimi, ryhmassa.ohjaaja,kokous.alkaa, kokous.sijainti,
  	kokous.kuvaus, kokous.paattyy
  FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id
- LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND  Kokous.alkaa =
+ LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND Kokous.alkaa =
  (SELECT MIN(kokous.alkaa) FROM kokous WHERE kokous.alkaa > ? AND kokous.ryhmaid = ryhma.id)
  WHERE ryhmassa.henkiloid=? AND NOT ryhma.paattynyt AND ryhmassa.paattyen IS NULL ORDER BY nimi
  ```
@@ -203,17 +196,18 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 ##### Mahdollisten ryhmien selaaminen
 
 ```sql
-select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  from ryhma
-left outer join
-(select ryhmaid, count(id) as lkm from ryhmassa
-where not ohjaaja and  paattyen is null group by ryhmaid)
-as a on ryhma.id=a.ryhmaid
-where ilmoittautuminenalkaa <= ? and ilmoittautuminenpaattyy >= ?
-and ikavahintaan <= ? and ikaenintaan >= ? and ryhma.id not in
-(select ryhmaid from ryhmassa where henkiloid=?)
-and not ryhma.paattynyt order by nimi
+select ryhma.id,nimi,paikkoja,kuvaus, count(ryhmassa.henkiloid), ikavahintaan, ikaenintaan  from ryhma
+left outer join ryhmassa on ryhmassa.ryhmaid = ryhma.id
+where ryhma.ilmoittautuminenalkaa <= :pvm and ryhma.ilmoittautuminenpaattyy >= :pvm
+and not ryhma.paattynyt
+group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan
+having not ryhmassa.ohjaaja and ryhmassa.paattyen is null
+and ikavahintaan <= :ika and ikaenintaan >= :ika
+and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)
+order by nimi
 ```
 
+Kyselyissä nykyinen päivämäärä sijoitetaan Pythonissa :pvm-kenttään sen sijaan että käytettäisiin SQL:n *CURRENT_DATE*:a jotta palvelimen PostgreSQL:n aikavyöhyke ei vaikuttaisi hakuihin.
 
 ##### Ryhmän tietojen näyttäminen
 
@@ -374,27 +368,20 @@ DELETE FROM kokous WHERE kokous.id = ?
 ##### Menneiden kokousten luettelon näyttäminen
 
 ```sql
-SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, l.lkm FROM kokous
-LEFT OUTER JOIN ( SELECT kokous, count(kokous) as lkm FROM lasnaolo GROUP BY kokous) AS l
-ON l.kokous=kokous.id WHERE ryhmaid=? AND kokous.alkaa < ?
+SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, count(lasnaolo.ryhmassa) FROM kokous
+LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous
+WHERE ryhmaid=? AND kokous.alkaa < ?
+GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus
 
 ```
 
 ##### Läsnäololistan hakeminen
 
 ```sql
-# Ohjaajat
- select etunimi, sukunimi, ryhmassa.id, lasna.ryhmassa, henkilo.varotieto from ryhmassa
- join henkilo on ryhmassa.henkiloid=henkilo.id
- left outer join (select ryhmassa from lasnaolo where kokous=?) as lasna
- on lasna.ryhmassa=ryhmassa.id where ryhmassa.ryhmaid=? and  ohjaaja order by sukunimi,etunimi
-
-# Jäsenet
-select etunimi, sukunimi, ryhmassa.id, lasna.ryhmassa, henkilo.varotieto from ryhmassa
+select etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto, ryhmassa.ohjaaja from ryhmassa
 join henkilo on ryhmassa.henkiloid=henkilo.id
-left outer join (select ryhmassa from lasnaolo where kokous=?) as lasna on lasna.ryhmassa=ryhmassa.id
-where ryhmassa.ryhmaid=? and  not  ohjaaja order by sukunimi,etunimi
-
+left outer join lasnaolo on ryhmassa.id=lasnaolo.ryhmassa and lasnaolo.kokous=?
+where ryhmassa.ryhmaid=? order by sukunimi,etunimi
 ```
 
 ##### Läsnäolleiden merkitseminen
