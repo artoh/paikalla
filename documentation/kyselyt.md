@@ -124,7 +124,12 @@ FROM henkilo, huoltajuus
 WHERE ? = huoltajuus.huoltaja AND henkilo.id = huoltajuus.huollettava
 
 #Huoltajan henkilötiedot
-SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi, henkilo.sukunimi AS henkilo_sukunimi, henkilo.puhelin AS henkilo_puhelin, henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana, henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo, henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi, henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
+SELECT henkilo.id AS henkilo_id, henkilo.etunimi AS henkilo_etunimi,
+henkilo.sukunimi AS henkilo_sukunimi, henkilo.puhelin AS henkilo_puhelin,
+henkilo.email AS henkilo_email, henkilo.salasana AS henkilo_salasana,
+henkilo.syntymaaika AS henkilo_syntymaaika, henkilo.toimihenkilo AS henkilo_toimihenkilo,
+henkilo.varotieto AS henkilo_varotieto, henkilo.jasenyysalkoi AS henkilo_jasenyysalkoi,
+henkilo.jasenyyspaattyi AS henkilo_jasenyyspaattyi
 FROM henkilo, huoltajuus
 ```
 
@@ -141,7 +146,8 @@ FROM henkilo, huoltajuus
 #### Kysely
 
 ```sql
-UPDATE henkilo SET etunimi=?, sukunimi=?, puhelin=?, syntymaaika=?, email=?, varotieto=? WHERE henkilo.id = ?
+UPDATE henkilo SET etunimi=?, sukunimi=?, puhelin=?, syntymaaika=?,
+email=?, varotieto=? WHERE henkilo.id = ?
 
 
 ```
@@ -175,8 +181,10 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 #### Kysely
 
  ```sql
- SELECT ryhma.id, ryhma.nimi, ryhmassa.ohjaaja,kokous.alkaa, kokous.sijainti, kokous.kuvaus, kokous.paattyy
- FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND  Kokous.alkaa =
+ SELECT ryhma.id, ryhma.nimi, ryhmassa.ohjaaja,kokous.alkaa, kokous.sijainti,
+ 	kokous.kuvaus, kokous.paattyy
+ FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id
+ LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND  Kokous.alkaa =
  (SELECT MIN(kokous.alkaa) FROM kokous WHERE kokous.alkaa > ? AND kokous.ryhmaid = ryhma.id)
  WHERE ryhmassa.henkiloid=? AND NOT ryhma.paattynyt AND ryhmassa.paattyen IS NULL ORDER BY nimi
  ```
@@ -197,8 +205,11 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 ```sql
 select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  from ryhma
 left outer join
-(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid)
-as a on ryhma.id=a.ryhmaid where ilmoittautuminenalkaa <= ? and ilmoittautuminenpaattyy >= ? and ikavahintaan <= ? and ikaenintaan >= ? and ryhma.id not in
+(select ryhmaid, count(id) as lkm from ryhmassa
+where not ohjaaja and  paattyen is null group by ryhmaid)
+as a on ryhma.id=a.ryhmaid
+where ilmoittautuminenalkaa <= ? and ilmoittautuminenpaattyy >= ?
+and ikavahintaan <= ? and ikaenintaan >= ? and ryhma.id not in
 (select ryhmaid from ryhmassa where henkiloid=?)
 and not ryhma.paattynyt order by nimi
 ```
@@ -208,15 +219,22 @@ and not ryhma.paattynyt order by nimi
 
 ```sql
 # Ryhmän tiedot
-SELECT ryhma.id AS ryhma_id, ryhma.nimi AS ryhma_nimi, ryhma.paikkoja AS ryhma_paikkoja, ryhma.ilmoittautuminenalkaa AS ryhma_ilmoittautuminenalkaa, ryhma.ilmoittautuminenpaattyy AS ryhma_ilmoittautuminenpaattyy, ryhma.ikavahintaan AS ryhma_ikavahintaan, ryhma.ikaenintaan AS ryhma_ikaenintaan, ryhma.kuvaus AS ryhma_kuvaus, ryhma.paattynyt AS ryhma_paattynyt
+SELECT ryhma.id AS ryhma_id, ryhma.nimi AS ryhma_nimi, ryhma.paikkoja AS ryhma_paikkoja,
+ryhma.ilmoittautuminenalkaa AS ryhma_ilmoittautuminenalkaa,
+ryhma.ilmoittautuminenpaattyy AS ryhma_ilmoittautuminenpaattyy,
+ryhma.ikavahintaan AS ryhma_ikavahintaan, ryhma.ikaenintaan AS ryhma_ikaenintaan,
+ryhma.kuvaus AS ryhma_kuvaus, ryhma.paattynyt AS ryhma_paattynyt
 FROM ryhma
 WHERE ryhma.id = ?
 
 # Ohjaajat
-SELECT etunimi, sukunimi, puhelin, email FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloid=henkilo.id WHERE ryhmaid=? AND ohjaaja
+SELECT etunimi, sukunimi, puhelin, email
+FROM ryhmassa JOIN henkilo
+ON ryhmassa.henkiloid=henkilo.id WHERE ryhmaid=? AND ohjaaja
 
 # Kokoontumiset
-SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus FROM kokous WHERE ryhmaid=? AND kokous.paattyy > ?
+SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus
+FROM kokous WHERE ryhmaid=? AND kokous.paattyy > ?
 
 ```
 
@@ -252,8 +270,8 @@ Jäsenyystietoa ei siis poisteta, vaan ryhmän jäsenyys merkitään päättymä
 ##### Kysely
 
 ```sql
-SELECT henkilo.etunimi, ryhma.nimi, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus,
-kokous.id, ryhmassa.ohjaaja, Henkilo.id
+SELECT henkilo.etunimi, ryhma.nimi, kokous.alkaa, kokous.paattyy,
+kokous.sijainti, kokous.kuvaus, kokous.id, ryhmassa.ohjaaja, Henkilo.id
 FROM henkilo
 JOIN ryhmassa ON henkilo.id=ryhmassa.henkiloid
 JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id
@@ -274,7 +292,8 @@ AND kokous.paattyy >= ? ORDER BY kokous.alkaa
 #### Kysely
 
 ```sql
-INSERT INTO ryhma (nimi, paikkoja, ilmoittautuminenalkaa, ilmoittautuminenpaattyy, ikavahintaan, ikaenintaan, kuvaus, paattynyt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO ryhma (nimi, paikkoja, ilmoittautuminenalkaa, ilmoittautuminenpaattyy,
+	ikavahintaan, ikaenintaan, kuvaus, paattynyt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ```
 
 ### Ryhmän poistaminen
@@ -297,7 +316,8 @@ DELETE FROM ryhma WHERE ryhma.id = ?
 #### Kysely
 
 ```sql
-UPDATE ryhma SET nimi=?, paikkoja=?, ilmoittautuminenalkaa=?, ilmoittautuminenpaattyy=?, ikavahintaan=?, ikaenintaan=?, kuvaus=?, paattynyt=? WHERE ryhma.id = ?
+UPDATE ryhma SET nimi=?, paikkoja=?, ilmoittautuminenalkaa=?, ilmoittautuminenpaattyy=?,
+ikavahintaan=?, ikaenintaan=?, kuvaus=?, paattynyt=? WHERE ryhma.id = ?
 ```
 
 
@@ -312,7 +332,8 @@ UPDATE ryhma SET nimi=?, paikkoja=?, ilmoittautuminenalkaa=?, ilmoittautuminenpa
 #### Kysely
 
 ```sql
-INSERT INTO kokous (ryhmaid, alkaa, paattyy, sijainti, kuvaus, memo) VALUES (?, ?, ?, ?, ?, ?)
+INSERT INTO kokous (ryhmaid, alkaa, paattyy, sijainti, kuvaus, memo)
+VALUES (?, ?, ?, ?, ?, ?)
 ```
 
 
@@ -365,7 +386,8 @@ ON l.kokous=kokous.id WHERE ryhmaid=? AND kokous.alkaa < ?
 # Ohjaajat
  select etunimi, sukunimi, ryhmassa.id, lasna.ryhmassa, henkilo.varotieto from ryhmassa
  join henkilo on ryhmassa.henkiloid=henkilo.id
- left outer join (select ryhmassa from lasnaolo where kokous=?) as lasna on lasna.ryhmassa=ryhmassa.id where ryhmassa.ryhmaid=? and  ohjaaja order by sukunimi,etunimi
+ left outer join (select ryhmassa from lasnaolo where kokous=?) as lasna
+ on lasna.ryhmassa=ryhmassa.id where ryhmassa.ryhmaid=? and  ohjaaja order by sukunimi,etunimi
 
 # Jäsenet
 select etunimi, sukunimi, ryhmassa.id, lasna.ryhmassa, henkilo.varotieto from ryhmassa
@@ -393,25 +415,7 @@ Tilaston yhteydessä näytetään ryhmän läsnäolotiedot.
 - [x] Ryhmänohjaaja näkee oman ryhmänsä läsnäolotilastot
 - [x] Toimihenkilö näkee yksittäisen ryhmän tilaston
 
-#### Kysely
-
-```sql
-select ryhma.nimi, kokous.ryhmaid, count(distinct kokous.id), count(lasnaolo.kokous)
- from kokous
- left outer join lasnaolo on lasnaolo.kokous=kokous.id
- join ryhma on kokous.ryhmaid=ryhma.id
- where kokous.alkaa between :alkaa and :loppuu
- group by kokous.ryhmaid
- order by nimi
-```
-
-### Koko yhdistyksen tilasto
-
-#### Roolit
-
-- [x] Toimihenkilö näkee koko yhdistyksen tilastot
-
-#### Kysely
+#### Kyselyt
 
 ##### Ryhmän yhteenvetotilasto
 ```sql
@@ -430,4 +434,22 @@ join kokous on lasnaolo.kokous=kokous.id
 where kokous.ryhmaid=:ryhmaid and
 kokous.alkaa between :alkaa and :loppuu group by henkilo.id
 order by lasna desc
+```
+
+### Koko yhdistyksen tilasto
+
+#### Roolit
+
+- [x] Toimihenkilö näkee koko yhdistyksen tilastot
+
+#### Kysely
+
+```sql
+select ryhma.nimi, kokous.ryhmaid, count(distinct kokous.id), count(lasnaolo.kokous)
+ from kokous
+ left outer join lasnaolo on lasnaolo.kokous=kokous.id
+ join ryhma on kokous.ryhmaid=ryhma.id
+ where kokous.alkaa between :alkaa and :loppuu
+ group by kokous.ryhmaid
+ order by nimi
 ```

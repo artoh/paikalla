@@ -21,7 +21,7 @@ class RyhmaTiedotForm(FlaskForm) :
         if self.ikaenintaan.data < self.ikavahintaan.data:
             raise ValidationError("Ikä vähintään ei voi olla enempää kuin ikä enintään.")
 
-    nimi = StringField("Ryhmän nimi", validators=[validators.Length(min=3, message="Nimi vähintään kolme merkkiä pitkä")])
+    nimi = StringField("Ryhmän nimi", validators=[validators.Length(min=3, max=128, message="Ryhmän nimi 3-128 merkkiä pitkä")])
     paikkoja = IntegerField("Paikkoja", validators=[validators.NumberRange(min=0, max=100, message="Ryhmässä voi olla 0 - 100 paikkaa")], default=0)
     ilmoittautuminenAlkaa = NullableDateField("Ilmoittautuminen alkaa")
     ilmoittautuminenPaattyy = NullableDateField("Ilmoittautuminen päättyy", [ilmo_validointi])
