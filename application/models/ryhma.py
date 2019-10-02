@@ -174,7 +174,7 @@ class Ryhma(db.Model):
                     "join henkilo on ryhmassa.henkiloid=henkilo.id "
                     " join kokous on lasnaolo.kokous=kokous.id "
                     "where kokous.ryhmaid=:ryhmaid and "
-                    "kokous.alkaa between :alkaa and :loppuu group by henkilo.id order by lasna desc"
+                    "kokous.alkaa between :alkaa and :loppuu group by henkilo.id, ryhmassa.ohjaaja order by lasna desc"
                     ).params(alkaa=mista, loppuu=mihin, ryhmaid=self.id )
         res = db.engine.execute(stmt)
         lasnaolot = []
