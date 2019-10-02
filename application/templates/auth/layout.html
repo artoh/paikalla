@@ -1,10 +1,16 @@
 {% extends "baselayout.html" %}
 
 {% block nav %}
-<div class="navbar-expand navbar-dark bg-success">
+<div class="navbar navbar-dark bg-success">
   <a class="navbar-brand" href="#">
     <a class="navbar-brand text-white" href="/"><i class="far fa-hand-paper"></i>
     Paikalla
   </a>
+    <ul class="navbar-nav mr-auto"></ul>
+  <span class="navbar-text nav-item" id="ohjelinkki">
+      <a href="https://github.com/artoh/paikalla/blob/master/documentation/kayttoohje.md" class="nav-link" target="_blank">
+        <i class="far fa-life-ring"></i> Ohjeet
+      </a>
+  </span>
 </div>
 {% endblock %}

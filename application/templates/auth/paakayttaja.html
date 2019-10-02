@@ -5,6 +5,21 @@
 <h2>Tervetuloa!</h2>
 
 <p>Paikalla-sovelluksen avulla voi hallita yhdistyksesi ilmoittautumisia sekä ryhmien osallistumistilastoja.</p>
+
+<div class="card">
+    <div class="card-body">
+        {% if production %}
+            <h5 class="card-title">Tuontantoympäristö</h5>
+            <p>Tietosi tallennetaan <b>PostgreSQL-tietokantaan</b> osoitteessa <b>{{database}}</b>.</p>
+        {% else %}
+            <h5 class="card-title">Testiympäristö</h5>
+            <p>Tietosi tallennetaan <b>SQLite-tietokannan</b> tiedostoon <b>paikalla.db</b>.</p>
+        {% endif %}
+        <a target="_blank" href="https://github.com/artoh/paikalla/blob/master/documentation/asennus.md">Lue asennusohje</a>
+    </div>
+</div>
+
+
 <p>Aloita luomalla jäsenrekisterin hoitajan käyttäjätunnus.</p>
 
 {% import "bootstrap/wtf.html" as wtf %}

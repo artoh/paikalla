@@ -55,12 +55,19 @@
               </li>
             {% endif %}
           </ul>
-          <a href="{{url_for("auth_logout")}}" class="btn btn-light" role="button"><i class="fas fa-sign-out-alt"></i> Kirjaudu ulos</a>
+          <span class="navbar-text nav-item" id="ohjelinkki">
+              <a href="https://github.com/artoh/paikalla/blob/master/documentation/kayttoohje.md" class="nav-link" target="_blank">
+                <i class="far fa-life-ring"></i> Ohjeet
+              </a>
+          </span>
         </div>
       </nav>
     </div>
-<div class="container text-success">
-  {{current_user.etunimi}} {{current_user.sukunimi}}
+<div class="container kayttaja">
+  <span class="text-success">{{current_user.etunimi}} {{current_user.sukunimi}}</span>
+    <a href="{{url_for('auth_logout')}}" class="btn btn-outline-success" role="button"><i class="fas fa-sign-out-alt"></i> Kirjaudu ulos</a>
+  </div>
 </div>
+
 
 {% endblock %}

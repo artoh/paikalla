@@ -3,6 +3,7 @@ from flask import render_template, request, url_for, redirect, flash
 from application.forms.auth import LuoKayttajaForm
 from flask_login import login_user
 from application.models.henkilo import Henkilo
+import os
 
 
 @app.route("/aloita")
@@ -12,7 +13,8 @@ def auth_paakayttaja():
         return redirect(  url_for("auth_login"))
 
     form = LuoKayttajaForm()
-    return  render_template("auth/paakayttaja.html", form = form)
+    return  render_template("auth/paakayttaja.html", form = form, production=os.environ.get("PRODUCTION"),
+                            database=os.environ.get("DATABASE_URL"))
 
 
 @app.route("/aloita", methods=["POST"])
@@ -24,6 +26,7 @@ def auth_luo_paakayttaja():
     form = LuoKayttajaForm(request.form)
 
     if not form.validate():
+        flash("Ole hyvä ja tarkista syöttämäsi tiedot", "danger")
         return render_template("auth/paakayttaja.html", form=form)
 
     henkilo = form.henkilo()
