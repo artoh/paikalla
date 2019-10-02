@@ -146,7 +146,7 @@ class Ryhma(db.Model):
                     "left outer join lasnaolo on lasnaolo.kokous=kokous.id "
                     "join ryhma on kokous.ryhmaid=ryhma.id "
                     "where kokous.alkaa between :alkaa and :loppuu "
-                    "group by kokous.ryhmaid "
+                    "group by kokous.ryhmaid, ryhma.nimi "
                     "order by nimi").params(alkaa = mista, loppuu=mihin)
         res = db.engine.execute(stmt)
         lista = []
