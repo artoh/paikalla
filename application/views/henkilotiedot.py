@@ -101,10 +101,8 @@ def henkilotiedot_vaihda_salasana():
         return redirect(url_for("henkilotiedot_index"))
 
     henkiloid = int(request.form.get("henkiloid"))
-    print(" -  henkilöid {}  nykyinen {}".format(henkiloid, current_user.id))
     if henkiloid == current_user.id:
         henkilo = Henkilo.query.get(current_user.id)  # Oman salasanan saa vaihtaa
-        print(" --- haettu {}".format(henkilo.id))
     else:
         # Tarkistetaan, että ollaan vaihtamassa huollettavan salasanaa
         henkilo = kayttaja_autorisointi(henkiloid)
