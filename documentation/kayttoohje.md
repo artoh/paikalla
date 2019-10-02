@@ -165,7 +165,9 @@ Jäsenen nimeä painamalla näet jäsenen tiedot sekä huoltajan yhteystiedot.
 
 ### Ryhmän tilasto
 
-(Toimintoa ei vielä toteutettu)
+![Ryhmän tilasto](pic/ryhmatilasto.png)
+
+Ryhmän tilastonäkymässä saat haettua haluamallasi aikavälillä yhteenvetotiedot ryhmän toiminnasta sekä ryhmän läsnäolotilaston. Tilastossa näkyvät vain ne ryhmän jäsenet, jotka ovat osallistuneet vähintään yhteen kokoontumiseen valitulla aikavälillä.
 
 ## Ohje jäsenrekisterin hoitajalle
 
@@ -196,4 +198,10 @@ Jos poistat ryhmät, poistuvat myös kaikki siihen liittyvät tilastomerkinnät.
 
 ### Tilastot
 
-(Toimintoa ei vielä toteutettu)
+![Yhdistyksen tilasto](pic/tilasto.png)
+
+Tilastojen yhteenvetosivulla näet haluamallasi aikavälillä yhteenvedon ryhmien kokoontumistilastoista. Luettelossa näkyvät vain ne ryhmät, joilla on ollut kokoontumisia valitulla aikavälillä.
+
+Ryhmän nimi toimii linkkinä ryhmäkohtaiseen tilastoon.
+
+Jos ryhmän menneen kokoontumisen läsnäolijoita ei ole merkitty, näkyy se kokouksena, jossa ei ole yhtään osallistujaa, ja laskee yhdistyksen tilastolukemia. Huolehdi siitä, että ryhmien ohjaajat merkitsevät joka kokouksessa läsnäolijat.

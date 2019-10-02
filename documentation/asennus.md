@@ -55,3 +55,5 @@ Jatka edellä olevista paikalliseen käyttöön asentamisen ohjeista:
 ```
 
 8. Ensimmäisellä käynnistyskerralla sovellus opastaa sinua luomaan jäsenrekisterin hoitajan käyttäjätunnuksen.
+
+  Varmista, että tervetuloruutu ilmoittaa **tuotantoympäristön** olevan käytössä. Muussa tapauksessa kohdassa 6 neuvotut asetukset eivät ole onnistuneet, ja tietokanta tyhjentyy joka kerta sovelluksen käynnistyessä uudelleen.

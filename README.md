@@ -24,14 +24,6 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - Jatkokehitysideat
 
 ### Vielä tekemättä
-- Tilastotoiminnot
-  - [x] Ryhmien tilastosivu
-  - [x] Yhdistyksen tilastosivu
-  - [ ] Tilastotoimintojen käyttöohje
-- Autorisointeja
-  - [x] Jäsenhallinnan autorisaatio
-  - [x] Ryhmähallinnan autorisaatio
-  - [x] Tilastojen autorisaatio
 - [ ] Kyselyiden optimointi
 - [ ] Testaamista
 - [ ] Dokumentaatiota
