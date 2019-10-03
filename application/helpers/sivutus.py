@@ -45,19 +45,19 @@ class Sivutus(object):
             return ""
 
         str = "<nav><ul class='pagination'><li class='page-item"
-        if self.sivulla == 1:
-            str+="disabled"
+        if self.sivu == 1:
+            str+=" disabled"
         str += "'><a class='page-link' href='?sivu=1' tabindex='-1' aria-disabled='true'>Edellinen</a></li>"
 
-        for i in range(1,self.sivua()+1):
+        for i in range(1, self.sivua()+1):
             str += "<li class='page-item"
             if self.sivu == i:
                 str += " active' aria-current='page"
             str +="'><a class='page-link' href='?sivu={0}'>{0}</a></li>".format(i)
 
         str += "<li class='page-item"
-        if self.sivulla == self.sivua():
-            str+="disabled"
+        if self.sivu == self.sivua():
+            str+=" disabled"
         str += "'><a class='page-link' href='?sivu={}' tabindex='-1' aria-disabled='true'>Seuraava</a></li>".format(self.sivua())
         str += "</ul></nav>"
         return str
