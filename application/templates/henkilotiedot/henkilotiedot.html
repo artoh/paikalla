@@ -109,25 +109,28 @@
         {% endif %}
       </td>
     </table>
-{% endmacro %}
 
+  {% if not henkilo.aikuinen() %}
+    Huoltajat
+    <ul>
+     {% for huoltaja in henkilo.huoltajat %}
+         <li>{{huoltaja.etunimi}} {{huoltaja.sukunimi}}</li>
+     {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
 
 {{ henkilotiedot(current_user)}}
 
 {% for lapsi in current_user.huollettavat %}
- {% if not lapsi.aikuinen() %}
- <hr/>
-  {{ henkilotiedot(lapsi)}}
-  Huoltajat
-  <ul>
-   {% for huoltaja in lapsi.huoltajat %}
-    <li>{{huoltaja.etunimi}} {{huoltaja.sukunimi}}</li>
-   {% endfor %}
-  </ul>
+  {% if not lapsi.aikuinen() %}
+    <hr/>
+    {{ henkilotiedot(lapsi) }}
   {% endif %}
 {% endfor %}
 
 {% endblock %}
+
 
 {% block script %}
 
