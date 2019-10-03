@@ -40,4 +40,4 @@ def ryhma_autorisaatio(ryhma_id: int) -> bool:
     res = db.engine.execute( text("SELECT id FROM ryhmassa WHERE ryhmaid=:ryhmaid AND "
                                   "henkiloid=:henkiloid AND ohjaaja")
                              .params(ryhmaid=ryhma_id, henkiloid=current_user.id))
-    return len(res) > 0
+    return res.first() is not None
