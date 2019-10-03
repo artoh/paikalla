@@ -49,13 +49,13 @@ class KokousSarjaForm(FlaskForm) :
     alkaa= DateField("Alkaa päivästä", [validators.InputRequired()])
     paattyy= DateField("Päättyy päivään", [alkaa_ennen_paattymista, validators.InputRequired() ])
     viikonpaiva= SelectField("Viikonpäivä",
-                             choices=[("1","Maanantai"),
-                                      ("2", "Tiistai"),
-                                      ("3", "Keskiviikko"),
-                                      ("4", "Torstai"),
-                                      ("5", "Perjantai"),
-                                      ("6", "Lauantai"),
-                                      ("0", "Sunnuntai")])
+                             choices=[("0","Maanantai"),
+                                      ("1", "Tiistai"),
+                                      ("2", "Keskiviikko"),
+                                      ("3", "Torstai"),
+                                      ("4", "Perjantai"),
+                                      ("5", "Lauantai"),
+                                      ("6", "Sunnuntai")])
     alkaaklo= TimeField("Alkaa klo", [validators.InputRequired() ])
     paattyyklo= TimeField("Päättyy klo", [klo_ennen_paattymista, validators.InputRequired() ])
     sijainti= StringField("Sijanti")

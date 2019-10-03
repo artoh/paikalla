@@ -74,10 +74,14 @@ def ryhmat_luo_kokoussarja(ryhma_id: int):
     if not form.validate():
         return render_template("ryhmat/uusisarja.html", ryhma=ryhma, form=form)
 
+    print("Viikonpäivä {}".format(int(form.viikonpaiva.data)) )
+
     paiva = form.alkaa.data
     kokoukset = 0
     while paiva < form.paattyy.data:
-        if( paiva.weekday() == int(form.viikonpaiva.data) ) :
+        if paiva.weekday() == int(form.viikonpaiva.data)  :
+            print("Löydettu {} ".format(paiva))
+
             kokous = Kokous(ryhma.id)
             kokous.alkaa = datetime.combine(paiva, form.alkaaklo.data)
             kokous.paattyy = datetime.combine(paiva, form.paattyyklo.data)
