@@ -1,7 +1,7 @@
 from application import app
 from flask import render_template, request
 from flask_login import login_required, current_user
-from .sivutus import Sivutus
+from application.helpers.sivutus import Sivutus
 from datetime import datetime
 
 @app.template_filter('kpvm')

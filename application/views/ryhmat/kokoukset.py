@@ -1,11 +1,11 @@
 from application import app, db, login_manager
 from flask import render_template, request, url_for, redirect, flash
-from application.models import Ryhma, Ryhmassa, Henkilo
+from application.models import Ryhma, Ryhmassa
 from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
-from application.views.autorisointi import ryhma_autorisaatio
-from application.views.sivutus import Sivutus
+from application.helpers.autorisointi import ryhma_autorisaatio
+from application.helpers.sivutus import Sivutus
 
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset")

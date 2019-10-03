@@ -3,7 +3,7 @@ from application.models.ryhma import Ryhma
 from flask import render_template, request
 from datetime import date
 from dateutil.parser import parse
-from application.views.autorisointi import ryhma_autorisaatio
+from application.helpers.autorisointi import ryhma_autorisaatio
 
 @app.route("/ryhmat/<ryhma_id>/ryhmatilasto")
 def ryhmat_tilasto(ryhma_id : int):

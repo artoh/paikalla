@@ -1,8 +1,8 @@
 from application import app, db, login_manager
-from flask import render_template, request, url_for, redirect, flash
+from flask import render_template, request, url_for, redirect
 from application.models import Ryhma, Ryhmassa, Henkilo
 from datetime import datetime
-from application.views.autorisointi import ryhma_autorisaatio
+from application.helpers.autorisointi import ryhma_autorisaatio
 
 
 @app.route("/ryhmat/<ryhma_id>/ryhmassa")

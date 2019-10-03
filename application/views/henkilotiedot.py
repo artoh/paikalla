@@ -1,7 +1,7 @@
-from application import app, db, login_manager, bcrypt
+from application import app, db, login_manager
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
-from .autorisointi import kayttaja_autorisointi
+from application.helpers.autorisointi import kayttaja_autorisointi
 from application.forms.jasenet import HenkiloTiedotForm, HenkiloTiedotLapsiForm
 from application.models.henkilo import Henkilo
 from datetime import datetime

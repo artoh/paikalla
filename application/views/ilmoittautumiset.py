@@ -1,10 +1,10 @@
 from application import app, db, login_manager
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required
-from .autorisointi import kayttaja_autorisointi
+from application.helpers.autorisointi import kayttaja_autorisointi
 from application.models.ryhma import Ryhma
 from application.models.ryhmassa import Ryhmassa
-from application.views.sivutus import Sivutus
+from application.helpers.sivutus import Sivutus
 
 
 @app.route("/ilmoittautumiset")

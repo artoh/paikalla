@@ -2,7 +2,7 @@ from application import app, db, admin_required, login_manager
 from flask import render_template, request, url_for, redirect, flash
 from application.models import Ryhma
 from application.forms.ryhmat import RyhmaTiedotForm
-from application.views.autorisointi import ryhma_autorisaatio
+from application.helpers.autorisointi import ryhma_autorisaatio
 
 
 @app.route("/ryhmat/uusi/")
