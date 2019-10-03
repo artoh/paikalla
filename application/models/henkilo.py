@@ -75,12 +75,12 @@ class Henkilo(db.Model):
         stmt = text("select ryhma.id, nimi, paikkoja, kuvaus, count(ryhmassa.henkiloid), ikavahintaan, ikaenintaan "
                     "from ryhma left outer join ryhmassa on ryhmassa.ryhmaid = ryhma.id "
                     "where ryhma.ilmoittautuminenalkaa <= :tanaan and ryhma.ilmoittautuminenpaattyy >= :tanaan "
-                    "and not ryhma.paattynyt "
-                    "group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan, "
-                    "ryhmassa.ohjaaja, ryhmassa.paattyen "
+                    "and not ryhma.paattynyt"
+                    "group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan "
                     "having not ryhmassa.ohjaaja and ryhmassa.paattyen is null "
                     "and ikavahintaan <= :ika and ikaenintaan >= :ika "
                     "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid) "
+                    "and not ryhma.paattynyt "
                     "order by nimi"
                     ).params(ika=self.ika(), henkiloid=self.id, tanaan=datetime.today())
         res = db.engine.execute(stmt)

@@ -194,18 +194,21 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 ##### Mahdollisten ryhmien selaaminen
 
 ```sql
-select ryhma.id,nimi,paikkoja,kuvaus, count(ryhmassa.henkiloid), ikavahintaan, ikaenintaan  from ryhma
-left outer join ryhmassa on ryhmassa.ryhmaid = ryhma.id
-where ryhma.ilmoittautuminenalkaa <= :pvm and ryhma.ilmoittautuminenpaattyy >= :pvm
+select ryhma.id, nimi, paikkoja, kuvaus, count(ryhmassa.henkiloid), ikavahintaan, ikaenintaan
+from ryhma left outer join ryhmassa on ryhmassa.ryhmaid = ryhma.id
+where ryhma.ilmoittautuminenalkaa <= :tanaan and ryhma.ilmoittautuminenpaattyy >= :tanaan
 and not ryhma.paattynyt
-group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan,
+group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan
 having not ryhmassa.ohjaaja and ryhmassa.paattyen is null
 and ikavahintaan <= :ika and ikaenintaan >= :ika
 and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)
+and not ryhma.paattynyt
 order by nimi
 ```
 
 Kyselyissä nykyinen päivämäärä sijoitetaan Pythonissa :pvm-kenttään sen sijaan että käytettäisiin SQL:n *CURRENT_DATE*:a jotta palvelimen PostgreSQL:n aikavyöhyke ei vaikuttaisi hakuihin.
+
+(Yritin muokata tätä kyselyä muotoon, jossa ei olisi alikyselyitä, mutta siinä tapauksessa en saanut mukaan ryhmiä, joissa ei ollut vielä yhtään ilmoittautumista)
 
 ##### Ryhmän tietojen näyttäminen
 
