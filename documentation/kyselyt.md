@@ -196,7 +196,9 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 ```sql
 select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  
 from ryhma left outer join
-(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid
+(select ryhmaid, count(id) as lkm from ryhmassa
+	where not ohjaaja and  paattyen is null group by ryhmaid)
+as a on ryhma.id=a.ryhmaid
 where ilmoittautuminenalkaa <= :tanaan and ilmoittautuminenpaattyy >= :tanaan
 and ikavahintaan <= :ika and ikaenintaan >= :ika
 and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)
