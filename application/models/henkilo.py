@@ -127,7 +127,6 @@ class Henkilo(db.Model):
             else:
                 kokous["osallistujat"].append(rivi[0])
 
-            print("ohjaaja {} user {} current {}".format(rivi[7], rivi[8], current_user.id))
             if rivi[7] and current_user.id == int(rivi[8]) :
                 kokous["ohjaaja"]=True
 
