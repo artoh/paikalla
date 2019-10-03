@@ -194,12 +194,10 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 ##### Mahdollisten ryhmien selaaminen
 
 ```sql
-select ryhma.id, nimi, paikkoja, kuvaus, count(ryhmassa.henkiloid), ikavahintaan, ikaenintaan
-from ryhma left outer join ryhmassa on ryhmassa.ryhmaid = ryhma.id
-where ryhma.ilmoittautuminenalkaa <= :tanaan and ryhma.ilmoittautuminenpaattyy >= :tanaan
-and not ryhma.paattynyt
-group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan
-having not ryhmassa.ohjaaja and ryhmassa.paattyen is null
+select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  
+from ryhma left outer join
+(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid
+where ilmoittautuminenalkaa <= :tanaan and ilmoittautuminenpaattyy >= :tanaan
 and ikavahintaan <= :ika and ikaenintaan >= :ika
 and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)
 and not ryhma.paattynyt
