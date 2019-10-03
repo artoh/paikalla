@@ -46,6 +46,7 @@ class Ryhma(db.Model):
                     "LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous " 
                     "WHERE ryhmaid=:ryhmaid AND kokous.alkaa < :aika "
                     "GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus "
+                    "ORDER BY kokous.alkaa DESC"
                     ).params(ryhmaid=self.id, aika=aika )
                     # Ajan vertailu tehdään datetime-funktioilla eikä SQL:n aikafunktioilla, jotta
                     # palvelimen aikavyöhyke ei vaikuttaisi vertailuun.

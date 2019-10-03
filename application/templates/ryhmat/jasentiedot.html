@@ -38,7 +38,7 @@
   <tr>
     <td>Yhdistyksen jäsenyys</td>
     <td>
-      {% if jasenyys.jasen.jasenyysAlkoi and not jasenyys.jasen.jasenyysPaattyi %}
+      {% if jasenyys.jasen.jasen() %}
         Jäsen
       {% else %}
         Ei ole jäsen

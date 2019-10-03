@@ -198,7 +198,7 @@ select ryhma.id,nimi,paikkoja,kuvaus, count(ryhmassa.henkiloid), ikavahintaan, i
 left outer join ryhmassa on ryhmassa.ryhmaid = ryhma.id
 where ryhma.ilmoittautuminenalkaa <= :pvm and ryhma.ilmoittautuminenpaattyy >= :pvm
 and not ryhma.paattynyt
-group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan
+group by ryhma.id, nimi, paikkoja, kuvaus, ikavahintaan, ikaenintaan,
 having not ryhmassa.ohjaaja and ryhmassa.paattyen is null
 and ikavahintaan <= :ika and ikaenintaan >= :ika
 and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)
@@ -370,6 +370,7 @@ SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, count(lasnaolo.r
 LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous
 WHERE ryhmaid=? AND kokous.alkaa < ?
 GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus
+ORDER BY kokous.alkaa DESC
 
 ```
 
