@@ -30,8 +30,11 @@
 </table>
 
 <h5>Tulevat kokoukset</h5>
+
+{{ linkit|safe }}
+
 <table class="table table-borderless">
-{% for kokous in ryhma.tulevatkokoukset() %}
+{% for kokous in kokoukset %}
   <tr>
     <td>{{kokous.alkaa|pvm}}</td>
     <td>klo {{kokous.alkaa|klo}} - {{kokous.paattyy|klo}} </td>

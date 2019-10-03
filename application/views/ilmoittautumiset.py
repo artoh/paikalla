@@ -4,6 +4,7 @@ from flask_login import login_required
 from .autorisointi import kayttaja_autorisointi
 from application.models.ryhma import Ryhma
 from application.models.ryhmassa import Ryhmassa
+from application.views.sivutus import Sivutus
 
 
 @app.route("/ilmoittautumiset")
@@ -20,7 +21,11 @@ def ilmoittautumiset_ryhma_tiedot(ryhma_id: int):
        Ryhmästä näytetään ohjaajat yhteystietoineen ja tulevat kokoukset.
     """
     ryhma = Ryhma.query.get(ryhma_id)
-    return render_template("ilmoittautumiset/ryhma.html", ryhma=ryhma)
+    kokoukset = ryhma.tulevatkokoukset()
+    sivutus = Sivutus( len(kokoukset),request.args.get("sivu", type=int, default=1), 20)
+    return render_template("ilmoittautumiset/ryhma.html", ryhma=ryhma,
+                           kokoukset=kokoukset[sivutus.alku():sivutus.loppu()],
+                           linkit=sivutus.linkit())
 
 
 @app.route("/ilmoittautumiset/uusilista/<henkilo_id>")
@@ -40,7 +45,11 @@ def ilmoittautumiset_uusi_tiedot(henkilo_id: int, ryhma_id: int):
     if not henkilo:
         return login_manager.unauthorized()
     ryhma = Ryhma.query.get(ryhma_id)
-    return render_template("ilmoittautumiset/ryhma.html", henkilo=henkilo, ryhma=ryhma)
+    kokoukset = ryhma.tulevatkokoukset()
+    sivutus = Sivutus( len(kokoukset),request.args.get("sivu", type=int, default=1), 20)
+    return render_template("ilmoittautumiset/ryhma.html", henkilo=henkilo, ryhma=ryhma,
+                           kokoukset=kokoukset[sivutus.alku():sivutus.loppu()],
+                           linkit=sivutus.linkit())
 
 
 @app.route("/ilmoittautumiset/ilmoittaudu", methods=["POST"])

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from application.forms.kokoukset import KokousTiedotForm, KokousSarjaForm
 from application.models import Kokous
 from application.views.autorisointi import ryhma_autorisaatio
+from application.views.sivutus import Sivutus
 
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset")
@@ -14,8 +15,12 @@ def ryhmat_kokoukset(ryhma_id: int):
         return login_manager.unauthorized();
 
     ryhma = Ryhma.query.get(ryhma_id)
-    kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa")
-    return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset)
+    kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa").all()
+
+    sivutus = Sivutus( len(kokoukset), request.args.get("sivu", type=int, default=1), 20)
+
+    return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset[sivutus.alku():sivutus.loppu()],
+                           linkit=sivutus.linkit())
 
 
 @app.route("/ryhmat/<ryhma_id>/kokoukset/uusi")
@@ -141,7 +146,11 @@ def ryhmat_menneet(ryhma_id: int):
     if not ryhma_autorisaatio(ryhma_id):
         return login_manager.unauthorized();
     ryhma = Ryhma.query.get(ryhma_id)
-    return render_template("ryhmat/menneet.html", ryhma=ryhma)
+    menneet = ryhma.menneetKokoukset()
+    sivutus = Sivutus( len(menneet),request.args.get("sivu", type=int, default=1), 20)
+
+    return render_template("ryhmat/menneet.html", ryhma=ryhma,
+                           menneet=menneet[sivutus.alku():sivutus.loppu()], linkit=sivutus.linkit())
 
 
 @app.route("/ryhmat/menneet/<kokous_id>")

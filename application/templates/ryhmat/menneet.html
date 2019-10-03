@@ -3,6 +3,9 @@
 
 
 <h2>Menneet kokoukset</h2>
+
+{{ linkit|safe }}
+
 <table class="table table-sm table-borderless table-striped">
  <thead class="thead-light">
    <tr>
@@ -14,7 +17,7 @@
    <tr>
  </thead>
  <tbody>
-   {% for kokous in ryhma.menneetKokoukset() %}
+   {% for kokous in menneet %}
      <tr>
        <td>{{kokous.alkaa|pvmaika}} </td>
        <td>{{kokous.lasna|int}}</td>
