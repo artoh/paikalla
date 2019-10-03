@@ -4,8 +4,8 @@
 
 <h2>Lisää uusi huollettava</h2>
 
-<p>Tällä lomakkeella lapsesi liittyy yhdistyksen jäseneksi. Jos toinen huoltaja on jo lisännyt lapsenne, voi hän
-  liittää sinut lapsen huoltajaksi.</p>
+<p>Tällä lomakkeella lapsesi liittyy yhdistyksen jäseneksi. Jos toinen huoltaja on jo lisännyt lapsenne, älä täytä tätä
+  lomaketta: Toinen huoltaja voi liittää myös sinut lapsen huoltajaksi.</p>
 
 {% import "bootstrap/wtf.html" as wtf %}
 {{ wtf.quick_form( form=form,action=url_for('henkilotiedot_luo_huollettava'), button_map={"submit":"success"}) }}
