@@ -21,7 +21,6 @@ def auth_luo_uusikayttaja():
 
     henkilo = form.henkilo()
     db.session.add(henkilo)
-    db.session.commit()
 
     try:
         db.session.commit()
