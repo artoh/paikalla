@@ -57,10 +57,10 @@ def jasenet_luo_huoltaja(huollettava_id :int):
     huollettava = Henkilo.query.get(huollettava_id)
     henkilo = Henkilo()
     form.tallenna( henkilo )
-    db.session.add(henkilo)
-    huollettava.huoltajat.append(henkilo)
 
     try:
+        db.session.add(henkilo)
+        huollettava.huoltajat.append(henkilo)
         db.session.commit()
     except IntegrityError:
         flash("Sähköpostiosoite on jo käytössä", "danger")
