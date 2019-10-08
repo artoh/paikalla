@@ -19,7 +19,7 @@ class Ryhma(db.Model):
     ikaenintaan = db.Column( db.Integer, default=999, index=True);
     kuvaus = db.Column(db.Text, nullable = True)
     paattynyt = db.Column( db.Boolean, default=False, index=True)
-    jasenyydet = db.relationship('Ryhmassa',lazy=True)
+    jasenyydet = db.relationship('Ryhmassa', lazy=True)
 
     def jasenet(self) -> list:
         """Luettelo ryhmän nykyisistä jäsenistä ja ohjaajista"""
