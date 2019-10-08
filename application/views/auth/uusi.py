@@ -20,9 +20,8 @@ def auth_luo_uusikayttaja():
         return render_template("auth/uusikayttaja.html", form=form)
 
     henkilo = form.henkilo()
-    db.session.add(henkilo)
-
     try:
+        db.session.add(henkilo)
         db.session.commit()
     except IntegrityError:
         flash("Sähköpostiosoite on jo käytössä", "danger")

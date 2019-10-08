@@ -39,9 +39,9 @@ def jasenet_luo() :
     henkilo = Henkilo()
 
     form.tallenna( henkilo )
-    db.session.add(henkilo)
 
     try:
+        db.session.add(henkilo)
         db.session.commit()
     except IntegrityError:
         flash("Sähköpostiosoite on jo käytössä", "danger")
