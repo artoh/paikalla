@@ -15,11 +15,14 @@ def ryhmat_kokoukset(ryhma_id: int):
         return login_manager.unauthorized();
 
     ryhma = Ryhma.query.get(ryhma_id)
-    kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa").all()
+    kokoukset = Kokous.query.filter(Kokous.ryhmaid == ryhma.id, Kokous.paattyy > datetime.now()).order_by("alkaa").paginate(request.args.get("sivu", type=int, default=1),20,)
 
-    sivutus = Sivutus( len(kokoukset), request.args.get("sivu", type=int, default=1), 20)
+    # Sivutuksen navigointikomponentti toteutetaan omalla Sivutus-apuluokalla
+    # katso /application/helpers/sivutus.py
 
-    return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset[sivutus.alku():sivutus.loppu()],
+    sivutus = Sivutus( kokoukset.total, kokoukset.page, kokoukset.per_page)
+
+    return render_template("ryhmat/kokoukset.html", ryhma=ryhma, kokoukset=kokoukset.items,
                            linkit=sivutus.linkit())
 
 
