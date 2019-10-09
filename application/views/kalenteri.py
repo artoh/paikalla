@@ -14,6 +14,9 @@ def format_date(value):
 def kalenteri():
     """Näyttää kalenterin, jossa nykyisen käyttäjän ja hänen huollettaviensa tulevat kokoukset"""
     kalenteri = current_user.kalenteri()
+
+    # Sivutus tehdään view-tasolla ilman paginationia, jotta sivutus ei katkea kesken päivän
+
     sivutus = Sivutus( len(kalenteri), request.args.get("sivu", type=int, default=1) )
 
     return render_template("kalenteri/kalenteri.html", kalenteri=kalenteri[ sivutus.alku() : sivutus.loppu()], linkit=sivutus.linkit(),

@@ -5,17 +5,24 @@ import math
 class Sivutus(object):
     """Näytettävän tiedon sivuttaminen Bootstrapin pagination-komponentin avulla
 
-       Sivutusta ei kuitenkaan tehdä kauniisti tietokantakyselyillä.
-       Näin, koska sivutettaessa kalenteria kalenterin yhteen päivään on yhdistetty useampia kyselyn rivejä
-       (eri kokouksia ja eri henkilöiden osallistumisia), eikä kalenterin haluta sivutuksessa katkeavan
-       päivien välistä.
+       Toteutettu käsin Bootstrap 4 -versiota hyödyntäväksi.
+
+       Tätä voi käyttää sekä flask_sqlalchemyn paginate()-ominaisuutta hyödyntämällä, että
+       käsin haetusta kyselystä.
+
+       Käsin haetuissa kyselyissä sivutus tehdään vasta, kun koko kysely on haettu listalle,
+       joten sivutus ei toteudu tietokannan tasolla. Toisaalta koko listan hakeminen ja
+       muokkaaminen mahdollistaa esimerkiksi sen varmistamisen, ettei kalenteria sivutettaessa
+       sivu koskaan katkea kesken päivää.
+
+
        """
     def __init__(self, laajuus: int, sivu:int=1, sivulla:int=10):
         """ Sivutustoiminnallisuuden alustaminen
 
-        :param laajuus: montako elementtiä sivutettavana
-        :param sivu: millä sivulla ollaan
-        :param sivulla: montako elementtiä sivua kohden
+        :param laajuus: montako elementtiä sivutettavana. Käytettäessä paginatiota .total
+        :param sivu: millä sivulla ollaan. Käytettäessä paginatiota .page
+        :param sivulla: montako elementtiä sivua kohden. Käytettäessä paginatiota .per_page
         """
         self.sivu = sivu
         self.laajuus = laajuus
