@@ -11,8 +11,12 @@ class KokousTiedotForm(FlaskForm):
         if (self.alkaa.data > self.paattyy.data):
             raise ValidationError("Kokous ei voi päättyä ennen kuin se alkoi")
 
-    alkaa= DateTimeLocalField("Kokous alkaa", validators=[validators.InputRequired()], format='%Y-%m-%dT%H:%M')
-    paattyy= DateTimeLocalField("Kokous päättyy", validators=[validators.InputRequired(), alkaa_ennen_paattymista], format='%Y-%m-%dT%H:%M')
+    alkaa= DateTimeLocalField("Kokous alkaa",
+                              validators=[validators.DataRequired(message="Anna päivämäärä")],
+                              format='%Y-%m-%dT%H:%M')
+    paattyy= DateTimeLocalField("Kokous päättyy",
+                                validators=[validators.DataRequired(message="Anna päivämäärä"), alkaa_ennen_paattymista],
+                                format='%Y-%m-%dT%H:%M')
     sijainti= StringField("Sijainti")
     kuvaus= TextAreaField("Ennakkotiedot")
     submit = SubmitField("Tallenna")
@@ -46,8 +50,8 @@ class KokousSarjaForm(FlaskForm) :
         if (self.alkaaklo.data > self.paattyyklo.data):
             raise ValidationError("Kokous ei voi päättyä ennen kuin se alkoi")
 
-    alkaa= DateField("Alkaa päivästä", [validators.InputRequired()])
-    paattyy= DateField("Päättyy päivään", [alkaa_ennen_paattymista, validators.InputRequired() ])
+    alkaa= DateField("Alkaa päivästä", [validators.DataRequired(message="Anna päivämäärä")])
+    paattyy= DateField("Päättyy päivään", [alkaa_ennen_paattymista, validators.DataRequired(message="Anna päivämääärä") ])
     viikonpaiva= SelectField("Viikonpäivä",
                              choices=[("0","Maanantai"),
                                       ("1", "Tiistai"),
@@ -56,8 +60,8 @@ class KokousSarjaForm(FlaskForm) :
                                       ("4", "Perjantai"),
                                       ("5", "Lauantai"),
                                       ("6", "Sunnuntai")])
-    alkaaklo= TimeField("Alkaa klo", [validators.InputRequired() ])
-    paattyyklo= TimeField("Päättyy klo", [klo_ennen_paattymista, validators.InputRequired() ])
+    alkaaklo= TimeField("Alkaa klo", [validators.DataRequired(message="Anna kellonaika") ])
+    paattyyklo= TimeField("Päättyy klo", [validators.InputRequired(message="Anna kellonaika"), klo_ennen_paattymista ])
     sijainti= StringField("Sijanti")
     kuvaus= TextAreaField("Ennakkotiedot")
     submit= SubmitField("Tallenna")
