@@ -225,11 +225,11 @@ WHERE ryhma.id = ?
 # Ohjaajat
 SELECT etunimi, sukunimi, puhelin, email
 FROM ryhmassa JOIN henkilo
-ON ryhmassa.henkiloid=henkilo.id WHERE ryhmaid=? AND ohjaaja
+ON ryhmassa.henkiloid=henkilo.id WHERE ryhmaid=? AND ohjaaja ORDER BY sukunimi
 
 # Kokoontumiset
 SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus
-FROM kokous WHERE ryhmaid=? AND kokous.paattyy > ?
+FROM kokous WHERE ryhmaid=? AND kokous.paattyy > ? ORDER BY kokous.alkaa
 
 ```
 

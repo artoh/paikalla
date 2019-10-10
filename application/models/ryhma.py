@@ -68,7 +68,7 @@ class Ryhma(db.Model):
         """Ryhmän tulevat kokoukset (kokoukset, jotka eivät ole vielä päättyneet"""
         aika = datetime.now()
         stmt = text("SELECT kokous.id, kokous.alkaa, kokous.paattyy, kokous.sijainti, kokous.kuvaus FROM kokous "
-                     "WHERE ryhmaid=:ryhmaid AND kokous.paattyy > :aika"
+                     "WHERE ryhmaid=:ryhmaid AND kokous.paattyy > :aika ORDER BY kokous.alkaa"
                     ).params(ryhmaid=self.id, aika=aika)
         res = db.engine.execute(stmt)
         lista = []
@@ -84,7 +84,7 @@ class Ryhma(db.Model):
     def ohjaajat(self) -> list:
         """Lista ryhmän ohjaajista ja heidän yhteystiedoistaan"""
         stmt=text("SELECT etunimi, sukunimi, puhelin, email FROM ryhmassa JOIN henkilo ON ryhmassa.henkiloid=henkilo.id "
-                  "WHERE ryhmaid=:ryhmaid AND ohjaaja ").params(ryhmaid=self.id)
+                  "WHERE ryhmaid=:ryhmaid AND ohjaaja ORDER BY sukunimi").params(ryhmaid=self.id)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
