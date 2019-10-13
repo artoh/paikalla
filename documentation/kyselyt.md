@@ -194,16 +194,16 @@ UPDATE henkilo SET salasana=? WHERE henkilo.id = ?
 ##### Mahdollisten ryhmien selaaminen
 
 ```sql
-select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  
-from ryhma left outer join
-(select ryhmaid, count(id) as lkm from ryhmassa
-	where not ohjaaja and  paattyen is null group by ryhmaid)
-as a on ryhma.id=a.ryhmaid
-where ilmoittautuminenalkaa <= :tanaan and ilmoittautuminenpaattyy >= :tanaan
-and ikavahintaan <= :ika and ikaenintaan >= :ika
-and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid)
-and not ryhma.paattynyt
-order by nimi
+SELECT ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  
+FROM ryhma LEFT OUTER JOIN
+(SELECT ryhmaid, COUNT(id) AS lkm FROM ryhmassa
+	WHERE NOT ohjaaja AND  paattyen IS NULL GROUP BY ryhmaid)
+AS a ON ryhma.id=a.ryhmaid
+WHERE ilmoittautuminenalkaa <= :tanaan AND ilmoittautuminenpaattyy >= :tanaan
+AND ikavahintaan <= :ika AND ikaenintaan >= :ika
+AND ryhma.id NOT IN (SELECT ryhmaid FROM ryhmassa WHERE henkiloid=:henkiloid)
+AND NOT ryhma.paattynyt
+ORDER BY nimi
 ```
 
 Kyselyissä nykyinen päivämäärä sijoitetaan Pythonissa :pvm-kenttään sen sijaan että käytettäisiin SQL:n *CURRENT_DATE*:a jotta palvelimen PostgreSQL:n aikavyöhyke ei vaikuttaisi hakuihin.
@@ -380,11 +380,11 @@ ORDER BY kokous.alkaa DESC
 ##### Läsnäololistan hakeminen
 
 ```sql
-select etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto,
-	ryhmassa.ohjaaja from ryhmassa
-join henkilo on ryhmassa.henkiloid=henkilo.id
-left outer join lasnaolo on ryhmassa.id=lasnaolo.ryhmassa and lasnaolo.kokous=?
-where ryhmassa.ryhmaid=? order by sukunimi,etunimi
+SELECT etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto,
+	ryhmassa.ohjaaja FROM ryhmassa
+JOIN henkilo ON ryhmassa.henkiloid=henkilo.id
+LEFT OUTER JOIN lasnaolo ON ryhmassa.id=lasnaolo.ryhmassa AND lasnaolo.kokous=?
+WHERE ryhmassa.ryhmaid=? ORDER BY sukunimi,etunimi
 ```
 
 ##### Läsnäolleiden merkitseminen
@@ -409,21 +409,21 @@ Tilaston yhteydessä näytetään ryhmän läsnäolotiedot.
 
 ##### Ryhmän yhteenvetotilasto
 ```sql
-select count(distinct kokous.id), count(lasnaolo.kokous) from kokous
-left outer join lasnaolo on lasnaolo.kokous=kokous.id                     
-where kokous.alkaa between :alkaa and :loppuu
-and kokous.ryhmaid=:ryhmaid
+SELECT COUNT(distinct kokous.id), COUNT(lasnaolo.kokous) FROM kokous
+LEFT OUTER JOIN lasnaolo ON lasnaolo.kokous=kokous.id                     
+WHERE kokous.alkaa BETWEEN :alkaa AND :loppuu
+AND kokous.ryhmaid=:ryhmaid
 ```
 
 #### Läsnäolotilasto
 ```sql
-select sukunimi, etunimi, count(lasnaolo.kokous) as lasna, ryhmassa.ohjaaja from lasnaolo
-join ryhmassa on lasnaolo.ryhmassa=ryhmassa.id
-join henkilo on ryhmassa.henkiloid=henkilo.id
-join kokous on lasnaolo.kokous=kokous.id
-where kokous.ryhmaid=:ryhmaid and
-kokous.alkaa between :alkaa and :loppuu group by henkilo.id
-order by lasna desc
+SELECT sukunimi, etunimi, count(lasnaolo.kokous) AS lasna, ryhmassa.ohjaaja FROM lasnaolo
+JOIN ryhmassa ON lasnaolo.ryhmassa=ryhmassa.id
+JOIN henkilo ON ryhmassa.henkiloid=henkilo.id
+JOIN kokous ON lasnaolo.kokous=kokous.id
+WHERE kokous.ryhmaid=:ryhmaid AND
+kokous.alkaa BETWEEN :alkaa AND :loppuu GROUP BY henkilo.id
+ORDER BY lasna DESC
 ```
 
 ### Koko yhdistyksen tilasto
@@ -435,11 +435,11 @@ order by lasna desc
 #### Kysely
 
 ```sql
-select ryhma.nimi, kokous.ryhmaid, count(distinct kokous.id), count(lasnaolo.kokous)
- from kokous
- left outer join lasnaolo on lasnaolo.kokous=kokous.id
- join ryhma on kokous.ryhmaid=ryhma.id
- where kokous.alkaa between :alkaa and :loppuu
- group by kokous.ryhmaid
- order by nimi
+SELECT ryhma.nimi, kokous.ryhmaid, COUNT(distinct kokous.id), COUNT(lasnaolo.kokous)
+ FROM kokous
+ LEFT OUTER JOIN lasnaolo ON lasnaolo.kokous=kokous.id
+ JOIN ryhma ON kokous.ryhmaid=ryhma.id
+ WHERE kokous.alkaa BETWEEN :alkaa AND :loppuu
+ GROUP BY kokous.ryhmaid
+ ORDER BY nimi
 ```
