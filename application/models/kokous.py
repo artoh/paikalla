@@ -27,10 +27,10 @@ class Kokous(db.Model) :
     def paikallalista(self) -> list:
         """Lista ryhmän jäsenistä paikallaololistaa varten, sekä tieto paikalla olemisesta"""
 
-        stmt = text(" select etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto, ryhmassa.ohjaaja from ryhmassa "
-                    "join henkilo on ryhmassa.henkiloid=henkilo.id "
-                    "left outer join lasnaolo on ryhmassa.id=lasnaolo.ryhmassa and lasnaolo.kokous=:kokousid "
-                    "where ryhmassa.ryhmaid=:ryhmaid order by sukunimi,etunimi "
+        stmt = text(" SELECT etunimi, sukunimi, ryhmassa.id, lasnaolo.ryhmassa, henkilo.varotieto, ryhmassa.ohjaaja FROM ryhmassa "
+                    "JOIN henkilo ON ryhmassa.henkiloid=henkilo.id "
+                    "LEFT OUTER JOIN lasnaolo ON ryhmassa.id=lasnaolo.ryhmassa AND lasnaolo.kokous=:kokousid "
+                    "WHERE ryhmassa.ryhmaid=:ryhmaid ORDER BY sukunimi,etunimi "
                     ).params(kokousid=self.id, ryhmaid=self.ryhmaid)
         res = db.engine.execute(stmt)
         lista = []

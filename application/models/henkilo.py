@@ -74,14 +74,14 @@ class Henkilo(db.Model):
     def mahdollisetryhmat(self) -> list:
         """Ryhmät, joihin voi ilmoittautua iän puolesta"""
 
-        stmt = text("select ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  "
-                    "from ryhma left outer join "
-                    "(select ryhmaid, count(id) as lkm from ryhmassa where not ohjaaja and  paattyen is null group by ryhmaid) as a on ryhma.id=a.ryhmaid "
-                    "where ilmoittautuminenalkaa <= :tanaan and ilmoittautuminenpaattyy >= :tanaan "
-                    "and ikavahintaan <= :ika and ikaenintaan >= :ika "
-                    "and ryhma.id not in (select ryhmaid from ryhmassa where henkiloid=:henkiloid) "
-                    "and not ryhma.paattynyt "
-                    "order by nimi"
+        stmt = text("SELECT ryhma.id,nimi,paikkoja,kuvaus,a.lkm, ikavahintaan, ikaenintaan  "
+                    "FROM ryhma LEFT OUTER JOIN "
+                    "(SELECT ryhmaid, COUNT(ID) AS lkm from ryhmassa WHERE NOT ohjaaja AND  paattyen IS NULL GROUP BY RYHMAID) AS a ON ryhma.id=a.ryhmaid "
+                    "WHERE ilmoittautuminenalkaa <= :tanaan AND ilmoittautuminenpaattyy >= :tanaan "
+                    "AND ikavahintaan <= :ika AND ikaenintaan >= :ika "
+                    "AND ryhma.id NOT IN (SELECT ryhmaid FROM ryhmassa WHERE henkiloid=:henkiloid) "
+                    "AND NOT ryhma.paattynyt "
+                    "ORDER BY nimi"
                     ).params(ika=self.ika(), henkiloid=self.id, tanaan=datetime.today())
 
         res = db.engine.execute(stmt)
@@ -145,7 +145,7 @@ class Henkilo(db.Model):
     def omatryhmat(self) -> list:
         """Lista aktiivisista ryhmistä, joissa jäsenenä tai ohjaajana"""
         stmt = text("SELECT ryhma.id, ryhma.nimi, ryhmassa.ohjaaja,kokous.alkaa, kokous.sijainti, kokous.kuvaus, kokous.paattyy "
-                    "FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id " 
+                    "FROM ryhmassa JOIN ryhma ON ryhmassa.ryhmaid=ryhma.id "
                     "LEFT OUTER JOIN Kokous ON Kokous.ryhmaid = ryhma.id AND  Kokous.alkaa = (SELECT MIN(kokous.alkaa) FROM kokous WHERE kokous.alkaa > :tanaan AND kokous.ryhmaid = ryhma.id) "
                     "WHERE ryhmassa.henkiloid=:henkiloid AND NOT ryhma.paattynyt AND ryhmassa.paattyen IS NULL "
                     "ORDER BY nimi").params(henkiloid=self.id, tanaan=datetime.today())

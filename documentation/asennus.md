@@ -23,6 +23,7 @@
 ```
 (venv) ~/paikalla$ python run.py
 ```
+Nyt ohjelma käynnistyy, kun siirryt selaimella osoitteeseen `localhost:5000`
 
 5. Ensimmäisellä käynnistyskerralla sovellus opastaa sinua luomaan jäsenrekisterin hoitajan käyttäjätunnuksen
 

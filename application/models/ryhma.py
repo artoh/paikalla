@@ -43,7 +43,7 @@ class Ryhma(db.Model):
         """Luettelo ryhmän menneistä kokoontumisista ja läsnäolleiden määrästä"""
         aika = datetime.now() - timedelta( minutes=30)
         stmt = text("SELECT kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus, count(lasnaolo.ryhmassa) FROM kokous "
-                    "LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous " 
+                    "LEFT OUTER JOIN lasnaolo on kokous.id=lasnaolo.kokous "
                     "WHERE ryhmaid=:ryhmaid AND kokous.alkaa < :aika "
                     "GROUP BY kokous.id, kokous.alkaa, kokous.sijainti, kokous.kuvaus "
                     "ORDER BY kokous.alkaa DESC"
@@ -121,7 +121,7 @@ class Ryhma(db.Model):
             ehto = ""
 
         stmt = text("SELECT ryhma.id, ryhma.nimi, ryhma.ikavahintaan, ryhma.ikaenintaan, ryhma.ilmoittautuminenalkaa, ryhma.ilmoittautuminenpaattyy, "
-                    "ryhma.paikkoja, a.lkm "            
+                    "ryhma.paikkoja, a.lkm "
                     "FROM ryhma LEFT OUTER JOIN "
                     "(SELECT ryhmaid, count(id) as lkm FROM ryhmassa WHERE NOT ohjaaja AND paattyen IS NULL GROUP BY ryhmaid) "
                     "AS a ON ryhma.id=a.ryhmaid " + ehto + " ORDER BY ryhma.nimi")
@@ -143,12 +143,12 @@ class Ryhma(db.Model):
     @staticmethod
     def yhteistilasto(mista: date, mihin: date) -> list:
         """Yhdistyksen yleistilastoon ryhmien kokoontumistiedot"""
-        stmt = text("select ryhma.nimi, kokous.ryhmaid, count(distinct kokous.id), count(lasnaolo.kokous) from kokous "
-                    "left outer join lasnaolo on lasnaolo.kokous=kokous.id "
-                    "join ryhma on kokous.ryhmaid=ryhma.id "
-                    "where kokous.alkaa between :alkaa and :loppuu "
-                    "group by kokous.ryhmaid, ryhma.nimi "
-                    "order by nimi").params(alkaa = mista, loppuu=mihin)
+        stmt = text("SELECT ryhma.nimi, kokous.ryhmaid, COUNT(DISTINCT kokous.id), COUNT(lasnaolo.kokous) from kokous "
+                    "LEFT OUTER JOIN lasnaolo ON lasnaolo.kokous=kokous.id "
+                    "JOIN ryhma ON kokous.ryhmaid=ryhma.id "
+                    "WHERE kokous.alkaa BETWEEN :alkaa AND :loppuu "
+                    "GROUP BY kokous.ryhmaid, ryhma.nimi "
+                    "ORDER BY nimi").params(alkaa = mista, loppuu=mihin)
         res = db.engine.execute(stmt)
         lista = []
         for rivi in res:
@@ -161,21 +161,21 @@ class Ryhma(db.Model):
 
     def ryhmantilasto(self, mista: date, mihin: date) -> dict:
         """Ryhmän oma tilasto, jossa myös läsnäolotilastot """
-        stmt = text("select count(distinct kokous.id), count(lasnaolo.kokous) from kokous "
-                    "left outer join lasnaolo on lasnaolo.kokous=kokous.id "                    
-                    "where kokous.alkaa between :alkaa and :loppuu "
-                    "and kokous.ryhmaid=:ryhmaid ").params(alkaa=mista, loppuu=mihin, ryhmaid=self.id)
+        stmt = text("SELECT COUNT(DISTINCT kokous.id), COUNT(lasnaolo.kokous) FROM kokous "
+                    "LEFT OUTER JOIN lasnaolo ON lasnaolo.kokous=kokous.id "
+                    "WHERE kokous.alkaa BETWEEN :alkaa AND :loppuu "
+                    "AND kokous.ryhmaid=:ryhmaid ").params(alkaa=mista, loppuu=mihin, ryhmaid=self.id)
         res = db.engine.execute(stmt)
         tulos = {}
         for rivi in res:
             tulos["tilasto"] = {"kokouksia" : rivi[0], "lasna" : rivi[1]}
 
-        stmt = text("select sukunimi, etunimi, count(lasnaolo.kokous) as lasna, ryhmassa.ohjaaja from lasnaolo "
-                    "join ryhmassa on lasnaolo.ryhmassa=ryhmassa.id "
-                    "join henkilo on ryhmassa.henkiloid=henkilo.id "
-                    " join kokous on lasnaolo.kokous=kokous.id "
-                    "where kokous.ryhmaid=:ryhmaid and "
-                    "kokous.alkaa between :alkaa and :loppuu group by henkilo.id, ryhmassa.ohjaaja order by lasna desc"
+        stmt = text("SELECT sukunimi, etunimi, count(lasnaolo.kokous) AS lasna, ryhmassa.ohjaaja FROM lasnaolo "
+                    "JOIN ryhmassa ON lasnaolo.ryhmassa=ryhmassa.id "
+                    "JOIN henkilo ON ryhmassa.henkiloid=henkilo.id "
+                    "JOIN kokous ON lasnaolo.kokous=kokous.id "
+                    "WHERE kokous.ryhmaid=:ryhmaid AND "
+                    "kokous.alkaa BETWEEN :alkaa AND :loppuu GROUP BY henkilo.id, ryhmassa.ohjaaja ORDER BY lasna desc"
                     ).params(alkaa=mista, loppuu=mihin, ryhmaid=self.id )
         res = db.engine.execute(stmt)
         lasnaolot = []
