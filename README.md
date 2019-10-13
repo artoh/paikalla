@@ -21,4 +21,4 @@ Ohjaajat pitävät kirjaa läsnäolleista, ja ohjelma tuottaa tarpeelliset toimi
 - [Käyttöohje](documentation/kayttoohje.md)
 - [Asennusohje](documentation/asennus.md)
 - [Tietokantarakenne](documentation/tietokantarakenne.md)
-- [Jatkokehitysideat](documentation/ideat,md)
+- [Jatkokehitysideat](documentation/ideat.md)
