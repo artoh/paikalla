@@ -121,7 +121,7 @@ def ryhmat_kokoukset_muokkaa(kokous_id: int):
     if not ryhma_autorisaatio(kokous.ryhmaid):
         return login_manager.unauthorized();
 
-    if kokous.alkaa < datetime.today() - timedelta(minutes=15) :
+    if kokous.alkaa < datetime.today() + timedelta(minutes=15) :
         return redirect( url_for("ryhmat_menneet_muokkaa", kokous_id=kokous_id))
 
     form = KokousTiedotForm()
